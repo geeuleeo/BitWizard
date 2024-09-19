@@ -26,6 +26,8 @@ public class Utente {
 	
 	@OneToMany(mappedBy = "utente")
     private List<PartecipantiViaggio> partecipazioni;
+
+
 	
 	
 	
