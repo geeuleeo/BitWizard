@@ -1,6 +1,6 @@
 tecnologie:
 
-backend: java con framework spring boot, database h2 (possibilità di scalarlo a MySQL), javascript
+backend: java con framework spring boot, database h2 (possibilità di scalarlo a MySQL) oppure usare un servizio database in cloud, javascript
 
 frontend: html, css
 
