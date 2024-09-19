@@ -1,0 +1,37 @@
+tecnologie:
+
+backend: java con framework spring boot, database h2 (possibilità di scalarlo a MySQL), javascript
+
+frontend: html, css
+
+
+
+
+funzionalità:
+
+- permettere la creazione viaggi dagli utenti/agenzie
+
+- impostare un numero minimo e massimo per il viaggio, in caso non si raggiunga il numero richiesto il viaggio verà annullato, se il numero di partecipanti è al completo gli utenti interessati si possono inserire in una lista d'attesa
+
+- recensioni sia per il viaggio e per il suo creatore del, sia per i partecipanti, ci saranno premi o benefici aggiuntivi per gli organizzatori di successo (sconti, visibilità maggiore, etc.)
+
+- implementare ruoli diversi in base al tipo di utente: privato/agenzia, e in base al "livello" (quanti viaggi uno ha organizzato con successo e alle recensioni)
+
+- sistema di ricompense per i clienti più fedeli
+
+- sistema di abbinamento degli utenti in base agli interessi, tipologia di viaggio che ricercano e i viaggi passati
+
+
+
+
+schema colori:
+
+blu navy / corallo
+
+verde foresta / emboldened
+
+
+
+logo:
+
+(da creare)
