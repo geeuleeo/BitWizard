@@ -1,25 +1,22 @@
 package com.wizard.services;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
+import com.wizard.entities.Immagine;
+import com.wizard.entities.Ruolo;
+import com.wizard.entities.Tag;
 import com.wizard.entities.Utente;
 
+@Service
 public interface UtenteService {
 
     List<Utente> getAllUtenti();
-    
-	public Utente loggaUtente(String username,String password);
 
-	// public Utente modificaUtente(String username, String newPassword);
+	Utente salvaUtente(String nome, String cognome, String numeroTelefono, String email, String password, Date dataNascita, String descrizione, Immagine imgProfilo, List<Tag> tag, Ruolo ruolo);
 
-	Utente authenticate(String username, String password);
-
-	Utente salvaUtente(String nome, String cognome, String email, String password);
-
-	Set<String> getUtenti();
-
-	Optional<Utente> getUtente(Long id);
+	boolean existByEmail(String email);
 
 }

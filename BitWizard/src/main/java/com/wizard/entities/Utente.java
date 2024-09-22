@@ -38,11 +38,11 @@ public class Utente {
 	private String descrizione;
 	
 	@ManyToOne
-	@JoinColumn(name = "immagine_id")
+    @JoinColumn(name = "immagine_id", referencedColumnName = "id_img", nullable = true)
 	private Immagine immagineProfilo;
 	
 	@ManyToOne
-    @JoinColumn(name = "ruolo_id")
+    @JoinColumn(name = "ruolo_id", nullable = false)
 	private Ruolo ruolo;
 	
 	private int punteggio;
