@@ -51,9 +51,8 @@ public class Viaggio {
 
     private double prezzo;
 
-    @ManyToOne
-    @JoinColumn(name = "creatore_id", referencedColumnName = "utenteId")
-    private Utente creatore;
+    @Column(name = "creatore_id", nullable = false)
+    private Long creatoreId;
 
     @Column(name = "eta_min")
     private int etaMin;
@@ -64,14 +63,6 @@ public class Viaggio {
     @ManyToOne
     @JoinColumn(name = "stato_id")
     private Stato stato;
-
-    @ManyToMany
-    @JoinTable(
-        name = "tag_viaggio",
-        joinColumns = @JoinColumn(name = "viaggio_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private List<Tag> tag;
 
     private boolean deleted;
 
@@ -157,12 +148,6 @@ public class Viaggio {
 	public void setPrezzo(double prezzo) {
 		this.prezzo = prezzo;
 	}
-	public Utente getCreatore() {
-		return creatore;
-	}
-	public void setCreatore(Utente creatore) {
-		this.creatore = creatore;
-	}
 	public int getEtaMax() {
 		return etaMax;
 	}
@@ -177,12 +162,6 @@ public class Viaggio {
 	}
 	public Stato getStato() {
 		return stato;
-	}
-	public List<Tag> getTag() {
-		return tag;
-	}
-	public void setTag(List<Tag> tag) {
-		this.tag = tag;
 	}
 	public boolean isDeleted() {
 		return deleted;
@@ -204,6 +183,12 @@ public class Viaggio {
 	}
 	public void setStato(Stato stato) {
 		this.stato = stato;
+	}
+	public Long getCreatoreId() {
+		return creatoreId;
+	}
+	public void setCreatoreId(Long creatoreId) {
+		this.creatoreId = creatoreId;
 	}
 	
 }

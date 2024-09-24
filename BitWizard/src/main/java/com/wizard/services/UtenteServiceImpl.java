@@ -2,18 +2,19 @@ package com.wizard.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.wizard.entities.Immagine;
-import com.wizard.entities.Livello;
 import com.wizard.entities.Ruolo;
 import com.wizard.entities.Tag;
 import com.wizard.entities.Utente;
-import com.wizard.repos.ImmagineDAO;
+import com.wizard.entities.UtenteTag;
+import com.wizard.repos.TagDAO;
 import com.wizard.repos.UtenteDAO;
+import com.wizard.repos.UtenteTagDAO;
 
 @Service
 public class UtenteServiceImpl implements UtenteService {
@@ -22,17 +23,20 @@ public class UtenteServiceImpl implements UtenteService {
     private UtenteDAO dao;
 	
 	@Autowired
-	private ImmagineDAO immagineDAO;
+    private UtenteTagDAO utenteTagDAO;
+	
+	@Autowired
+	private TagDAO tagDAO;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     
-	@Override
-	public Utente salvaUtente(String nome, String cognome, String numeroTelefono, String email, String password,
-			Date dataNascita, String descrizione, Immagine imgProfilo, List<Tag> tag, Ruolo ruolo) {
-		
-		Utente u = new Utente();
-		
+    @Override
+    public Utente salvaUtente(String nome, String cognome, String numeroTelefono, String email, String password,
+                              Date dataNascita, String descrizione, int immagineId, List<Integer> tagIds, Ruolo ruolo) {
+        
+        Utente u = new Utente();
+        
         u.setNome(nome);
         u.setCognome(cognome);
         u.setEmail(email);
@@ -40,25 +44,34 @@ public class UtenteServiceImpl implements UtenteService {
         u.setDataNascita(dataNascita);
         u.setDescrizione(descrizione);
         u.setDeleted(false);
-        u.setCreatoIl(new Date());
-        u.setTag(tag);
+        u.setCreatoIl(new Date());  // Imposta la data di creazione
         u.setRuolo(ruolo);
+        u.setImmagineId(immagineId);
         
-        u.setPassword(passwordEncoder.encode(password));
-        
-        // 1. Salva l'immagine nel database
-        Immagine immagineSalvata = immagineDAO.save(imgProfilo);
-        System.out.println("Immagine salvata con ID: " + immagineSalvata.getIdImg());
+        u.setPassword(passwordEncoder.encode(password));  // Codifica la password
 
-        // 2. Ora assegna l'immagine salvata all'utente
-        u.setImmagineProfilo(immagineSalvata);
-
-        // 3. Salva l'utente nel database con l'immagine associata
+        // 1. Salva l'utente senza i tag per ora
         Utente utenteSalvato = dao.save(u);
         System.out.println("Utente salvato con ID: " + utenteSalvato.getUtenteId());
+
+        if (tagIds != null && !tagIds.isEmpty()) {
+            for (Integer tagId : tagIds) {
+                Optional<Tag> tag = tagDAO.findById(tagId);
+                if (tag.isPresent()) {
+                    UtenteTag utenteTag = new UtenteTag();
+                    utenteTag.setUtente(utenteSalvato); // Associa l'utente
+                    utenteTag.setTag(tag.get()); // Associa il tag
+
+                    // Salva l'associazione nella tabella utente_tag
+                    utenteTagDAO.save(utenteTag);
+                } else {
+                    System.out.println("Tag con ID " + tagId + " non trovato.");
+                }
+            }
+        }
         
-		return utenteSalvato;
-	}
+        return utenteSalvato;
+    }
 	
 	@Override
     public boolean existByEmail(String email) {

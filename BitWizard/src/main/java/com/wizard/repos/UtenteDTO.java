@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.wizard.entities.Immagine;
 import com.wizard.entities.Ruolo;
-import com.wizard.entities.Tag;
 
 public class UtenteDTO {
 	
@@ -17,7 +16,7 @@ public class UtenteDTO {
     private Date dataNascita;
     private String descrizione;
     private Immagine imgProfilo;
-    private List<Tag> tag;
+    private List<Integer> tagIds;
     private Ruolo ruolo;
     
 	public String getNome() {
@@ -68,11 +67,11 @@ public class UtenteDTO {
 	public void setImgProfilo(Immagine imgProfilo) {
 		this.imgProfilo = imgProfilo;
 	}
-	public List<Tag> getTag() {
-		return tag;
+	public List<Integer> getTagIds() {
+		return tagIds;
 	}
-	public void setTag(List<Tag> tag) {
-		this.tag = tag;
+	public void setTagIds(List<Integer> tagIds) {
+		this.tagIds = tagIds;
 	}
 	public Ruolo getRuolo() {
 		return ruolo;

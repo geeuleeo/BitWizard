@@ -9,8 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
@@ -37,9 +35,8 @@ public class Utente {
 	
 	private String descrizione;
 	
-	@ManyToOne
-    @JoinColumn(name = "immagine_id", referencedColumnName = "id_img", nullable = true)
-	private Immagine immagineProfilo;
+	@Column(name = "immagine_id", nullable = true)
+    private Integer immagineId;
 	
 	@ManyToOne
     @JoinColumn(name = "ruolo_id", nullable = false)
@@ -53,14 +50,6 @@ public class Utente {
 	
 	@Column(name = "icona_livello")
 	private String iconaLivello;
-	
-	@ManyToMany
-    @JoinTable(
-        name = "tag_utente",
-        joinColumns = @JoinColumn(name = "utente_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private List<Tag> tag;
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creato_il")
@@ -146,9 +135,6 @@ public class Utente {
 	public void setIconaLivello(String iconaLivello) {
 		this.iconaLivello = iconaLivello;
 	}
-	public List<Tag> getTag() {
-		return tag;
-	}
 	public boolean isDeleted() {
 		return deleted;
 	}
@@ -167,14 +153,11 @@ public class Utente {
 	public void setLivello(Livello livello) {
 		this.livello = livello;
 	}
-	public void setTag(List<Tag> tag) {
-		this.tag = tag;
+	public int getImmagineId() {
+		return immagineId;
 	}
-	public Immagine getImmagineProfilo() {
-		return immagineProfilo;
-	}
-	public void setImmagineProfilo(Immagine immagineProfilo) {
-		this.immagineProfilo = immagineProfilo;
+	public void setImmagineId(int immagineId2) {
+		this.immagineId = immagineId2;
 	}
 	
 }
