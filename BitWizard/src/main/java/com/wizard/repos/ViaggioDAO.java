@@ -12,4 +12,8 @@ public interface ViaggioDAO extends JpaRepository<Viaggio, Long> {
 	
 	List<Viaggio> findByNome(String nome);
 
+	List<Viaggio> findByEtaMinGreaterThanEqualAndEtaMaxLessThanEqual(Integer min, Integer max);
+	
+	List<Viaggio> findByLuogoArrivoContainingIgnoreCase(String destinazione);
+	
 }

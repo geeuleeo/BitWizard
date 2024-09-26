@@ -1,8 +1,12 @@
 package com.wizard.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -70,7 +74,8 @@ public class Viaggio {
     @Column(name = "creato_il")
     private Date creatoIl;
 
-    @OneToMany(mappedBy = "viaggio")
+    @OneToMany(mappedBy = "viaggio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<PartecipantiViaggio> partecipanti;
 
     @ManyToMany
@@ -190,5 +195,13 @@ public class Viaggio {
 	public void setCreatoreId(Long creatoreId) {
 		this.creatoreId = creatoreId;
 	}
+	
+    public void addPartecipante(PartecipantiViaggio partecipante) {
+        if (partecipanti == null) {
+            partecipanti = new ArrayList<>();  // Inizializza la lista solo se è null
+        }
+        partecipanti.add(partecipante);
+        partecipante.setViaggio(this);  // Associa il partecipante al viaggio
+    }
 	
 }

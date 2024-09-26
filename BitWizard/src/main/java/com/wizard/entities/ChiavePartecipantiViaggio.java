@@ -2,6 +2,7 @@ package com.wizard.entities;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
@@ -13,8 +14,11 @@ public class ChiavePartecipantiViaggio implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private Long viaggioId;
-	private Long utenteId;
+    @Column(name = "viaggio_id")
+    private Long viaggioId;
+
+    @Column(name = "utente_id")
+    private Long utenteId;
 	
 	public Long getViaggioId() {
 		return viaggioId;

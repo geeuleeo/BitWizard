@@ -21,6 +21,7 @@ public class ViaggioDTO {
     private Long statoId;
     private List<Integer> tagIds;
     private List<Integer> immagineIds;
+    private List<PartecipantiViaggioDTO> partecipanti;
     
 	public Long getViaggioId() {
 		return viaggioId;
@@ -117,6 +118,12 @@ public class ViaggioDTO {
 	}
 	public void setImmagineIds(List<Integer> immagineIds) {
 		this.immagineIds = immagineIds;
+	}
+	public List<PartecipantiViaggioDTO> getPartecipanti() {
+		return partecipanti;
+	}
+	public void setPartecipanti(List<PartecipantiViaggioDTO> partecipanti) {
+		this.partecipanti = partecipanti;
 	}
 
 }

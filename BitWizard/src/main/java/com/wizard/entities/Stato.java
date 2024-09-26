@@ -15,7 +15,7 @@ public class Stato {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int statoId;
 	
-	@Column(name = "tipo_stato")
+	@Column(name = "tipo_stato", nullable = false)
 	private String tipoStato;
 
 	public int getStatoId() {

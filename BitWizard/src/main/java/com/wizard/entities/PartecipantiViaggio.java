@@ -2,6 +2,8 @@ package com.wizard.entities;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -20,14 +22,18 @@ public class PartecipantiViaggio {
     @ManyToOne
     @MapsId("viaggioId")
     @JoinColumn(name = "viaggio_id")
+    @JsonBackReference
     private Viaggio viaggio;
 
     @ManyToOne
     @MapsId("utenteId")
     @JoinColumn(name = "utente_id")
+    @JsonBackReference
     private Utente utente;
 
-    private String statoPartecipazione;
+    @ManyToOne
+    @JoinColumn(name = "stato_partecipazione", nullable = false)
+    private Stato statoPartecipazione;
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_iscrizione")
@@ -61,11 +67,11 @@ public class PartecipantiViaggio {
 		this.utente = utente;
 	}
 
-	public String getStatoPartecipazione() {
+	public Stato getStatoPartecipazione() {
 		return statoPartecipazione;
 	}
 
-	public void setStatoPartecipazione(String statoPartecipazione) {
+	public void setStatoPartecipazione(Stato statoPartecipazione) {
 		this.statoPartecipazione = statoPartecipazione;
 	}
 
