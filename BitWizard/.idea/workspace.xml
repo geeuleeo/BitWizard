@@ -4,7 +4,56 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a11e2c09-4c46-4af6-a777-c825422e55e7" name="Changes" comment="" />
+    <list default="true" id="a11e2c09-4c46-4af6-a777-c825422e55e7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wizard/controllers/ViaggioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wizard/controllers/ViaggioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wizard/repos/ViaggioDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wizard/repos/ViaggioDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wizard/services/ViaggioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wizard/services/ViaggioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wizard/services/ViaggioServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wizard/services/ViaggioServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/maven/com.wizard/wizard/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/maven/com.wizard/wizard/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/BitWizardApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/BitWizardApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/config/JacksonConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/config/JacksonConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/config/Security.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/config/Security.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/controllers/UtenteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/controllers/UtenteController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/controllers/ViaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/controllers/ViaggioController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/ChiavePartecipantiViaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/ChiavePartecipantiViaggio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Immagine.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Immagine.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Livello.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Livello.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/PartecipantiViaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/PartecipantiViaggio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Ruolo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Ruolo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Stato.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Stato.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Tag.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Tag.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Utente.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Utente.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/UtenteTag.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/UtenteTag.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Viaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Viaggio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/ViaggioImmagini.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/ViaggioImmagini.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/ViaggioTag.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/ViaggioTag.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/ImmagineDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/ImmagineDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/IscrizioneDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/IscrizioneDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/LivelloDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/LivelloDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/PartecipantiViaggioDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/PartecipantiViaggioDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/PartecipantiViaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/PartecipantiViaggioDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/RuoloDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/RuoloDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/StatoDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/StatoDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/StatoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/StatoDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/TagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/TagDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteTagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteTagDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioImmaginiDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioImmaginiDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioTagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioTagDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/UtenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/UtenteService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/UtenteServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/UtenteServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/ViaggioService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/ViaggioService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/ViaggioServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/ViaggioServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/wizard/BitWizardApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/wizard/BitWizardApplicationTests.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,12 +68,12 @@
     &quot;assignee&quot;: &quot;nicolaaggeri&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/geeuleeo/BitWizard.git&quot;,
-    &quot;accountId&quot;: &quot;5b40b93c-f70d-4492-a918-6871f0046320&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/geeuleeo/BitWizard.git",
+    "accountId": "48483cda-157f-416c-b679-1edaa972a2ef"
   }
-}</component>
+}]]></component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -42,7 +91,12 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.BitWizardApplication.executor": "Run",
     "git-widget-placeholder": "backend",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "Z:/BitWizard/BitWizard",
@@ -54,11 +108,32 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="BitWizardApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="wizard" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.wizard.BitWizardApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.wizard.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.BitWizardApplication" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.22855.74" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.22855.74" />
       </set>
     </attachedChunks>
   </component>
@@ -72,10 +147,22 @@
       <updated>1726755161192</updated>
       <workItem from="1726755162302" duration="24000" />
       <workItem from="1726757302743" duration="669000" />
+      <workItem from="1727441388022" duration="3562000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

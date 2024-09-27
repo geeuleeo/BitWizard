@@ -151,5 +151,54 @@ public class ViaggioController {
             }
         }
 
+
+    @GetMapping("/filtra/partenza")
+    public ResponseEntity<?> getViaggiByPartenza(@RequestParam String partenza) {
+        try {
+            // Cerca i viaggi per destinazione (luogoArrivo)
+            List<Viaggio> viaggi = viaggioService.getViaggiByPartenza(partenza);
+
+            if (viaggi.isEmpty()) {
+                // Restituisce 404 se non ci sono viaggi trovati per la destinazione
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Nessun viaggio trovato per la destinazione: " + partenza);
+            }
+
+            // Restituisce 200 OK con i viaggi trovati
+            return ResponseEntity.ok(viaggi);
+
+        } catch (IllegalArgumentException e) {
+            // Gestione di errori legati a parametri non validi
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Parametro destinazione non valido: " + e.getMessage());
+        } catch (Exception e) {
+            // Gestione generica di errori imprevisti
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Errore interno: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/filtra/prezzo")
+    public ResponseEntity<?> getViaggiByPrezzo(@RequestParam Integer min, @RequestParam Integer max) {
+
+        try {
+            List<Viaggio> viaggi = viaggioService.getViaggiByPrezzo(min,max);
+
+            if (viaggi.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Nessun viaggio trovato per l'intervallo di età: " + min + " - " + max);
+            }
+
+            return ResponseEntity.ok(viaggi);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Intervallo di età non valido: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Errore interno: " + e.getMessage());
+        }
+    }
+
     
 }

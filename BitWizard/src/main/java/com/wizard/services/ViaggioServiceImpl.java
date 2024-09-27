@@ -255,4 +255,24 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    return viaggi;
 	}
 
+	@Override
+	public List<Viaggio> getViaggiByPartenza(String partenza) {
+
+
+		List<Viaggio> viaggi = dao.findByLuogoPartenzaContainingIgnoreCase(partenza);
+
+	return viaggi;
+
+	}
+
+	@Override
+	public List<Viaggio> getViaggiByPrezzo(Integer min, Integer max) {
+
+
+		List<Viaggio> viaggi = dao.findByPrezzoBetween(min,max);
+
+		return viaggi;
+
+	}
+
 }

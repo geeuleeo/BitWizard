@@ -17,5 +17,12 @@ public interface ViaggioService {
 	List<Viaggio> getViaggiByEta(Integer min, Integer max);
 	
 	List<Viaggio> getViaggiByDestinazione(String destinazione);
+
+
+	List<Viaggio> getViaggiByPartenza(String partenza);
+
+
+
+	List<Viaggio> getViaggiByPrezzo(Integer min, Integer max);
 	
 }
