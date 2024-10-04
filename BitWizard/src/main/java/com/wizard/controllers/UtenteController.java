@@ -49,7 +49,10 @@ public class UtenteController {
         }
 
         // 2. Salva l'immagine nel database
-        Immagine immagineSalvata = immagineDAO.save(utenteDTO.getImgProfilo());
+        Immagine immagineSalvata = null;
+        if (utenteDTO.getImgProfilo() != null) {
+            immagineSalvata = immagineDAO.save(utenteDTO.getImgProfilo());
+        }
 
         // 3. Recupera il ruolo dal database
         Ruolo ruolo = ruoloDAO.findById(utenteDTO.getRuolo().getRuoloId())
@@ -64,7 +67,7 @@ public class UtenteController {
             utenteDTO.getPassword(),
             utenteDTO.getDataNascita(),
             utenteDTO.getDescrizione(),
-            immagineSalvata.getIdImg(),
+            (immagineSalvata != null) ? immagineSalvata.getIdImg() : null,
             utenteDTO.getTagIds(),  // Passa la lista di ID dei tag
             ruolo  // Passa il ruolo recuperato dal database
         );

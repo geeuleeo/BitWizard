@@ -10,6 +10,6 @@ import com.wizard.entities.Immagine;
 @Repository
 public interface ImmagineDAO extends JpaRepository<Immagine, Integer> {
 	
-	List<Immagine> findByImg(String img);
+	List<Immagine> findByImg(byte[] img);
 
 }

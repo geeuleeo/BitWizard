@@ -21,6 +21,8 @@ import com.wizard.repos.ViaggioDAO;
 import com.wizard.repos.ViaggioDTO;
 import com.wizard.services.ViaggioService;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @RestController
 @RequestMapping("/api/viaggi")
@@ -38,14 +40,19 @@ public class ViaggioController {
     @Autowired
     private UtenteDAO utenteDAO;
     
- // HttpSession session
     @PostMapping("/crea")
-    public ResponseEntity<?> creaViaggio(@RequestBody ViaggioDTO viaggioDTO) {
+    public ResponseEntity<?> creaViaggio(@RequestBody ViaggioDTO viaggioDTO, HttpSession session) {
         try {
-            if (viaggioDTO.getCreatoreId() == null) {
-                throw new IllegalArgumentException("Creatore mancante nel payload");
+            // Recupera il creatoreId dalla sessione
+            Long creatoreId = (Long) session.getAttribute("creatoreId");
+            if (creatoreId == null) {
+                throw new IllegalArgumentException("Creatore non trovato nella sessione.");
             }
 
+            // Imposta il creatoreId nel viaggioDTO
+            viaggioDTO.setCreatoreId(creatoreId);
+
+            // Salva il viaggio
             Viaggio viaggio = viaggioService.salvaViaggio(viaggioDTO);
 
             // Usa l'ObjectMapper per serializzare l'oggetto Viaggio
@@ -56,7 +63,6 @@ public class ViaggioController {
             return new ResponseEntity<>("Errore nella creazione del viaggio: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    
     
     @PostMapping("/iscriviti")
     public ResponseEntity<?> iscriviUtenteAlViaggio(@RequestBody IscrizioneDTO iscrizioneDTO) {

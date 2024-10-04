@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Immagine {
@@ -14,7 +15,9 @@ public class Immagine {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idImg;
 	
-	private String img;
+    @Lob
+    @Column(name = "img", columnDefinition = "LONGBLOB")
+    private byte[] img;
 
 	public int getIdImg() {
 		return idImg;
@@ -24,11 +27,11 @@ public class Immagine {
 		this.idImg = idImg;
 	}
 
-	public String getImg() {
+	public byte[] getImg() {
 		return img;
 	}
 
-	public void setImg(String img) {
+	public void setImg(byte[] img) {
 		this.img = img;
 	}
 	
