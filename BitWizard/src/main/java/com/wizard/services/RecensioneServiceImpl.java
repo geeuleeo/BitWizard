@@ -26,6 +26,8 @@ public class RecensioneServiceImpl implements RecensioneService{
 
     @Autowired
     private UtenteDAO utenteRepository;
+    @Autowired
+    private RecensioneDAO recensioneDAO;
 
     public Recensione salvaRecensione(Long viaggioId, Long utenteId, String testo, int rating) {
         Optional<Viaggio> viaggio = viaggioRepository.findById(viaggioId);
@@ -73,6 +75,11 @@ public class RecensioneServiceImpl implements RecensioneService{
         }
         
         return recensioni;
+    }
+
+    @Override
+    public List<Recensione> trovaRecensioni() {
+        return recensioneDAO.findAll();
     }
 
 }

@@ -21,4 +21,7 @@ public interface ViaggioDAO extends JpaRepository<Viaggio, Long> {
 	List<Viaggio> findByCreatoreId(Long creatoreId);
 
 	List<Viaggio> findByPrezzoBetween(Integer min, Integer max);
-}
+
+
+
+ }

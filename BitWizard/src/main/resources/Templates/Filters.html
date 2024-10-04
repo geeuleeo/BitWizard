@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtra Viaggi</title>
+  <style>
+    .filter-options {
+      display: none; /* Hide all filter options by default */
+    }
+  </style>
+</head>
+<body>
+<h1>Filtra Viaggi</h1>
+<form action="/filtra" method="GET" id="filterForm">
+  <label for="filterType">Seleziona metodo di filtraggio:</label>
+  <select id="filterType" name="filterType" onchange="showFilterOptions()">
+    <option value="" disabled selected>-- Scegli un metodo --</option>
+    <option value="tag">Filtra per Tag</option>
+    <option value="eta">Filtra per Età</option>
+    <option value="destinazione">Filtra per Destinazione</option>
+    <option value="partenza">Filtra per Luogo di Partenza</option>
+    <option value="prezzo">Filtra per Prezzo</option>
+  </select><br><br>
+
+  <div id="tagOptions" class="filter-options">
+    <label for="tagId">ID Tag:</label>
+    <input type="number" id="tagId" name="tagId"><br><br>
+  </div>
+
+  <div id="etaOptions" class="filter-options">
+    <label for="minEta">Età Minima:</label>
+    <input type="number" id="minEta" name="min"><br><br>
+
+    <label for="maxEta">Età Massima:</label>
+    <input type="number" id="maxEta" name="max"><br><br>
+  </div>
+
+  <div id="destinazioneOptions" class="filter-options">
+    <label for="destinazione">Destinazione:</label>
+    <input type="text" id="destinazione" name="destinazione"><br><br>
+  </div>
+
+  <div id="partenzaOptions" class="filter-options">
+    <label for="partenza">Luogo di Partenza:</label>
+    <input type="text" id="partenza" name="partenza"><br><br>
+  </div>
+
+  <div id="prezzoOptions" class="filter-options">
+    <label for="minPrezzo">Prezzo Minimo:</label>
+    <input type="number" id="minPrezzo" name="minPrezzo"><br><br>
+
+    <label for="maxPrezzo">Prezzo Massimo:</label>
+    <input type="number" id="maxPrezzo" name="maxPrezzo"><br><br>
+  </div>
+
+  <input type='submit' value='Filtra Viaggi'>
+</form>
+
+<script>
+  function showFilterOptions() {
+    // Hide all filter option divs
+    const options = document.querySelectorAll('.filter-options');
+    options.forEach(option => option.style.display = 'none');
+
+    // Get the selected filter type
+    const filterType = document.getElementById('filterType').value;
+
+    // Show the corresponding filter options
+    if (filterType) {
+      document.getElementById(filterType + 'Options').style.display = 'block';
+    }
+  }
+</script>
+</body>
+</html>

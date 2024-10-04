@@ -2,6 +2,7 @@ package com.wizard.repos;
 
 import java.util.List;
 
+import com.wizard.entities.Viaggio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.wizard.entities.ChiaveRecensione;
@@ -12,5 +13,7 @@ public interface RecensioneDAO extends JpaRepository<Recensione, ChiaveRecension
 	List<Recensione> findByIdUtenteId(Long utenteId);
 	
 	List<Recensione> findByIdViaggioId(Long viaggioId);
+
+
 
 }

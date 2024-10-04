@@ -17,4 +17,6 @@ public interface RecensioneService {
 
 	List<Recensione> trovaRecensioniDeiViaggiCreatiDaUtente(Long creatoreId);
 
+	List<Recensione> trovaRecensioni();
+
 }
