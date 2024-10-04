@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creazione Viaggio</title>
+</head>
+<body>
+<h1>Creazione Viaggio</h1>
+<form action="/submitViaggio" method="POST">
+    <label for="viaggioId">ID Viaggio:</label>
+    <input type="number" id="viaggioId" name="viaggioId"><br><br>
+
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required><br><br>
+
+    <label for="luogoPartenza">Luogo di Partenza:</label>
+    <input type="text" id="luogoPartenza" name="luogoPartenza" required><br><br>
+
+    <label for="luogoArrivo">Luogo di Arrivo:</label>
+    <input type="text" id="luogoArrivo" name="luogoArrivo" required><br><br>
+
+    <label for="dataPartenza">Data di Partenza:</label>
+    <input type="date" id="dataPartenza" name="dataPartenza" required><br><br>
+
+    <label for="dataRitorno">Data di Ritorno:</label>
+    <input type="date" id="dataRitorno" name="dataRitorno"><br><br>
+
+    <label for="dataScadenza">Data di Scadenza:</label>
+    <input type="date" id="dataScadenza" name="dataScadenza"><br><br>
+
+    <label for="numPartMin">Numero Partecipanti Minimo:</label>
+    <input type="number" id="numPartMin" name="numPartMin" required><br><br>
+
+    <label for="numPartMax">Numero Partecipanti Massimo:</label>
+    <input type="number" id="numPartMax" name="numPartMax" required><br><br>
+
+    <label for="prezzo">Prezzo:</label>
+    <input type="number" step="0.01" id="prezzo" name="prezzo" required><br><br>
+
+    <label for="creatoreId">ID Creatore:</label>
+    <input type="number" id="creatoreId" name="creatoreId"><br><br>
+
+    <label for="etaMin">Età Minima:</label>
+    <input type="number" id="etaMin" name="etaMin"><br><br>
+
+    <label for="etaMax">Età Massima:</label>
+    <input type="number" id="etaMax" name="etaMax"><br><br>
+
+    <label for="statoId">ID Stato:</label>
+    <input type="number" id="statoId" name="statoId"><br><br>
+
+    <label for="tagIds">Tag IDs (separati da virgola):</label>
+    <input type="text" id="tagIds" name="tagIds"><br><br>
+
+    <label for="immagineIds">Immagine IDs (separati da virgola):</label>
+    <input type="text" id="immagineIds" name="immagineIds"><br><br>
+
+    <h3>Partecipanti Viaggio</h3>
+    <!-- Assuming a simple input for partecipanti, this can be expanded as needed -->
+    <div id='partecipantiContainer'>
+        <!-- Example of adding a participant -->
+        <div class='partecipante'>
+            <label for='partecipanteNome'>Nome Partecipante:</label>
+            <input type='text' name='partecipanteNome[]' required />
+            <!-- Add more fields as necessary -->
+        </div>
+        <!-- More participants can be added dynamically -->
+        <!-- Use JavaScript to manage adding/removing participants -->
+    </div>
+
+    <button type='button' onclick='addPartecipante()'>Aggiungi Partecipante</button><br><br>
+
+    <input type='submit' value='Crea Viaggio'>
+</form>
+
+<!-- Simple JavaScript to add more participants -->
+<script>
+    function addPartecipante() {
+        const container = document.getElementById('partecipantiContainer');
+        const newPartecipante = document.createElement('div');
+        newPartecipante.className = 'partecipante';
+        newPartecipante.innerHTML = `
+              <label for='partecipanteNome'>Nome Partecipante:</label>
+              <input type='text' name='partecipanteNome[]' required />
+              <!-- Add more fields as necessary -->
+          `;
+        container.appendChild(newPartecipante);
+    }
+</script>
+</body>
+</html>
