@@ -16,6 +16,8 @@ import com.wizard.repos.TagDAO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.UtenteTagDAO;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class UtenteServiceImpl implements UtenteService {
 	
@@ -82,5 +84,21 @@ public class UtenteServiceImpl implements UtenteService {
     public List<Utente> getAllUtenti() {
         return dao.findAll();
     }
+
+    @Override
+    public Utente getUtente(HttpSession session) {
+        // Recupera l'ID utente dalla sessione
+        Object utenteIdObj = session.getAttribute("utenteId");
+        
+        if (utenteIdObj == null) {
+            throw new IllegalStateException("Nessun utente loggato.");
+        }
+
+        Long utenteId = (Long) utenteIdObj;
+        
+        return dao.findById(utenteId)
+                  .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + utenteId));
+    }
+
 	
 }

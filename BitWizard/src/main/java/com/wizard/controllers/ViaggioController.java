@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
-import com.wizard.repos.IscrizioneDTO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.ViaggioDAO;
 import com.wizard.repos.ViaggioDTO;
@@ -64,20 +64,43 @@ public class ViaggioController {
         }
     }
     
+    @GetMapping("/viaggio/{id}")
+    public ResponseEntity<?> caricaPaginaViaggio(@PathVariable Long id, HttpSession session) {
+        // Recupera le informazioni del viaggio
+        Viaggio viaggio = viaggioDAO.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
+        
+        // Salva l'id del viaggio nella sessione
+        session.setAttribute("viaggioId", id);
+        
+        // Restituisce le informazioni del viaggio
+        return ResponseEntity.ok(viaggio);
+    }
+    
     @PostMapping("/iscriviti")
-    public ResponseEntity<?> iscriviUtenteAlViaggio(@RequestBody IscrizioneDTO iscrizioneDTO) {
+    public ResponseEntity<?> iscriviUtenteAlViaggio(HttpSession session) {
         try {
-            // Recupera l'utente e il viaggio usando i rispettivi ID
-            Viaggio viaggio = viaggioDAO.findById(iscrizioneDTO.getViaggioId())
-                .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
+            // Recupera l'id del viaggio dalla session
+            Long viaggioId = (Long) session.getAttribute("viaggioId");
+            if (viaggioId == null) {
+                throw new IllegalStateException("Nessun viaggio selezionato");
+            }
             
-            Utente partecipante = utenteDAO.findById(iscrizioneDTO.getUtenteId())
+            // Recupera l'id dell'utente dalla session
+            Long utenteId = (Long) session.getAttribute("utenteId");
+            if (utenteId == null) {
+                throw new IllegalStateException("Utente non autenticato");
+            }
+
+            // Recupera il viaggio e l'utente dai rispettivi DAO
+            Viaggio viaggio = viaggioDAO.findById(viaggioId)
+                .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
+            Utente partecipante = utenteDAO.findById(utenteId)
                 .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
             
             // Chiama il servizio per aggiungere il partecipante al viaggio
             Utente utenteIscritto = viaggioService.addPartecipanteViaggio(partecipante, viaggio);
-            
-            // Restituisce una risposta di successo
+
             return ResponseEntity.ok(utenteIscritto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

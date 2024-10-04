@@ -55,7 +55,7 @@ public class UtenteController {
         }
 
         // 3. Recupera il ruolo dal database
-        Ruolo ruolo = ruoloDAO.findById(utenteDTO.getRuolo().getRuoloId())
+        Ruolo ruolo = ruoloDAO.findById(((Ruolo) utenteDTO.getRuolo()).getRuoloId())
                                      .orElseThrow(() -> new RuntimeException("Ruolo non trovato"));
 
         // 4. Salva l'utente con il ruolo e gli ID dei tag
