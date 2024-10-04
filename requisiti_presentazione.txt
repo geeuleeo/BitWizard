@@ -1,0 +1,30 @@
+- crezione utente
+	- form per passare tutti i dati
+	- caricare immagine profilo
+	- aggiungere i tag
+
+- creazione viaggio
+	- form per passare tutti i dati
+	- caricare una/più immagini
+
+- iscriversi ad un viaggio
+
+Esempio di flusso:
+L'utente clicca su un link o naviga alla pagina di un viaggio, ad esempio http://tuosito.com/viaggio/5.
+Il metodo caricaPaginaViaggio viene chiamato con id = 5.
+Il metodo cerca il viaggio con id = 5 nel database.
+Se il viaggio esiste, il suo id (5) viene memorizzato nella sessione utente con la chiave "viaggioId".
+I dettagli del viaggio vengono restituiti al client (che può essere una pagina web o una chiamata API), e vengono mostrati all'utente.
+
+- lasciare una recensione ad un viaggio
+	- sistema di valutazione ( ? con stelline)
+
+- ricerca viaggio
+	- filtri
+	tag
+	età
+	luogo
+	data partenza
+	prezzo
+
+? aggiungere Http Session
