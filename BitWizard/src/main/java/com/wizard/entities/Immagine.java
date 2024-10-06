@@ -34,5 +34,9 @@ public class Immagine {
 	public void setImg(byte[] img) {
 		this.img = img;
 	}
+
+	public boolean isEmpty() {
+	    return img == null || img.length == 0;
+	}
 	
 }

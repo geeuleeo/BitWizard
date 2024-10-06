@@ -1,8 +1,10 @@
 package com.wizard.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -14,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
@@ -38,8 +41,17 @@ public class Utente {
 	
 	private String descrizione;
 	
-	@Column(name = "immagine_id", nullable = true)
-    private Integer immagineId;
+    @OneToOne
+    @JoinColumn(name = "immagine_id")
+    private Immagine immagine;
+    
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
+    
+    @OneToMany(mappedBy = "utente", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
+    @JsonIgnore
+    private List<UtenteTag> utenteTags = new ArrayList<>();
 	
 	@ManyToOne
     @JoinColumn(name = "ruolo_id", nullable = false)
@@ -59,7 +71,6 @@ public class Utente {
 	private Date creatoIl;
 	
 	private boolean deleted;
-	
 	
 	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
@@ -157,11 +168,17 @@ public class Utente {
 	public void setLivello(Livello livello) {
 		this.livello = livello;
 	}
-	public int getImmagineId() {
-		return immagineId;
+	public Immagine getImmagine() {
+		return immagine;
 	}
-	public void setImmagineId(int immagineId2) {
-		this.immagineId = immagineId2;
+	public void setImmagine(Immagine immagine) {
+		this.immagine = immagine;
+	}
+	public List<UtenteTag> getUtenteTags() {
+		return utenteTags;
+	}
+	public void setUtenteTags(List<UtenteTag> utenteTags) {
+		this.utenteTags = utenteTags;
 	}
 	
 }

@@ -113,9 +113,9 @@ public class ViaggioServiceImpl implements ViaggioService {
 	        throw e;
 	    }
         
-        List<Integer> tagIds = viaggioDTO.getTagIds();
+        List<Long> tagIds = viaggioDTO.getTagIds();
         if (tagIds != null && !tagIds.isEmpty()) {
-            for (Integer tagId : tagIds) {
+            for (Long tagId : tagIds) {
                 Optional<Tag> tag = tagDAO.findById(tagId);
                 if (tag.isPresent()) {
                     ViaggioTag viaggioTag = new ViaggioTag();

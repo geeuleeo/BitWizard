@@ -19,7 +19,7 @@ public class ViaggioDTO {
     private int etaMin;
     private int etaMax;
     private Long statoId;
-    private List<Integer> tagIds;
+    private List<Long> tagIds;
     private List<Integer> immagineIds;
     private List<PartecipantiViaggioDTO> partecipanti;
     
@@ -107,10 +107,10 @@ public class ViaggioDTO {
 	public void setStatoId(Long statoId) {
 		this.statoId = statoId;
 	}
-	public List<Integer> getTagIds() {
+	public List<Long> getTagIds() {
 		return tagIds;
 	}
-	public void setTagIds(List<Integer> tagIds) {
+	public void setTagIds(List<Long> tagIds) {
 		this.tagIds = tagIds;
 	}
 	public List<Integer> getImmagineIds() {

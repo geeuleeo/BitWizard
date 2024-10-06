@@ -1,10 +1,15 @@
 package com.wizard.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Tag {
@@ -12,19 +17,22 @@ public class Tag {
 	@Id
 	@Column(name = "tag_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int tagId;
+	private Long tagId;
 	
 	@Column(name = "tipo_tag")
 	private String tipoTag;
 	
 	@Column(name = "img_tag")
 	private String imgTag;
+	
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UtenteTag> utenteTags = new ArrayList<>();
 
-	public int getTagId() {
+	public Long getTagId() {
 		return tagId;
 	}
 
-	public void setTagId(int tagId) {
+	public void setTagId(Long tagId) {
 		this.tagId = tagId;
 	}
 
@@ -42,6 +50,14 @@ public class Tag {
 
 	public void setImgTag(String imgTag) {
 		this.imgTag = imgTag;
+	}
+
+	public List<UtenteTag> getUtenteTags() {
+		return utenteTags;
+	}
+
+	public void setUtenteTags(List<UtenteTag> utenteTags) {
+		this.utenteTags = utenteTags;
 	}
 
 }

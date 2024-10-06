@@ -3,9 +3,6 @@ package com.wizard.repos;
 import java.util.Date;
 import java.util.List;
 
-import com.wizard.entities.Immagine;
-import com.wizard.entities.Ruolo;
-
 public class UtenteDTO {
 	
     private String nome;
@@ -15,9 +12,9 @@ public class UtenteDTO {
     private String password;
     private Date dataNascita;
     private String descrizione;
-    private Immagine imgProfilo;
-    private List<Integer> tagIds;
-    private Ruolo ruolo;
+    private String imgProfilo;
+    private int ruoloId;
+    private List<Long> tagIds;
     
 	public String getNome() {
 		return nome;
@@ -61,23 +58,23 @@ public class UtenteDTO {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
-	public Immagine getImgProfilo() {
+	public String getImgProfilo() {
 		return imgProfilo;
 	}
-	public void setImgProfilo(Immagine imgProfilo) {
+	public void setImgProfilo(String imgProfilo) {
 		this.imgProfilo = imgProfilo;
 	}
-	public List<Integer> getTagIds() {
+	public int getRuoloId() {
+		return ruoloId;
+	}
+	public void setRuoloId(int ruoloId) {
+		this.ruoloId = ruoloId;
+	}
+	public List<Long> getTagIds() {
 		return tagIds;
 	}
-	public void setTagIds(List<Integer> tagIds) {
+	public void setTagIds(List<Long> tagIds) {
 		this.tagIds = tagIds;
-	}
-	public Ruolo getRuolo() {
-		return ruolo;
-	}
-	public void setRuolo(Ruolo ruolo) {
-		this.ruolo = ruolo;
 	}
 
 }

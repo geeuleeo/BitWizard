@@ -1,14 +1,15 @@
 package com.wizard.services;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.wizard.entities.Ruolo;
 import com.wizard.entities.Tag;
 import com.wizard.entities.Utente;
 import com.wizard.entities.UtenteTag;
@@ -17,6 +18,7 @@ import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.UtenteTagDAO;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UtenteServiceImpl implements UtenteService {
@@ -33,46 +35,62 @@ public class UtenteServiceImpl implements UtenteService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     
-    @Override
-    public Utente salvaUtente(String nome, String cognome, String numeroTelefono, String email, String password,
-                              Date dataNascita, String descrizione, int immagineId, List<Integer> tagIds, Ruolo ruolo) {
-        
-        Utente u = new Utente();
-        
-        u.setNome(nome);
-        u.setCognome(cognome);
-        u.setEmail(email);
-        u.setNumeroTelefono(numeroTelefono);
-        u.setDataNascita(dataNascita);
-        u.setDescrizione(descrizione);
-        u.setDeleted(false);
-        u.setCreatoIl(new Date());  // Imposta la data di creazione
-        u.setRuolo(ruolo);
-        u.setImmagineId(immagineId);
-        
-        u.setPassword(passwordEncoder.encode(password));  // Codifica la password
-
-        // 1. Salva l'utente senza i tag per ora
-        Utente utenteSalvato = dao.save(u);
-        System.out.println("Utente salvato con ID: " + utenteSalvato.getUtenteId());
-
-        if (tagIds != null && !tagIds.isEmpty()) {
-            for (Integer tagId : tagIds) {
-                Optional<Tag> tag = tagDAO.findById(tagId);
-                if (tag.isPresent()) {
-                    UtenteTag utenteTag = new UtenteTag();
-                    utenteTag.setUtente(utenteSalvato); // Associa l'utente
-                    utenteTag.setTag(tag.get()); // Associa il tag
-
-                    // Salva l'associazione nella tabella utente_tag
-                    utenteTagDAO.save(utenteTag);
-                } else {
-                    System.out.println("Tag con ID " + tagId + " non trovato.");
-                }
-            }
+    @Autowired
+    private UtenteTagDAO utenteTagRepository;
+    
+    @Transactional
+    public Utente salvaUtente(Utente utente, List<Long> tagIds) {
+    	
+        System.out.println("Numero di UtenteTag nell'utente: " + utente.getUtenteTags().size());
+        for (UtenteTag utenteTag : utente.getUtenteTags()) {
+            System.out.println("UtenteTag: utente=" + utenteTag.getUtente() + ", tag=" + utenteTag.getTag());
         }
         
+              // Salva l'utente nel database
+        Utente utenteSalvato = dao.save(utente);
+        if (utenteSalvato.getUtenteId() == null) {
+            throw new RuntimeException("Errore nel salvataggio dell'utente");
+        }
+
+        // Gestisci le associazioni con i tag
+        if (tagIds != null && !tagIds.isEmpty()) {
+            // Recupera i tag dal database
+            List<Tag> tags = tagDAO.findAllById(tagIds);
+
+            // Verifica se tutti i tag sono stati trovati
+            if (tags.size() != tagIds.size()) {
+                throw new RuntimeException("Uno o più tag non sono stati trovati");
+            }
+
+            // Crea e salva le associazioni
+            for (Tag tag : tags) {
+                if (tag == null) {
+                    throw new RuntimeException("Tag nullo trovato nella lista dei tag recuperati.");
+                }
+
+                UtenteTag utenteTag = new UtenteTag();
+                utenteTag.setUtente(utenteSalvato);
+                utenteTag.setTag(tag);
+
+                // Aggiungi l'associazione alle liste
+                utenteSalvato.getUtenteTags().add(utenteTag);
+                tag.getUtenteTags().add(utenteTag);
+
+                // Salva l'associazione
+                utenteTagRepository.save(utenteTag);
+            }
+            
+        }
+
         return utenteSalvato;
+    }
+    
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Utente utente = dao.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato"));
+        
+        return new User(utente.getEmail(), utente.getPassword(), new ArrayList<>());
     }
 	
 	@Override
@@ -99,6 +117,24 @@ public class UtenteServiceImpl implements UtenteService {
         return dao.findById(utenteId)
                   .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + utenteId));
     }
+    
+    public void aggiungiTagAUtente(Utente utente, List<Tag> tags) {
+        for (Tag tag : tags) {
+            UtenteTag utenteTag = new UtenteTag();
+            utenteTag.setUtente(utente);
+            utenteTag.setTag(tag);
 
-	
+            utente.getUtenteTags().add(utenteTag);
+            utenteTagRepository.save(utenteTag);
+        }
+    }
+    
+    public void rimuoviTagDaUtente(Utente utente, Tag tag) {
+        UtenteTag utenteTag = utenteTagRepository.findByUtenteAndTag(utente, tag);
+        if (utenteTag != null) {
+            utente.getUtenteTags().remove(utenteTag);
+            utenteTagRepository.delete(utenteTag);
+        }
+    }
+
 }

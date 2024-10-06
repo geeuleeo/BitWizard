@@ -6,19 +6,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"utente_id", "tag_id"}))
 public class UtenteTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "utente_id", nullable = false)
     private Utente utente;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "tag_id", nullable = false)
     private Tag tag;
 
