@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_4" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.4">
+	<Header>
+		<Application name="SkLearn2PMML package" version="0.109.0"/>
+		<Timestamp>2024-07-10T13:16:25Z</Timestamp>
+	</Header>
+	<MiningBuildTask>
+		<Extension name="repr">PMMLPipeline(steps=[('lr', LinearRegression())])</Extension>
+	</MiningBuildTask>
+	<DataDictionary>
+		<DataField name="horsepower" optype="continuous" dataType="double"/>
+		<DataField name="wheelbase" optype="continuous" dataType="double"/>
+		<DataField name="carlength" optype="continuous" dataType="double"/>
+		<DataField name="carwidth" optype="continuous" dataType="double"/>
+		<DataField name="carheight" optype="continuous" dataType="double"/>
+		<DataField name="curbweight" optype="continuous" dataType="double"/>
+		<DataField name="enginesize" optype="continuous" dataType="double"/>
+		<DataField name="peakrpm" optype="continuous" dataType="double"/>
+		<DataField name="citympg" optype="continuous" dataType="double"/>
+		<DataField name="highwaympg" optype="continuous" dataType="double"/>
+		<DataField name="price" optype="continuous" dataType="double"/>
+	</DataDictionary>
+	<RegressionModel functionName="regression" algorithmName="sklearn.linear_model._base.LinearRegression">
+		<MiningSchema>
+			<MiningField name="horsepower" usageType="target"/>
+			<MiningField name="wheelbase"/>
+			<MiningField name="carlength"/>
+			<MiningField name="carwidth"/>
+			<MiningField name="carheight"/>
+			<MiningField name="curbweight"/>
+			<MiningField name="enginesize"/>
+			<MiningField name="peakrpm"/>
+			<MiningField name="citympg"/>
+			<MiningField name="highwaympg"/>
+			<MiningField name="price"/>
+		</MiningSchema>
+		<RegressionTable intercept="42.333277473483854">
+			<NumericPredictor name="wheelbase" coefficient="-1.541897172237691"/>
+			<NumericPredictor name="carlength" coefficient="-0.3744819928560019"/>
+			<NumericPredictor name="carwidth" coefficient="2.272273802448728"/>
+			<NumericPredictor name="carheight" coefficient="-0.7350475438753071"/>
+			<NumericPredictor name="curbweight" coefficient="0.02950724560178643"/>
+			<NumericPredictor name="enginesize" coefficient="0.35900868130151625"/>
+			<NumericPredictor name="peakrpm" coefficient="0.014714903454633464"/>
+			<NumericPredictor name="citympg" coefficient="-3.641727056582446"/>
+			<NumericPredictor name="highwaympg" coefficient="1.8461047094080651"/>
+			<NumericPredictor name="price" coefficient="6.00183031715773E-4"/>
+		</RegressionTable>
+	</RegressionModel>
+</PMML>
