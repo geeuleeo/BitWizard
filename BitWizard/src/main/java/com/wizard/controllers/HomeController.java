@@ -27,7 +27,7 @@ public class HomeController {
     // Metodo per servire la pagina di login
     @GetMapping("/login")
     public String showLoginPage() {
-        return "login"; // Nome del template della pagina di login (ad esempio, login.html o login.jsp)
+        return "login";
     }
 
     @PostMapping("/login")
@@ -75,4 +75,10 @@ public class HomeController {
         }
         return "home";
     }
+    
+    @GetMapping("/CreaViaggio")
+    public String showCreaViaggioPage() {
+        return "CreaViaggio";
+    }
+    
 }

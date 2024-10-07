@@ -85,6 +85,10 @@ public class Viaggio {
         inverseJoinColumns = @JoinColumn(name = "id_img")
     )
     private List<Immagine> immaginiViaggio;
+    
+    @ManyToOne
+    @JoinColumn(name = "immagine_id")
+    private Immagine immagineCopertina;
 	
 	
 	public List<PartecipantiViaggio> getPartecipanti() {
@@ -195,8 +199,13 @@ public class Viaggio {
 	public void setCreatoreId(Long creatoreId) {
 		this.creatoreId = creatoreId;
 	}
-	
-    public void addPartecipante(PartecipantiViaggio partecipante) {
+    public Immagine getImmagineCopertina() {
+		return immagineCopertina;
+	}
+	public void setImmagineCopertina(Immagine immagineCopertina) {
+		this.immagineCopertina = immagineCopertina;
+	}
+	public void addPartecipante(PartecipantiViaggio partecipante) {
         if (partecipanti == null) {
             partecipanti = new ArrayList<>();  // Inizializza la lista solo se è null
         }

@@ -3,6 +3,10 @@ package com.wizard.repos;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.wizard.customs.StringToLongListDeserializer;
+import com.wizard.entities.Immagine;
+
 public class ViaggioDTO {
 	
 	private Long viaggioId;
@@ -18,9 +22,9 @@ public class ViaggioDTO {
     private Long creatoreId;
     private int etaMin;
     private int etaMax;
-    private Long statoId;
+    @JsonDeserialize(using = StringToLongListDeserializer.class)
     private List<Long> tagIds;
-    private List<Integer> immagineIds;
+    private String immagineCopertina;
     private List<PartecipantiViaggioDTO> partecipanti;
     
 	public Long getViaggioId() {
@@ -101,23 +105,11 @@ public class ViaggioDTO {
 	public void setEtaMax(int etaMax) {
 		this.etaMax = etaMax;
 	}
-	public Long getStatoId() {
-		return statoId;
-	}
-	public void setStatoId(Long statoId) {
-		this.statoId = statoId;
-	}
 	public List<Long> getTagIds() {
 		return tagIds;
 	}
 	public void setTagIds(List<Long> tagIds) {
 		this.tagIds = tagIds;
-	}
-	public List<Integer> getImmagineIds() {
-		return immagineIds;
-	}
-	public void setImmagineIds(List<Integer> immagineIds) {
-		this.immagineIds = immagineIds;
 	}
 	public List<PartecipantiViaggioDTO> getPartecipanti() {
 		return partecipanti;
@@ -125,5 +117,12 @@ public class ViaggioDTO {
 	public void setPartecipanti(List<PartecipantiViaggioDTO> partecipanti) {
 		this.partecipanti = partecipanti;
 	}
+	public String getImmagineCopertina() {
+		return immagineCopertina;
+	}
+	public void setImmagineCopertina(String immagineCopertina) {
+		this.immagineCopertina = immagineCopertina;
+	}
+	
 
 }

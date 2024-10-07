@@ -1,6 +1,8 @@
 package com.wizard.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +46,8 @@ public class ViaggioController {
     public ResponseEntity<?> creaViaggio(@RequestBody ViaggioDTO viaggioDTO, HttpSession session) {
         try {
             // Recupera il creatoreId dalla sessione
-            Long creatoreId = (Long) session.getAttribute("creatoreId");
+            Utente creatore = (Utente) session.getAttribute("utenteLoggato");
+            Long creatoreId = (Long) creatore.getUtenteId(); 
             if (creatoreId == null) {
                 throw new IllegalArgumentException("Creatore non trovato nella sessione.");
             }
@@ -60,7 +63,12 @@ public class ViaggioController {
 
             return new ResponseEntity<>(viaggioJson, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Errore nella creazione del viaggio: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        	// Modifica per restituire un oggetto JSON invece di una stringa semplice
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Errore nella creazione del viaggio");
+            errorResponse.put("message", e.getMessage());
+            
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
     

@@ -1,18 +1,20 @@
 package com.wizard.services;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.wizard.entities.ChiavePartecipantiViaggio;
 import com.wizard.entities.Immagine;
 import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Stato;
-import com.wizard.entities.Tag;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.entities.ViaggioImmagini;
@@ -80,14 +82,27 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    viaggio.setEtaMax(viaggioDTO.getEtaMax());
 	    viaggio.setDeleted(false);
 	    viaggio.setCreatoIl(new Date());
+	    
+	    if (viaggioDTO.getImmagineCopertina() != null && !viaggioDTO.getImmagineCopertina().isEmpty()) {
+            try {
+                byte[] imgBytes = Base64.getDecoder().decode(viaggioDTO.getImmagineCopertina());
+                Immagine immagine = new Immagine();
+                immagine.setImg(imgBytes); // Salva i dati dell'immagine
+                immagineDAO.save(immagine);
+                viaggio.setImmagineCopertina(immagine); // Associa l'immagine al viaggio
+            } catch (IllegalArgumentException e) {
+            	throw new IllegalArgumentException("Formato immagine non valido");
+            }
+        }
 
 	    // Imposta il creatore del viaggio
 	    viaggio.setCreatoreId(creatoreId);
 	    System.out.println("Creatore ID impostato: " + creatoreId);
 	    
+	    /*
 	    if (viaggioDTO.getStatoId() == null) {
 	        // Recupera lo stato "In attesa" dal database usando lo statoDAO
-	        Stato statoInAttesa = statoDAO.findByTipoStato("In attesa");
+	        Stato statoInAttesa = statoDAO.findByTipoStato("in attesa");
 	        viaggio.setStato(statoInAttesa);
 	        throw new IllegalStateException("Nessuno stato trovato");
 	    } else {
@@ -99,6 +114,7 @@ public class ViaggioServiceImpl implements ViaggioService {
 	            throw new IllegalArgumentException("Stato con ID " + viaggioDTO.getStatoId() + " non trovato.");
 	        }
 	    }
+	    */
 
 	    System.out.println("Tentativo di salvataggio del viaggio...");
 	    
@@ -114,6 +130,7 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    }
         
         List<Long> tagIds = viaggioDTO.getTagIds();
+        /*
         if (tagIds != null && !tagIds.isEmpty()) {
             for (Long tagId : tagIds) {
                 Optional<Tag> tag = tagDAO.findById(tagId);
@@ -128,24 +145,9 @@ public class ViaggioServiceImpl implements ViaggioService {
                 }
             }
         }
-
-
-        // Associa le immagini al viaggio
-        List<Integer> immagineIds = viaggioDTO.getImmagineIds();
-        if (immagineIds != null && !immagineIds.isEmpty()) {
-            for (Integer immagineId : immagineIds) {
-                Optional<Immagine> imgOptional = immagineDAO.findById(immagineId);
-                if (imgOptional.isPresent()) {
-                    Immagine img = imgOptional.get();
-                    ViaggioImmagini viaggioImg = new ViaggioImmagini();
-                    viaggioImg.setViaggio(viaggioSalvato);
-                    viaggioImg.setImmagine(img);
-                    viaggioImgDAO.save(viaggioImg);
-                } else {
-                    System.out.println("Immagine con ID " + immagineId + " non trovata.");
-                }
-            }
-        }
+        */
+        
+        associaTagEViaggio(tagIds, viaggioSalvato);
         
         Optional<Utente> creatoreOptional = utenteDAO.findById(viaggioDTO.getCreatoreId());
 
@@ -223,7 +225,28 @@ public class ViaggioServiceImpl implements ViaggioService {
 	        throw new IllegalArgumentException("Utente con ID " + partecipante.getUtenteId() + " non trovato.");
 	    }
 	}
+	
+	private void associaTagEViaggio(List<Long> tagIds, Viaggio viaggio) {
+	    if (tagIds != null && !tagIds.isEmpty()) {
+	        tagDAO.findAllById(tagIds).forEach(tag -> {
+	            ViaggioTag viaggioTag = new ViaggioTag();
+	            viaggioTag.setViaggio(viaggio);
+	            viaggioTag.setTag(tag);
+	            viaggioTagDAO.save(viaggioTag);
+	        });
+	    }
+	}
 
+	private void associaImmaginiEViaggio(List<Integer> immagineIds, Viaggio viaggio) {
+	    if (immagineIds != null && !immagineIds.isEmpty()) {
+	        immagineDAO.findAllById(immagineIds).forEach(immagine -> {
+	            ViaggioImmagini viaggioImg = new ViaggioImmagini();
+	            viaggioImg.setViaggio(viaggio);
+	            viaggioImg.setImmagine(immagine);
+	            viaggioImgDAO.save(viaggioImg);
+	        });
+	    }
+	}
 
 	@Override
 	public List<Viaggio> getViaggiByTag(Integer tagId) {
