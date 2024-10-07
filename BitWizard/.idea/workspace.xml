@@ -4,34 +4,37 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a11e2c09-4c46-4af6-a777-c825422e55e7" name="Changes" comment="Aggiunti metodi">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Templates/Crea.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Templates/Filters.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Templates/IscrizioneViaggio.html" afterDir="false" />
+    <list default="true" id="a11e2c09-4c46-4af6-a777-c825422e55e7" name="Changes" comment="Aggiunti metodi e templates">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/wizard/templateController/ViaggioTemplateController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wizard/repos/RecensioneDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wizard/repos/RecensioneDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wizard/repos/ViaggioDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wizard/repos/ViaggioDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wizard/services/RecensioneService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wizard/services/RecensioneService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wizard/services/RecensioneServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wizard/services/RecensioneServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Templates/Crea.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Templates/Crea.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Templates/Filters.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Templates/Filters.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Templates/Crea.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Templates/Crea.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Templates/Filters.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Templates/Filters.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/controllers/ImmagineController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/controllers/ImmagineController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/config/CustomAuthenticationFailureHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/config/CustomAuthenticationFailureHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/config/CustomAuthenticationSuccessHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/config/CustomAuthenticationSuccessHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/config/Security.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/config/Security.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/controllers/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/controllers/HomeController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/controllers/UtenteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/controllers/UtenteController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/controllers/ViaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/controllers/ViaggioController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/ChiaveRecensione.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/ChiaveRecensione.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/customs/CustomDettagliUtente.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/customs/CustomDettagliUtente.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/customs/StringToLongListDeserializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/customs/StringToLongListDeserializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Agenzia.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Agenzia.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Immagine.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Immagine.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Recensione.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Recensione.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Tag.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Tag.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Utente.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Utente.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/UtenteAgenzia.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/UtenteAgenzia.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/UtenteTag.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/UtenteTag.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/Viaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/Viaggio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/entities/ViaggioImmagini.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/entities/ViaggioImmagini.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/ImmagineDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/ImmagineDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/RecensioneDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/RecensioneDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/RecensioneDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/RecensioneDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/TagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/TagDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/ImmagineService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/ImmagineService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/ImmagineServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/ImmagineServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/RecensioneService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/RecensioneService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/RecensioneServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/RecensioneServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteTagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/UtenteTagDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/repos/ViaggioDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/CustomDettagliUtenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/CustomDettagliUtenteService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/UtenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/UtenteService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/UtenteServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/UtenteServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/ViaggioService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/ViaggioService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/wizard/services/ViaggioServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/wizard/services/ViaggioServiceImpl.class" afterDir="false" />
     </list>
@@ -44,6 +47,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -80,10 +84,11 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
+    "JUnit.All in wizard.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "15",
-    "RequestMappingsPanelWidth1": "15",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.BitWizardApplication.executor": "Run",
     "git-widget-placeholder": "#10 on backend",
@@ -97,7 +102,15 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.BitWizardApplication">
+    <configuration name="All in wizard" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="wizard" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="BitWizardApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="wizard" />
@@ -115,6 +128,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.BitWizardApplication" />
+        <item itemvalue="JUnit.All in wizard" />
       </list>
     </recent_temporary>
   </component>
@@ -137,7 +151,7 @@
       <workItem from="1726755162302" duration="24000" />
       <workItem from="1726757302743" duration="669000" />
       <workItem from="1727441388022" duration="4780000" />
-      <workItem from="1728044066045" duration="5828000" />
+      <workItem from="1728044066045" duration="17932000" />
     </task>
     <task id="LOCAL-00001" summary="Aggiunti metodi">
       <option name="closed" value="true" />
@@ -147,7 +161,23 @@
       <option name="project" value="LOCAL" />
       <updated>1727445593101</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Aggiunti metodi e templates">
+      <option name="closed" value="true" />
+      <created>1728050501727</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1728050501727</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Aggiunti metodi e templates">
+      <option name="closed" value="true" />
+      <created>1728050541029</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1728050541029</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -166,6 +196,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Aggiunti metodi" />
-    <option name="LAST_COMMIT_MESSAGE" value="Aggiunti metodi" />
+    <MESSAGE value="Aggiunti metodi e templates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aggiunti metodi e templates" />
   </component>
 </project>
