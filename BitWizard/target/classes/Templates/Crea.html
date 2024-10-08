@@ -10,7 +10,7 @@
 <div class="container mt-5">
     <h2>Crea un Nuovo Viaggio</h2>
 
-    <form th:action="@{/crea}" method="post" th:object="${viaggio}">
+    <form th:action="@{/api/viaggi/crea}" method="post" th:object="${viaggio}">
         <div class="form-group">
             <label for="nome">Nome del Viaggio:</label>
             <input type="text" id="nome" th:field="*{nome}" class="form-control" required />
