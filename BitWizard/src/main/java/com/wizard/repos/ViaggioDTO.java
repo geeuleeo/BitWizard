@@ -24,7 +24,9 @@ public class ViaggioDTO {
     private int etaMax;
     @JsonDeserialize(using = StringToLongListDeserializer.class)
     private List<Long> tagIds;
-    private String immagineCopertina;
+    //private String immagineCopertina;
+    private byte[] immagineCopertina;
+    
     private List<PartecipantiViaggioDTO> partecipanti;
     
 	public Long getViaggioId() {
@@ -117,10 +119,10 @@ public class ViaggioDTO {
 	public void setPartecipanti(List<PartecipantiViaggioDTO> partecipanti) {
 		this.partecipanti = partecipanti;
 	}
-	public String getImmagineCopertina() {
+	public byte[] getImmagineCopertina() {
 		return immagineCopertina;
 	}
-	public void setImmagineCopertina(String immagineCopertina) {
+	public void setImmagineCopertina(byte[] immagineCopertina) {
 		this.immagineCopertina = immagineCopertina;
 	}
 	

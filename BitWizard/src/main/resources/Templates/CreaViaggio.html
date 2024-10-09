@@ -5,60 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creazione Viaggio</title>
     <script>
-        function mostraFeedback(successo) {
-            const feedback = document.getElementById('feedback');
-            if (successo) {
-                feedback.textContent = 'Viaggio creato con successo!';
-                feedback.style.color = 'green';
+    function inviaForm() {
+        const form = document.getElementById('creaViaggioForm');
+        const formData = new FormData(form); // Manteniamo il file nel suo formato binario
+
+        inviaDati(formData); // Inviamo il formData così com'è, inclusi i file
+    }
+
+    function inviaDati(formData) {
+        fetch('/api/viaggi/crea', {
+            method: 'POST',
+            body: formData // Invia il formData direttamente, il browser gestirà il boundary
+        })
+        .then(response => {
+            if (response.ok) {
+                mostraFeedback(true);
             } else {
-                feedback.textContent = 'Errore durante la creazione del viaggio.';
-                feedback.style.color = 'red';
+                return response.text().then(text => { throw new Error(text) });
             }
-        }
-
-        function inviaForm() {
-            const form = document.getElementById('creaViaggioForm');
-            const formData = new FormData(form);
-            const data = {};
-
-            formData.forEach((value, key) => {
-                if (key === 'immagineCopertina' && value instanceof File) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        data[key] = e.target.result.split(',')[1]; // Rimuove la parte 'data:image/...;base64,'
-                        inviaDati(data); // Invia i dati una volta che l'immagine è stata letta
-                    };
-                    reader.readAsDataURL(value);
-                } else {
-                    data[key] = value;
-                }
-            });
-
-            if (!formData.has('immagineCopertina')) {
-                inviaDati(data);
-            }
-        }
-
-        function inviaDati(data) {
-            fetch('/viaggi/crea', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (response.ok) {
-                    mostraFeedback(true);
-                } else {
-                    return response.text().then(text => { throw new Error(text) });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error.message);
-                mostraFeedback(false);
-            });
-        }
+        })
+        .catch(error => {
+            console.error('Errore:', error.message);
+            mostraFeedback(false);
+        });
+    }
     </script>
 </head>
 <body>

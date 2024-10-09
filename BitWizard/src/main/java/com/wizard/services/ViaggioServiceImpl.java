@@ -81,19 +81,23 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    viaggio.setEtaMin(viaggioDTO.getEtaMin());
 	    viaggio.setEtaMax(viaggioDTO.getEtaMax());
 	    viaggio.setDeleted(false);
-	    viaggio.setCreatoIl(new Date());
+	    viaggio.setCreatoIl(new Date());	    
 	    
-	    if (viaggioDTO.getImmagineCopertina() != null && !viaggioDTO.getImmagineCopertina().isEmpty()) {
-            try {
-                byte[] imgBytes = Base64.getDecoder().decode(viaggioDTO.getImmagineCopertina());
-                Immagine immagine = new Immagine();
-                immagine.setImg(imgBytes); // Salva i dati dell'immagine
-                immagineDAO.save(immagine);
-                viaggio.setImmagineCopertina(immagine); // Associa l'immagine al viaggio
-            } catch (IllegalArgumentException e) {
-            	throw new IllegalArgumentException("Formato immagine non valido");
-            }
-        }
+	    if (Optional.ofNullable(viaggioDTO.getImmagineCopertina()).isPresent() && viaggioDTO.getImmagineCopertina().length > 0) {
+	        try {
+	            byte[] imgBytes = viaggioDTO.getImmagineCopertina();
+	            
+	            // Aggiungi qui un controllo del formato immagine, se necessario
+	            
+	            Immagine immagine = new Immagine();
+	            immagine.setImg(imgBytes); // Salva i dati dell'immagine
+	            immagineDAO.save(immagine);
+	            
+	            viaggio.setImmagineCopertina(immagine); // Associa l'immagine al viaggio
+	        } catch (IllegalArgumentException e) {
+	            throw new IllegalArgumentException("Formato immagine non valido: " + e.getMessage(), e);
+	        }
+	    }
 
 	    // Imposta il creatore del viaggio
 	    viaggio.setCreatoreId(creatoreId);
