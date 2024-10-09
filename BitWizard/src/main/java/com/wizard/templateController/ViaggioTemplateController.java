@@ -20,7 +20,7 @@ public class ViaggioTemplateController {
 
        model.addAttribute("viaggio", viaggio);
 
-       return "Crea";
+       return "CreaViaggio";
    }
 
 

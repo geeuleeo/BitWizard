@@ -6,54 +6,52 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-
 <div class="container mt-5">
     <h2>Crea un Nuovo Viaggio</h2>
-
     <form th:action="@{/api/viaggi/crea}" method="post" th:object="${viaggio}">
         <div class="form-group">
-            <label for="nome">Nome del Viaggio:</label>
-            <input type="text" id="nome" th:field="*{nome}" class="form-control" required />
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" th:field="*{nome}" class="form-control" required/>
         </div>
 
         <div class="form-group">
             <label for="luogoPartenza">Luogo di Partenza:</label>
-            <input type="text" id="luogoPartenza" th:field="*{luogoPartenza}" class="form-control" required />
+            <input type="text" id="luogoPartenza" th:field="*{luogoPartenza}" class="form-control" required/>
         </div>
 
         <div class="form-group">
             <label for="luogoArrivo">Luogo di Arrivo:</label>
-            <input type="text" id="luogoArrivo" th:field="*{luogoArrivo}" class="form-control" required />
+            <input type="text" id="luogoArrivo" th:field="*{luogoArrivo}" class="form-control" required/>
         </div>
 
         <div class="form-group">
             <label for="dataPartenza">Data di Partenza:</label>
-            <input type="date" id="dataPartenza" th:field="*{dataPartenza}" class="form-control" required />
+            <input type="date" id="dataPartenza" th:field="*{dataPartenza}" class="form-control" required/>
         </div>
 
         <div class="form-group">
             <label for="dataRitorno">Data di Ritorno:</label>
-            <input type="date" id="dataRitorno" th:field="*{dataRitorno}" class="form-control" required />
+            <input type="date" id="dataRitorno" th:field="*{dataRitorno}" class="form-control"/>
         </div>
 
         <div class="form-group">
             <label for="dataScadenza">Data di Scadenza:</label>
-            <input type="date" id="dataScadenza" th:field="*{dataScadenza}" class="form-control" required />
+            <input type="date" id="dataScadenza" th:field="*{dataScadenza}" class="form-control"/>
         </div>
 
         <div class="form-group">
             <label for="numPartMin">Numero Minimo di Partecipanti:</label>
-            <input type="number" id="numPartMin" th:field="*{numPartMin}" class="form-control" required min="1"/>
+            <input type="number" id="numPartMin" th:field="*{numPartMin}" class="form-control" required/>
         </div>
 
         <div class="form-group">
             <label for="numPartMax">Numero Massimo di Partecipanti:</label>
-            <input type="number" id="numPartMax" th:field="*{numPartMax}" class="form-control" required min="${numPartMin}"/>
+            <input type="number" id="numPartMax" th:field="*{numPartMax}" class="form-control" required/>
         </div>
 
         <div class="form-group">
             <label for="prezzo">Prezzo:</label>
-            <input type="number" id="prezzo" th:field="*{prezzo}" class="form-control" required step=".01"/>
+            <input type="number" step="0.01" id="prezzo" th:field="*{prezzo}" class="form-control" required/>
         </div>
 
         <div class="form-group">
@@ -66,31 +64,14 @@
             <input type="number" id="etaMax" th:field="*{etaMax}" class="form-control"/>
         </div>
 
-        <!-- Stato selection -->
-        <div class="form-group">
-            <label for="stato">Stato:</label>
-            <select id="stato" th:field="*{stato}" class="form-control">
-                <!-- Assuming you have a list of stati in your model -->
-                <!-- Replace 'stati' with your actual list variable -->
-                <!-- Example: th:each='stato : ${stati}' -->
-                <!-- Add options dynamically -->
-                <!--
-                <option th:value="${stato.id}" th:text="${stato.nome}"></option>
-                -->
-            </select>
-        </div>
-
-        <!-- Submit Button -->
         <button type="submit" class="btn btn-primary">Crea Viaggio</button>
     </form>
-
-    <!-- Error and Success Messages -->
-    <div th:if="${errorMessage}" class="alert alert-danger mt-3" th:text="${errorMessage}"></div>
-    <div th:if="${successMessage}" class="alert alert-success mt-3" th:text="${successMessage}"></div>
 </div>
 
-<script src="//code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="//stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="/path/to/popper.min.js"></script>
+<script src="/path/to/bootstrap.min.js"></script>
 </body>
 </html>

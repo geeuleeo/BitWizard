@@ -11,6 +11,8 @@ public class Agenzia {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long aziendaId;
+
+	private String nome;
 	
 	private String descrizione;
 
