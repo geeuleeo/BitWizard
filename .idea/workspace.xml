@@ -4,57 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/repos/AgenziaDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/services/AgenziaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/services/AgenziaServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/templateController/AgenziaController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/agenzieList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="-">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/entities/Agenzia.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/entities/Agenzia.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/templateController/ViaggioTemplateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/templateController/ViaggioTemplateController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/Crea.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/Crea.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/Crea.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/CreaViaggio.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/Filters.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/IscrizioneViaggio.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/home.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/CustomAuthenticationFailureHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/CustomAuthenticationFailureHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/CustomAuthenticationSuccessHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/CustomAuthenticationSuccessHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/Security.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/Security.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ImmagineController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ImmagineController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/CustomDettagliUtente.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/CustomDettagliUtente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/StringToLongListDeserializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/StringToLongListDeserializer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Agenzia.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Agenzia.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Tag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Tag.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Utente.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Utente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteAgenzia.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteAgenzia.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ImmagineDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ImmagineDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/TagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/TagDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/CustomDettagliUtenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/CustomDettagliUtenteService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ImmagineService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ImmagineService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ImmagineServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ImmagineServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/templateController/ViaggioTemplateController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/templateController/ViaggioTemplateController.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,8 +116,17 @@
       <workItem from="1728396485113" duration="1707000" />
       <workItem from="1728412721034" duration="36000" />
       <workItem from="1728417929381" duration="661000" />
-      <workItem from="1728490399013" duration="5678000" />
+      <workItem from="1728490399013" duration="6043000" />
     </task>
+    <task id="LOCAL-00001" summary="-">
+      <option name="closed" value="true" />
+      <created>1728496343342</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1728496343342</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,6 +136,8 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
+    <MESSAGE value="-" />
+    <option name="LAST_COMMIT_MESSAGE" value="-" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
