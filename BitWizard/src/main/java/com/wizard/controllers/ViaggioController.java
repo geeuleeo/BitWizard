@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.repos.UtenteDAO;
@@ -36,9 +35,6 @@ public class ViaggioController {
     private ViaggioService viaggioService;
     
     @Autowired
-    private ObjectMapper objectMapper;
-    
-    @Autowired
     private ViaggioDAO viaggioDAO;
     
     @Autowired
@@ -51,8 +47,11 @@ public class ViaggioController {
             @RequestParam("luogoArrivo") String luogoArrivo,
             @RequestParam("dataPartenza") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataPartenza,
             @RequestParam("dataRitorno") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataRitorno,
+            @RequestParam("dataScadenza") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataScadenza,
             @RequestParam("numPartMin") int numPartMin,
             @RequestParam("numPartMax") int numPartMax,
+            @RequestParam("etaMax") int etaMax,
+            @RequestParam("etaMin") int etaMin,
             @RequestParam("prezzo") double prezzo,
             @RequestParam(value = "immagineCopertina", required = false) MultipartFile immagineCopertina,
             HttpSession session) {
@@ -70,8 +69,11 @@ public class ViaggioController {
             viaggioDTO.setLuogoArrivo(luogoArrivo);
             viaggioDTO.setDataPartenza(dataPartenza);
             viaggioDTO.setDataRitorno(dataRitorno);
+            viaggioDTO.setDataScadenza(dataScadenza);
             viaggioDTO.setNumPartMin(numPartMin);
             viaggioDTO.setNumPartMax(numPartMax);
+            viaggioDTO.setEtaMin(etaMin);
+            viaggioDTO.setEtaMax(etaMax);
             viaggioDTO.setPrezzo(prezzo);
             viaggioDTO.setCreatoreId(creatore.getUtenteId());
 

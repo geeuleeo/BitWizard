@@ -28,5 +28,10 @@ public class ImmagineServiceImpl implements ImmagineService{
         return immagineRepository.findById(idImg)
                 .orElseThrow(() -> new RuntimeException("Immagine non trovata con ID: " + idImg));
     }
+    
+    public byte[] findImageById(int id) {
+        return immagineRepository.findByIdImg(id)
+                .orElseThrow(() -> new RuntimeException("Immagine non trovata")).getImg();
+    }
 
 }

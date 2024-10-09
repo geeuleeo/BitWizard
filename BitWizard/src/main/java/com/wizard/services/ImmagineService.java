@@ -13,5 +13,7 @@ public interface ImmagineService {
 	public Immagine salvaImmagine(MultipartFile file) throws IOException;
 
 	public Immagine getImmagineById(int idImg);
+	
+	public byte[] findImageById(int id);
 
 }

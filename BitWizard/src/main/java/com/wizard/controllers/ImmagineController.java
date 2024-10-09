@@ -3,6 +3,7 @@ package com.wizard.controllers;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,11 +35,22 @@ public class ImmagineController {
             return new ResponseEntity<>("Errore durante il caricamento dell'immagine", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/immagine/{id}")
+    @ResponseBody
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") int id) {
+        Immagine imaggine = immagineService.getImmagineById(id);
+        
+        byte[] image = imaggine.getImg();
+        
+        if (image == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
 
-    @GetMapping("/{idImg}")
-    public ResponseEntity<?> getImmagine(@PathVariable int idImg) {
-        Immagine immagine = immagineService.getImmagineById(idImg);
-        return new ResponseEntity<>(immagine, HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.IMAGE_JPEG);
+
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
     }
 
 }
