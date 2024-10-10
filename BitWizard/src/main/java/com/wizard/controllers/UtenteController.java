@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,14 +20,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wizard.entities.Immagine;
 import com.wizard.entities.Recensione;
 import com.wizard.entities.Ruolo;
+import com.wizard.entities.Tag;
 import com.wizard.entities.Utente;
 import com.wizard.repos.ImmagineDAO;
 import com.wizard.repos.RecensioneDTO;
 import com.wizard.repos.RuoloDAO;
-import com.wizard.repos.UtenteDTO;
 import com.wizard.services.RecensioneService;
 import com.wizard.services.UtenteService;
 
@@ -61,11 +63,12 @@ public class UtenteController {
             @RequestParam("email") String email,
             @RequestParam("password") String password,
             @RequestParam("dataNascita") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataNascita,
-            @RequestParam(value = "imgProfilo", required = false) MultipartFile imgProfilo,  // Modificato per gestire MultipartFile
+            @RequestParam(value = "imgProfilo", required = false) MultipartFile imgProfilo,
             @RequestParam("descrizione") String descrizione,
             @RequestParam("ruoloId") int ruoloId,
-            @RequestParam(value = "tagIds", required = false) List<Long> tagIds,
-            HttpSession session) {
+            HttpSession session,
+            @RequestParam("tags") String tagsJson) throws JsonProcessingException
+    		{
 
         try {
             // Controlla se l'email esiste già
@@ -76,6 +79,11 @@ public class UtenteController {
             // Recupera il ruolo dal database
             Ruolo ruolo = ruoloDAO.findById(ruoloId)
                     .orElseThrow(() -> new RuntimeException("Ruolo non trovato"));
+            
+            // Dentro il tuo metodo signUp
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<Tag> tags = objectMapper.readValue(tagsJson, new TypeReference<List<Tag>>() {});
+
 
             // Crea un nuovo utente
             Utente nuovoUtente = new Utente();
@@ -113,7 +121,7 @@ public class UtenteController {
             }
 
             // Salva l'utente e associa i tag
-            Utente utenteSalvato = utenteService.salvaUtente(nuovoUtente, tagIds);
+            Utente utenteSalvato = utenteService.salvaUtente(nuovoUtente, tag);
             return new ResponseEntity<>(utenteSalvato, HttpStatus.CREATED);
 
         } catch (Exception e) {
@@ -124,7 +132,6 @@ public class UtenteController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
-
     
     @PostMapping("/recensione")
     public ResponseEntity<?> creaRecensione(@RequestBody RecensioneDTO recensioneDTO) {

@@ -39,7 +39,7 @@ public class UtenteServiceImpl implements UtenteService {
     private UtenteTagDAO utenteTagRepository;
     
     @Transactional
-    public Utente salvaUtente(Utente utente, List<Long> tagIds) {
+    public Utente salvaUtente(Utente utente, List<Tag> tag) {
     	
         System.out.println("Numero di UtenteTag nell'utente: " + utente.getUtenteTags().size());
         for (UtenteTag utenteTag : utente.getUtenteTags()) {
@@ -53,28 +53,21 @@ public class UtenteServiceImpl implements UtenteService {
         }
 
         // Gestisci le associazioni con i tag
-        if (tagIds != null && !tagIds.isEmpty()) {
-            // Recupera i tag dal database
-            List<Tag> tags = tagDAO.findAllById(tagIds);
-
-            // Verifica se tutti i tag sono stati trovati
-            if (tags.size() != tagIds.size()) {
-                throw new RuntimeException("Uno o più tag non sono stati trovati");
-            }
+        if (tag != null && !tag.isEmpty()) {
 
             // Crea e salva le associazioni
-            for (Tag tag : tags) {
+            for (Tag tags : tag) {
+            	
                 if (tag == null) {
                     throw new RuntimeException("Tag nullo trovato nella lista dei tag recuperati.");
                 }
-
                 UtenteTag utenteTag = new UtenteTag();
                 utenteTag.setUtente(utenteSalvato);
-                utenteTag.setTag(tag);
+                utenteTag.setTag(tags);
 
                 // Aggiungi l'associazione alle liste
                 utenteSalvato.getUtenteTags().add(utenteTag);
-                tag.getUtenteTags().add(utenteTag);
+                tags.getUtenteTags().add(utenteTag);
 
                 // Salva l'associazione
                 utenteTagRepository.save(utenteTag);
