@@ -1,16 +1,22 @@
 package com.wizard.controllers;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.repos.UtenteDAO;
@@ -29,40 +35,61 @@ public class ViaggioController {
     private ViaggioService viaggioService;
     
     @Autowired
-    private ObjectMapper objectMapper;
-    
-    @Autowired
     private ViaggioDAO viaggioDAO;
     
     @Autowired
     private UtenteDAO utenteDAO;
     
     @PostMapping("/crea")
-    public ResponseEntity<?> creaViaggio(@RequestParam ViaggioDTO viaggioDTO, HttpSession session) {
+    public ResponseEntity<?> creaViaggio(
+            @RequestParam("nome") String nome,
+            @RequestParam("luogoPartenza") String luogoPartenza,
+            @RequestParam("luogoArrivo") String luogoArrivo,
+            @RequestParam("dataPartenza") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataPartenza,
+            @RequestParam("dataRitorno") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataRitorno,
+            @RequestParam("dataScadenza") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataScadenza,
+            @RequestParam("numPartMin") int numPartMin,
+            @RequestParam("numPartMax") int numPartMax,
+            @RequestParam("etaMax") int etaMax,
+            @RequestParam("etaMin") int etaMin,
+            @RequestParam("prezzo") double prezzo,
+            @RequestParam(value = "immagineCopertina", required = false) MultipartFile immagineCopertina,
+            HttpSession session) {
+        
         try {
-            // Recupera il creatoreId dalla sessione
+            // Recupera il creatore dalla sessione
             Utente creatore = (Utente) session.getAttribute("utenteLoggato");
-            Long creatoreId = (Long) creatore.getUtenteId(); 
-            if (creatoreId == null) {
+            if (creatore == null) {
                 throw new IllegalArgumentException("Creatore non trovato nella sessione.");
             }
 
-            // Imposta il creatoreId nel viaggioDTO
-            viaggioDTO.setCreatoreId(creatoreId);
+            ViaggioDTO viaggioDTO = new ViaggioDTO();
+            viaggioDTO.setNome(nome);
+            viaggioDTO.setLuogoPartenza(luogoPartenza);
+            viaggioDTO.setLuogoArrivo(luogoArrivo);
+            viaggioDTO.setDataPartenza(dataPartenza);
+            viaggioDTO.setDataRitorno(dataRitorno);
+            viaggioDTO.setDataScadenza(dataScadenza);
+            viaggioDTO.setNumPartMin(numPartMin);
+            viaggioDTO.setNumPartMax(numPartMax);
+            viaggioDTO.setEtaMin(etaMin);
+            viaggioDTO.setEtaMax(etaMax);
+            viaggioDTO.setPrezzo(prezzo);
+            viaggioDTO.setCreatoreId(creatore.getUtenteId());
+
+            // Se è presente un'immagine, converti l'immagine in byte[]
+            if (immagineCopertina != null && !immagineCopertina.isEmpty()) {
+                viaggioDTO.setImmagineCopertina(immagineCopertina.getBytes());
+            }
 
             // Salva il viaggio
             Viaggio viaggio = viaggioService.salvaViaggio(viaggioDTO);
-
-            // Usa l'ObjectMapper per serializzare l'oggetto Viaggio
-            String viaggioJson = objectMapper.writeValueAsString(viaggio);
-
-            return new ResponseEntity<>(viaggioJson, HttpStatus.CREATED);
+            return new ResponseEntity<>(viaggio, HttpStatus.CREATED);
         } catch (Exception e) {
-        	// Modifica per restituire un oggetto JSON invece di una stringa semplice
+            // Restituisce una risposta di errore
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Errore nella creazione del viaggio");
             errorResponse.put("message", e.getMessage());
-            
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }

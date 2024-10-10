@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione Utente</title>
+    <script>
+ // Funzione per ottenere i tag dal backend
+    async function getTags() {
+        const response = await fetch('/api/tags/cerca');  // Modifica con l'endpoint corretto
+        const tags = await response.json();
+        return tags;
+    }
+
+    // Mostra i tag disponibili
+    function displayTags(tags) {
+        const availableTagsDiv = document.getElementById('availableTags');
+
+        tags.forEach(tag => {
+            const tagElement = document.createElement('div');
+            tagElement.textContent = tag.nome;  // Supponendo che il tag abbia un campo "nome"
+            tagElement.className = 'tag';
+            tagElement.setAttribute('data-tag-id', tag.id);
+
+            // Aggiungi evento per cliccare e spostare il tag
+            tagElement.onclick = () => selectTag(tagElement);
+
+            availableTagsDiv.appendChild(tagElement);
+        });
+    }
+
+    // Funzione per selezionare un tag
+    function selectTag(tagElement) {
+        const selectedTagsDiv = document.getElementById('selectedTags');
+        selectedTagsDiv.appendChild(tagElement);
+    }
+    
+    function removeTag(tagElement) {
+        const availableTagsDiv = document.getElementById('availableTags');
+        availableTagsDiv.appendChild(tagElement);
+    }
+
+    // Aggiungi i tag selezionati al FormData
+    function appendTagsToFormData(formData) {
+        const selectedTagsDiv = document.getElementById('selectedTags');
+        const tagElements = selectedTagsDiv.getElementsByClassName('tag');
+        const selectedTags = [];
+
+        // Raccogli i dati completi dei tag selezionati
+        for (let tagElement of tagElements) {
+            const tag = {
+                tagId: tagElement.getAttribute('data-tag-id'),    // ID del tag
+                tipoTag: tagElement.textContent,                  // Supponendo che il testo sia il tipo del tag
+                // Aggiungi altri attributi del tag, se necessario
+            };
+            selectedTags.push(tag);  // Aggiungi l'oggetto tag alla lista
+        }
+
+        // Serializza la lista di tag in JSON e aggiungila al FormData
+        formData.append('tags', JSON.stringify(selectedTags));
+    }
+
+
+    // Funzione per inviare il form
+    function inviaForm() {
+        const form = document.getElementById('signup');
+        const formData = new FormData(form); // Manteniamo il file nel suo formato binario
+
+        // Aggiungi i tag selezionati al FormData
+        appendTagsToFormData(formData);
+
+        // Invia il form
+        inviaDati(formData);
+    }
+
+    // Funzione per inviare i dati tramite fetch
+    function inviaDati(formData) {
+        fetch('/api/utente/signup', {
+            method: 'POST',
+            body: formData // Invia il formData direttamente, il browser gestirà il boundary
+        })
+        .then(response => {
+            if (response.ok) {
+                mostraFeedback(true); // Aggiungi qui la tua funzione per il feedback
+            } else {
+                return response.text().then(text => { throw new Error(text) });
+            }
+        })
+        .catch(error => {
+            console.error('Errore:', error.message);
+            mostraFeedback(false); // Aggiungi qui la tua funzione per il feedback di errore
+        });
+    }
+
+    // Inizializza la pagina caricando i tag
+    getTags().then(displayTags);
+
+    </script>
+    <style>
+        #availableTags, #selectedTags {
+            width: 45%;
+            float: left;
+            border: 1px solid black;
+            min-height: 100px;
+            padding: 10px;
+            margin: 10px;
+        }
+    .tag {
+    	display: inline-block;
+    	padding: 10px;
+    	margin: 5px;
+    	background-color: lightblue;
+    	border-radius: 5px;
+    	font-size: 16px;
+    	cursor: pointer;
+	}
+    </style>
+</head>
+<body>
+
+    <h2>Registrazione Nuovo Utente</h2>
+
+    <form id="signup" action="#" method="POST" enctype="multipart/form-data">
+        
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required><br><br>
+
+        <label for="cognome">Cognome:</label>
+        <input type="text" id="cognome" name="cognome" required><br><br>
+
+        <label for="numeroTelefono">Numero di Telefono:</label>
+        <input type="text" id="numeroTelefono" name="numeroTelefono" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <label for="dataNascita">Data di Nascita:</label>
+        <input type="date" id="dataNascita" name="dataNascita" required><br><br>
+
+        <label for="descrizione">Descrizione:</label>
+        <textarea id="descrizione" name="descrizione"></textarea><br><br>
+
+        <label for="ruoloId">Ruolo (ID):</label>
+        <input type="number" id="ruoloId" name="ruoloId" required><br><br>
+        
+        <!-- Selezione Tag -->
+        <h3>Seleziona i tuoi tag</h3>
+        <div id="availableTags">
+            <h4>Tag disponibili</h4>
+        </div>
+        <div id="selectedTags">
+            <h4>Tag selezionati</h4>
+        </div>
+		
+        <label for="imgProfilo">Immagine Profilo:</label>
+        <input type="file" id="imgProfilo" name="imgProfilo"><br><br>
+
+        <button type="button" onclick="inviaForm()">Crea Utente</button>
+    </form>
+
+</body>
+</html>

@@ -1,14 +1,11 @@
 package com.wizard.services;
 
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.wizard.entities.ChiavePartecipantiViaggio;
@@ -60,12 +57,6 @@ public class ViaggioServiceImpl implements ViaggioService {
 		
 		System.out.println("Inizio creazione viaggio...");
 		
-	    /*
-	    		(Utente) session.getAttribute("utenteCreatore");
-	    if (creatore == null) {
-	        throw new IllegalStateException("Creatore non trovato nella sessione.");
-	    }
-	     */
 		Long creatoreId = viaggioDTO.getCreatoreId();
 		
 	    Viaggio viaggio = new Viaggio();
@@ -81,7 +72,17 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    viaggio.setEtaMin(viaggioDTO.getEtaMin());
 	    viaggio.setEtaMax(viaggioDTO.getEtaMax());
 	    viaggio.setDeleted(false);
-	    viaggio.setCreatoIl(new Date());	    
+	    viaggio.setCreatoIl(new Date());
+	    
+	    Optional<Stato> statoOptional = statoDAO.findById(1);
+
+	    if (statoOptional.isPresent()) {
+	        Stato stato = statoOptional.get();
+	        viaggio.setStato(stato);
+	    } else {
+	        throw new RuntimeException("Stato non trovato");
+	    }
+
 	    
 	    if (Optional.ofNullable(viaggioDTO.getImmagineCopertina()).isPresent() && viaggioDTO.getImmagineCopertina().length > 0) {
 	        try {
@@ -102,23 +103,6 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    // Imposta il creatore del viaggio
 	    viaggio.setCreatoreId(creatoreId);
 	    System.out.println("Creatore ID impostato: " + creatoreId);
-	    
-	    /*
-	    if (viaggioDTO.getStatoId() == null) {
-	        // Recupera lo stato "In attesa" dal database usando lo statoDAO
-	        Stato statoInAttesa = statoDAO.findByTipoStato("in attesa");
-	        viaggio.setStato(statoInAttesa);
-	        throw new IllegalStateException("Nessuno stato trovato");
-	    } else {
-	        // Se lo stato viene passato nel DTO, recuperalo dal database usando l'ID
-	        Optional<Stato> statoOptional = statoDAO.findByStatoId(viaggioDTO.getStatoId());
-	        if (statoOptional.isPresent()) {
-	            viaggio.setStato(statoOptional.get());
-	        } else {
-	            throw new IllegalArgumentException("Stato con ID " + viaggioDTO.getStatoId() + " non trovato.");
-	        }
-	    }
-	    */
 
 	    System.out.println("Tentativo di salvataggio del viaggio...");
 	    
@@ -134,22 +118,6 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    }
         
         List<Long> tagIds = viaggioDTO.getTagIds();
-        /*
-        if (tagIds != null && !tagIds.isEmpty()) {
-            for (Long tagId : tagIds) {
-                Optional<Tag> tag = tagDAO.findById(tagId);
-                if (tag.isPresent()) {
-                    ViaggioTag viaggioTag = new ViaggioTag();
-					viaggioTag.setViaggio(viaggioSalvato); // Associa l'utente
-                    viaggioTag.setTag(tag.get()); // Associa il tag
-                    // Salva l'associazione nella tabella utente_tag
-                    viaggioTagDAO.save(viaggioTag);
-                } else {
-                    System.out.println("Tag con ID " + tagId + " non trovato.");
-                }
-            }
-        }
-        */
         
         associaTagEViaggio(tagIds, viaggioSalvato);
         
@@ -240,7 +208,8 @@ public class ViaggioServiceImpl implements ViaggioService {
 	        });
 	    }
 	}
-
+	
+	// ?
 	private void associaImmaginiEViaggio(List<Integer> immagineIds, Viaggio viaggio) {
 	    if (immagineIds != null && !immagineIds.isEmpty()) {
 	        immagineDAO.findAllById(immagineIds).forEach(immagine -> {
@@ -284,8 +253,6 @@ public class ViaggioServiceImpl implements ViaggioService {
 
 	@Override
 	public List<Viaggio> getViaggiByPartenza(String partenza) {
-
-
 		List<Viaggio> viaggi = dao.findByLuogoPartenzaContainingIgnoreCase(partenza);
 
 	return viaggi;
@@ -294,8 +261,6 @@ public class ViaggioServiceImpl implements ViaggioService {
 
 	@Override
 	public List<Viaggio> getViaggiByPrezzo(Integer min, Integer max) {
-
-
 		List<Viaggio> viaggi = dao.findByPrezzoBetween(min,max);
 
 		return viaggi;

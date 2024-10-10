@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.wizard.entities.Tag;
 import com.wizard.entities.Utente;
 
 import jakarta.servlet.http.HttpSession;
@@ -15,7 +16,7 @@ public interface UtenteService {
 
     List<Utente> getAllUtenti();
 
-	Utente salvaUtente(Utente utente, List<Long> list);
+	Utente salvaUtente(Utente utente, List<Tag> list);
 
 	boolean existByEmail(String email);
 

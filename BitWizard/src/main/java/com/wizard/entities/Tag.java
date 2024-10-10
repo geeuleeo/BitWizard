@@ -3,6 +3,8 @@ package com.wizard.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +27,7 @@ public class Tag {
 	@Column(name = "img_tag")
 	private String imgTag;
 	
+	@JsonIgnore
     @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UtenteTag> utenteTags = new ArrayList<>();
 

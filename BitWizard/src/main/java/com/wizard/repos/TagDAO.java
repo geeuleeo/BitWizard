@@ -15,11 +15,4 @@ public interface TagDAO extends JpaRepository<Tag, Long> {
 	
 	Optional<Tag> findById(Long id);
 
-	//List<Tag> findAllById(List<Long> tagIds);
-	
-	/*
-	@Query("SELECT t FROM Tag t WHERE t.tagId IN :ids")
-    List<Tag> findTagsByTagIds(@Param("ids") List<Long> ids);
-    */
-
 }
