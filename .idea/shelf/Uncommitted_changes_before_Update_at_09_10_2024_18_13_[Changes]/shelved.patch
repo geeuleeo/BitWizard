@@ -1,0 +1,1054 @@
+Index: BitWizard/target/classes/Templates/Filters.html
+===================================================================
+diff --git a/BitWizard/target/classes/Templates/Filters.html b/BitWizard/target/classes/Templates/Filters.html
+deleted file mode 100644
+--- a/BitWizard/target/classes/Templates/Filters.html	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,81 +0,0 @@
+-<!DOCTYPE html>
+-<html lang="it" xmlns:th="http://www.thymeleaf.org">
+-<head>
+-  <meta charset="UTF-8">
+-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-  <title>Filtra Viaggi</title>
+-  <style>
+-    .filter-options {
+-      display: none; /* Hide all filter options by default */
+-    }
+-  </style>
+-</head>
+-<body>
+-<h1>Filtra Viaggi</h1>
+-<form th:action="@{/filtra}" method="GET" id="filterForm">
+-  <label for="filterType">Seleziona metodo di filtraggio:</label>
+-  <select id="filterType" name="filterType" onchange="showFilterOptions()">
+-    <option value="" disabled selected>-- Scegli un metodo --</option>
+-    <option value="tag">Filtra per Tag</option>
+-    <option value="eta">Filtra per Età</option>
+-    <option value="destinazione">Filtra per Destinazione</option>
+-    <option value="partenza">Filtra per Luogo di Partenza</option>
+-    <option value="prezzo">Filtra per Prezzo</option>
+-  </select><br><br>
+-
+-  <!-- Tag Options -->
+-  <div id="tagOptions" class="filter-options">
+-    <label for="tagId">ID Tag:</label>
+-    <input type="number" id="tagId" name="tagId" th:value="${tagId}"><br><br>
+-  </div>
+-
+-  <!-- Età Options -->
+-  <div id="etaOptions" class="filter-options">
+-    <label for="minEta">Età Minima:</label>
+-    <input type="number" id="minEta" name="min" th:value="${minEta}"><br><br>
+-
+-    <label for="maxEta">Età Massima:</label>
+-    <input type="number" id="maxEta" name="max" th:value="${maxEta}"><br><br>
+-  </div>
+-
+-  <!-- Destinazione Options -->
+-  <div id="destinazioneOptions" class="filter-options">
+-    <label for="destinazione">Destinazione:</label>
+-    <input type="text" id="destinazione" name="destinazione" th:value="${destinazione}"><br><br>
+-  </div>
+-
+-  <!-- Luogo di Partenza Options -->
+-  <div id="partenzaOptions" class="filter-options">
+-    <label for="partenza">Luogo di Partenza:</label>
+-    <input type="text" id="partenza" name="partenza" th:value="${partenza}"><br><br>
+-  </div>
+-
+-  <!-- Prezzo Options -->
+-  <div id="prezzoOptions" class="filter-options">
+-    <label for="minPrezzo">Prezzo Minimo:</label>
+-    <input type="number" id="minPrezzo" name="minPrezzo" th:value="${minPrezzo}"><br><br>
+-
+-    <label for="maxPrezzo">Prezzo Massimo:</label>
+-    <input type="number" id="maxPrezzo" name="maxPrezzo" th:value="${maxPrezzo}"><br><br>
+-  </div>
+-
+-  <input type='submit' value='Filtra Viaggi'>
+-</form>
+-
+-<script>
+-  function showFilterOptions() {
+-    // Hide all filter option divs
+-    const options = document.querySelectorAll('.filter-options');
+-    options.forEach(option => option.style.display = 'none');
+-
+-    // Get the selected filter type
+-    const filterType = document.getElementById('filterType').value;
+-
+-    // Show the corresponding filter options
+-    if (filterType) {
+-      document.getElementById(filterType + 'Options').style.display = 'block';
+-    }
+-  }
+-</script>
+-</body>
+-</html>
+\ No newline at end of file
+Index: BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml
+===================================================================
+diff --git a/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml b/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml
+deleted file mode 100644
+--- a/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,118 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project xmlns="https://maven.apache.org/POM/4.0.0"
+-	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+-	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+-	<modelVersion>4.0.0</modelVersion>
+-	<parent>
+-		<groupId>org.springframework.boot</groupId>
+-		<artifactId>spring-boot-starter-parent</artifactId>
+-		<version>3.3.3</version>
+-		<relativePath /> <!-- lookup parent from repository -->
+-	</parent>
+-	<groupId>com.wizard</groupId>
+-	<artifactId>wizard</artifactId>
+-	<version>0.0.1-SNAPSHOT</version>
+-	<name>BitWizard</name>
+-	<description>Demo project for bitwizard</description>
+-	<url />
+-	<licenses>
+-		<license />
+-	</licenses>
+-	<developers>
+-		<developer />
+-	</developers>
+-	<scm>
+-		<connection />
+-		<developerConnection />
+-		<tag />
+-		<url />
+-	</scm>
+-	<properties>
+-		<java.version>17</java.version>
+-	</properties>
+-	<dependencies>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-security</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-web</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.thymeleaf.extras</groupId>
+-			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+-		</dependency>
+-
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-devtools</artifactId>
+-			<scope>runtime</scope>
+-			<optional>true</optional>
+-		</dependency>
+-		<dependency>
+-			<groupId>com.mysql</groupId>
+-			<artifactId>mysql-connector-j</artifactId>
+-			<scope>runtime</scope>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-test</artifactId>
+-			<scope>test</scope>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.security</groupId>
+-			<artifactId>spring-security-test</artifactId>
+-			<scope>test</scope>
+-		</dependency>
+-		<dependency>
+-			<groupId>com.fasterxml.jackson.core</groupId>
+-			<artifactId>jackson-core</artifactId>
+-			<version>2.15.2</version>
+-		</dependency>
+-
+-		<!-- Jackson Databind -->
+-		<dependency>
+-			<groupId>com.fasterxml.jackson.core</groupId>
+-			<artifactId>jackson-databind</artifactId>
+-			<version>2.15.2</version>
+-		</dependency>
+-
+-		<!-- Jackson Annotations -->
+-		<dependency>
+-			<groupId>com.fasterxml.jackson.core</groupId>
+-			<artifactId>jackson-annotations</artifactId>
+-			<version>2.15.2</version>
+-		</dependency>
+-
+-		<!-- Jackson Datatype Hibernate5 -->
+-		<dependency>
+-			<groupId>com.fasterxml.jackson.datatype</groupId>
+-			<artifactId>jackson-datatype-hibernate5</artifactId>
+-			<version>2.15.2</version>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.modelmapper</groupId>
+-			<artifactId>modelmapper</artifactId>
+-			<version>3.1.1</version>
+-		</dependency>
+-	</dependencies>
+-
+-	<build>
+-		<plugins>
+-			<plugin>
+-				<groupId>org.springframework.boot</groupId>
+-				<artifactId>spring-boot-maven-plugin</artifactId>
+-			</plugin>
+-		</plugins>
+-	</build>
+-
+-</project>
+Index: BitWizard/target/classes/Templates/Crea.html
+===================================================================
+diff --git a/BitWizard/target/classes/Templates/Crea.html b/BitWizard/target/classes/Templates/Crea.html
+deleted file mode 100644
+--- a/BitWizard/target/classes/Templates/Crea.html	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,96 +0,0 @@
+-<!DOCTYPE html>
+-<html xmlns:th="http://www.thymeleaf.org">
+-<head>
+-    <meta charset="UTF-8">
+-    <title>Crea Viaggio</title>
+-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+-</head>
+-<body>
+-
+-<div class="container mt-5">
+-    <h2>Crea un Nuovo Viaggio</h2>
+-
+-    <form th:action="@{/api/viaggi/crea}" method="post" th:object="${viaggio}">
+-        <div class="form-group">
+-            <label for="nome">Nome del Viaggio:</label>
+-            <input type="text" id="nome" th:field="*{nome}" class="form-control" required />
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="luogoPartenza">Luogo di Partenza:</label>
+-            <input type="text" id="luogoPartenza" th:field="*{luogoPartenza}" class="form-control" required />
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="luogoArrivo">Luogo di Arrivo:</label>
+-            <input type="text" id="luogoArrivo" th:field="*{luogoArrivo}" class="form-control" required />
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="dataPartenza">Data di Partenza:</label>
+-            <input type="date" id="dataPartenza" th:field="*{dataPartenza}" class="form-control" required />
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="dataRitorno">Data di Ritorno:</label>
+-            <input type="date" id="dataRitorno" th:field="*{dataRitorno}" class="form-control" required />
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="dataScadenza">Data di Scadenza:</label>
+-            <input type="date" id="dataScadenza" th:field="*{dataScadenza}" class="form-control" required />
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="numPartMin">Numero Minimo di Partecipanti:</label>
+-            <input type="number" id="numPartMin" th:field="*{numPartMin}" class="form-control" required min="1"/>
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="numPartMax">Numero Massimo di Partecipanti:</label>
+-            <input type="number" id="numPartMax" th:field="*{numPartMax}" class="form-control" required min="${numPartMin}"/>
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="prezzo">Prezzo:</label>
+-            <input type="number" id="prezzo" th:field="*{prezzo}" class="form-control" required step=".01"/>
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="etaMin">Età Minima:</label>
+-            <input type="number" id="etaMin" th:field="*{etaMin}" class="form-control"/>
+-        </div>
+-
+-        <div class="form-group">
+-            <label for="etaMax">Età Massima:</label>
+-            <input type="number" id="etaMax" th:field="*{etaMax}" class="form-control"/>
+-        </div>
+-
+-        <!-- Stato selection -->
+-        <div class="form-group">
+-            <label for="stato">Stato:</label>
+-            <select id="stato" th:field="*{stato}" class="form-control">
+-                <!-- Assuming you have a list of stati in your model -->
+-                <!-- Replace 'stati' with your actual list variable -->
+-                <!-- Example: th:each='stato : ${stati}' -->
+-                <!-- Add options dynamically -->
+-                <!--
+-                <option th:value="${stato.id}" th:text="${stato.nome}"></option>
+-                -->
+-            </select>
+-        </div>
+-
+-        <!-- Submit Button -->
+-        <button type="submit" class="btn btn-primary">Crea Viaggio</button>
+-    </form>
+-
+-    <!-- Error and Success Messages -->
+-    <div th:if="${errorMessage}" class="alert alert-danger mt-3" th:text="${errorMessage}"></div>
+-    <div th:if="${successMessage}" class="alert alert-success mt-3" th:text="${successMessage}"></div>
+-</div>
+-
+-<script src="//code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+-<script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+-<script src="//stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+-</body>
+-</html>
+\ No newline at end of file
+Index: BitWizard/target/classes/META-INF/MANIFEST.MF
+===================================================================
+diff --git a/BitWizard/target/classes/META-INF/MANIFEST.MF b/BitWizard/target/classes/META-INF/MANIFEST.MF
+deleted file mode 100644
+--- a/BitWizard/target/classes/META-INF/MANIFEST.MF	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,6 +0,0 @@
+-Manifest-Version: 1.0
+-Build-Jdk-Spec: 21
+-Implementation-Title: BitWizard
+-Implementation-Version: 0.0.1-SNAPSHOT
+-Created-By: Maven Integration for Eclipse
+-
+Index: BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties
+===================================================================
+diff --git a/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties b/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties
+deleted file mode 100644
+--- a/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,7 +0,0 @@
+-#Generated by Maven Integration for Eclipse
+-#Mon Oct 07 10:04:37 CEST 2024
+-artifactId=wizard
+-groupId=com.wizard
+-m2e.projectLocation=Z\:\\BitWizard\\BitWizard
+-m2e.projectName=BitWizard_BitWizard
+-version=0.0.1-SNAPSHOT
+Index: BitWizard/target/classes/Templates/IscrizioneViaggio.html
+===================================================================
+diff --git a/BitWizard/target/classes/Templates/IscrizioneViaggio.html b/BitWizard/target/classes/Templates/IscrizioneViaggio.html
+deleted file mode 100644
+--- a/BitWizard/target/classes/Templates/IscrizioneViaggio.html	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,20 +0,0 @@
+-<!DOCTYPE html>
+-<html lang="it">
+-<head>
+-  <meta charset="UTF-8">
+-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-  <title>Iscrizione al Viaggio</title>
+-</head>
+-<body>
+-<h1>Iscrizione al Viaggio</h1>
+-<form action="/submitIscrizione" method="POST">
+-  <label for="utenteId">ID Utente:</label>
+-  <input type="number" id="utenteId" name="utenteId" required><br><br>
+-
+-  <label for="viaggioId">ID Viaggio:</label>
+-  <input type="number" id="viaggioId" name="viaggioId" required><br><br>
+-
+-  <input type='submit' value='Iscriviti'>
+-</form>
+-</body>
+-</html>
+\ No newline at end of file
+Index: BitWizard/target/classes/Templates/home.html
+===================================================================
+diff --git a/BitWizard/target/classes/Templates/home.html b/BitWizard/target/classes/Templates/home.html
+deleted file mode 100644
+--- a/BitWizard/target/classes/Templates/home.html	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,11 +0,0 @@
+-<!DOCTYPE html>
+-<html xmlns:th="http://www.thymeleaf.org">
+-<head>
+-    <title>Home</title>
+-</head>
+-<body>
+-    <h1>Benvenuto, <span th:text="${nomeUtente}">Utente</span>!</h1>
+-    <p>Sei autenticato.</p>
+-    <a th:href="@{/logout}">Logout</a>
+-</body>
+-</html>
+\ No newline at end of file
+Index: BitWizard/target/classes/Templates/login.html
+===================================================================
+diff --git a/BitWizard/target/classes/Templates/login.html b/BitWizard/target/classes/Templates/login.html
+deleted file mode 100644
+--- a/BitWizard/target/classes/Templates/login.html	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,27 +0,0 @@
+-<!DOCTYPE html>
+-<html lang="it">
+-<head>
+-    <meta charset="UTF-8">
+-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Login</title>
+-</head>
+-<body>
+-    <h2>Login</h2>
+-
+-    <!-- Messaggio di errore -->
+-    <div th:if="${loginError}">
+-        <p th:text="${loginError}" style="color: red;"></p>
+-    </div>
+-
+-    <!-- Form di login -->
+-    <form action="/login" method="post">
+-        <label for="email">Email:</label>
+-        <input type="email" id="email" name="email" required>
+-
+-        <label for="password">Password:</label>
+-        <input type="password" id="password" name="password" required>
+-
+-        <button type="submit">Login</button>
+-    </form>
+-</body>
+-</html>
+\ No newline at end of file
+Index: BitWizard/target/classes/application.properties
+===================================================================
+diff --git a/BitWizard/target/classes/application.properties b/BitWizard/target/classes/application.properties
+deleted file mode 100644
+--- a/BitWizard/target/classes/application.properties	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,43 +0,0 @@
+-spring.application.name=BitWizard
+-
+-
+-
+-#spring.datasource.url=jdbc:mysql://my-springboot-mysql-bitwizard.h.aivencloud.com:10134/personal
+-#spring.datasource.username=${DB_USERNAME}
+-#spring.datasource.password=${DB_PASSWORD}
+-#spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+-#
+-#server.port=10134
+-#
+-#spring.jpa.hibernate.ddl-auto=update
+-#
+-#spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+-#
+-## Abilita il logging delle query SQL di Hibernate
+-#spring.jpa.show-sql=true
+-#
+-## Aggiungi anche il log per i parametri delle query
+-#spring.jpa.properties.hibernate.format_sql=true
+-#spring.jpa.properties.hibernate.use_sql_comments=true
+-#logging.level.org.hibernate.SQL=DEBUG
+-#logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+-#
+-#spring.servlet.multipart.max-file-size=10MB
+-#spring.servlet.multipart.max-request-size=10MB
+-#
+-#logging.level.org.springframework.security=DEBUG
+-
+-
+-
+-
+-
+-server.port=9013
+-
+-spring.jpa.hibernate.ddl-auto=update
+-
+-spring.datasource.username=root
+-spring.datasource.password=vacca
+-spring.datasource.url=jdbc:mysql://127.0.0.1:3306/project_by_learning
+-
+-spring.jpa.show-sql=true
+-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+\ No newline at end of file
+Index: BitWizard/target/classes/Templates/CreaViaggio.html
+===================================================================
+diff --git a/BitWizard/target/classes/Templates/CreaViaggio.html b/BitWizard/target/classes/Templates/CreaViaggio.html
+deleted file mode 100644
+--- a/BitWizard/target/classes/Templates/CreaViaggio.html	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ /dev/null	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
+@@ -1,144 +0,0 @@
+-<!DOCTYPE html>
+-<html lang="it">
+-<head>
+-    <meta charset="UTF-8">
+-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Creazione Viaggio</title>
+-    <script>
+-        function mostraFeedback(successo) {
+-            const feedback = document.getElementById('feedback');
+-            if (successo) {
+-                feedback.textContent = 'Viaggio creato con successo!';
+-                feedback.style.color = 'green';
+-            } else {
+-                feedback.textContent = 'Errore durante la creazione del viaggio.';
+-                feedback.style.color = 'red';
+-            }
+-        }
+-
+-        function inviaForm() {
+-            const form = document.getElementById('creaViaggioForm');
+-            const formData = new FormData(form);
+-            const data = {};
+-
+-            formData.forEach((value, key) => {
+-                if (key === 'immagineCopertina' && value instanceof File) {
+-                    const reader = new FileReader();
+-                    reader.onload = function(e) {
+-                        data[key] = e.target.result.split(',')[1]; // Rimuove la parte 'data:image/...;base64,'
+-                        inviaDati(data); // Invia i dati una volta che l'immagine è stata letta
+-                    };
+-                    reader.readAsDataURL(value);
+-                } else {
+-                    data[key] = value;
+-                }
+-            });
+-
+-            if (!formData.has('immagineCopertina')) {
+-                inviaDati(data);
+-            }
+-        }
+-
+-        function inviaDati(data) {
+-            fetch('/viaggi/crea', {
+-                method: 'POST',
+-                headers: {
+-                    'Content-Type': 'application/json'
+-                },
+-                body: JSON.stringify(data)
+-            })
+-            .then(response => {
+-                if (response.ok) {
+-                    mostraFeedback(true);
+-                } else {
+-                    return response.text().then(text => { throw new Error(text) });
+-                }
+-            })
+-            .catch(error => {
+-                console.error('Error:', error.message);
+-                mostraFeedback(false);
+-            });
+-        }
+-    </script>
+-</head>
+-<body>
+-    <h1>Creazione di un nuovo viaggio</h1>
+-    <form id="creaViaggioForm" action="/viaggi/crea" method="post" onsubmit="event.preventDefault(); inviaForm();">
+-        <label for="nome">Nome del Viaggio:</label>
+-        <input type="text" id="nome" name="nome" required><br><br>
+-
+-        <label for="luogoPartenza">Luogo di Partenza:</label>
+-        <input type="text" id="luogoPartenza" name="luogoPartenza" required><br><br>
+-
+-        <label for="luogoArrivo">Luogo di Arrivo:</label>
+-        <input type="text" id="luogoArrivo" name="luogoArrivo" required><br><br>
+-
+-        <label for="dataPartenza">Data di Partenza:</label>
+-        <input type="date" id="dataPartenza" name="dataPartenza" required><br><br>
+-
+-        <label for="dataRitorno">Data di Ritorno:</label>
+-        <input type="date" id="dataRitorno" name="dataRitorno" required><br><br>
+-
+-        <label for="dataScadenza">Data di Scadenza Iscrizione:</label>
+-        <input type="date" id="dataScadenza" name="dataScadenza" required><br><br>
+-
+-        <label for="numPartMin">Numero di Partecipanti Minimo:</label>
+-        <input type="number" id="numPartMin" name="numPartMin" required><br><br>
+-
+-        <label for="numPartMax">Numero di Partecipanti Massimo:</label>
+-        <input type="number" id="numPartMax" name="numPartMax" required><br><br>
+-
+-        <label for="prezzo">Prezzo (€):</label>
+-        <input type="number" step="0.01" id="prezzo" name="prezzo" required><br><br>
+-
+-        <label for="etaMin">Età Minima:</label>
+-        <input type="number" id="etaMin" name="etaMin" required><br><br>
+-
+-        <label for="etaMax">Età Massima:</label>
+-        <input type="number" id="etaMax" name="etaMax" required><br><br>
+-
+-        <label for="tagIds">Tag (separati da virgola, es. 1,2,3):</label>
+-        <input type="text" id="tagIds" name="tagIds"><br><br>
+-
+-        <label for="immagineCopertina">Immagine Copertina del Viaggio:</label>
+-		<input type="file" id="immagineCopertina" name="immagineCopertina" accept="image/*"><br><br>
+-
+-
+-        <input type="submit" value="Crea Viaggio">
+-    </form>
+-    
+-    <p id="feedback"></p>
+-    
+-    <script>
+-document.getElementById('creaViaggioForm').addEventListener('submit', function(event) {
+-    event.preventDefault();
+-    
+-    const formData = new FormData(event.target);
+-    const data = {};
+-    formData.forEach((value, key) => {
+-        data[key] = value;
+-    });
+-
+-    fetch('/api/viaggi/crea', {
+-        method: 'POST',
+-        headers: {
+-            'Content-Type': 'application/json'
+-        },
+-        body: JSON.stringify(data)
+-    })
+-    .then(response => {
+-        if (response.ok) {
+-            mostraFeedback(true);
+-        } else {
+-            return response.text().then(text => { throw new Error(text) });
+-        }
+-    })
+-    .catch(error => {
+-        console.error('Error:', error.message);
+-        mostraFeedback(false);
+-    });
+-});
+-</script>
+-    
+-</body>
+-</html>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"VcsDirectoryMappings\">\r\n    <mapping directory=\"$PROJECT_DIR$/..\" vcs=\"Git\" />\r\n    <mapping directory=\"$PROJECT_DIR$\" vcs=\"Git\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+--- a/.idea/vcs.xml	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ b/.idea/vcs.xml	(date 1728386995500)
+@@ -1,7 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+-    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.wizard.controllers;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Map;\r\n\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.ui.Model;\r\nimport org.springframework.web.bind.annotation.*;\r\n\r\nimport com.fasterxml.jackson.databind.ObjectMapper;\r\nimport com.wizard.entities.Utente;\r\nimport com.wizard.entities.Viaggio;\r\nimport com.wizard.repos.UtenteDAO;\r\nimport com.wizard.repos.ViaggioDAO;\r\nimport com.wizard.repos.ViaggioDTO;\r\nimport com.wizard.services.ViaggioService;\r\n\r\nimport jakarta.servlet.http.HttpSession;\r\n\r\n\r\n@RestController\r\n@RequestMapping(\"/api/viaggi\")\r\npublic class ViaggioController {\r\n\t\r\n    @Autowired\r\n    private ViaggioService viaggioService;\r\n    \r\n    @Autowired\r\n    private ObjectMapper objectMapper;\r\n    \r\n    @Autowired\r\n    private ViaggioDAO viaggioDAO;\r\n    \r\n    @Autowired\r\n    private UtenteDAO utenteDAO;\r\n    \r\n    @PostMapping(\"/crea\")\r\n    public ResponseEntity<?> creaViaggio(@RequestParam ViaggioDTO viaggioDTO, HttpSession session) {\r\n        try {\r\n            // Recupera il creatoreId dalla sessione\r\n            Utente creatore = (Utente) session.getAttribute(\"utenteLoggato\");\r\n            Long creatoreId = (Long) creatore.getUtenteId(); \r\n            if (creatoreId == null) {\r\n                throw new IllegalArgumentException(\"Creatore non trovato nella sessione.\");\r\n            }\r\n\r\n            // Imposta il creatoreId nel viaggioDTO\r\n            viaggioDTO.setCreatoreId(creatoreId);\r\n\r\n            // Salva il viaggio\r\n            Viaggio viaggio = viaggioService.salvaViaggio(viaggioDTO);\r\n\r\n            // Usa l'ObjectMapper per serializzare l'oggetto Viaggio\r\n            String viaggioJson = objectMapper.writeValueAsString(viaggio);\r\n\r\n            return new ResponseEntity<>(viaggioJson, HttpStatus.CREATED);\r\n        } catch (Exception e) {\r\n        \t// Modifica per restituire un oggetto JSON invece di una stringa semplice\r\n            Map<String, String> errorResponse = new HashMap<>();\r\n            errorResponse.put(\"error\", \"Errore nella creazione del viaggio\");\r\n            errorResponse.put(\"message\", e.getMessage());\r\n            \r\n            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);\r\n        }\r\n    }\r\n    \r\n    @GetMapping(\"/viaggio/{id}\")\r\n    public ResponseEntity<?> caricaPaginaViaggio(@PathVariable Long id, HttpSession session) {\r\n        // Recupera le informazioni del viaggio\r\n        Viaggio viaggio = viaggioDAO.findById(id)\r\n            .orElseThrow(() -> new IllegalArgumentException(\"Viaggio non trovato\"));\r\n        \r\n        // Salva l'id del viaggio nella sessione\r\n        session.setAttribute(\"viaggioId\", id);\r\n        \r\n        // Restituisce le informazioni del viaggio\r\n        return ResponseEntity.ok(viaggio);\r\n    }\r\n    \r\n    @PostMapping(\"/iscriviti\")\r\n    public ResponseEntity<?> iscriviUtenteAlViaggio(HttpSession session) {\r\n        try {\r\n            // Recupera l'id del viaggio dalla session\r\n            Long viaggioId = (Long) session.getAttribute(\"viaggioId\");\r\n            if (viaggioId == null) {\r\n                throw new IllegalStateException(\"Nessun viaggio selezionato\");\r\n            }\r\n            \r\n            // Recupera l'id dell'utente dalla session\r\n            Long utenteId = (Long) session.getAttribute(\"utenteId\");\r\n            if (utenteId == null) {\r\n                throw new IllegalStateException(\"Utente non autenticato\");\r\n            }\r\n\r\n            // Recupera il viaggio e l'utente dai rispettivi DAO\r\n            Viaggio viaggio = viaggioDAO.findById(viaggioId)\r\n                .orElseThrow(() -> new IllegalArgumentException(\"Viaggio non trovato\"));\r\n            Utente partecipante = utenteDAO.findById(utenteId)\r\n                .orElseThrow(() -> new IllegalArgumentException(\"Utente non trovato\"));\r\n            \r\n            // Chiama il servizio per aggiungere il partecipante al viaggio\r\n            Utente utenteIscritto = viaggioService.addPartecipanteViaggio(partecipante, viaggio);\r\n\r\n            return ResponseEntity.ok(utenteIscritto);\r\n        } catch (IllegalArgumentException e) {\r\n            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());\r\n        } catch (Exception e) {\r\n            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(\"Errore durante l'iscrizione al viaggio\");\r\n        }\r\n    }\r\n\r\n\r\n    @GetMapping(\"/filtra/tag\")\r\n    public ResponseEntity<?> getViaggiByTag(@RequestParam Integer tagId) {\r\n    \t\r\n    \ttry {\r\n                List<Viaggio> viaggi = viaggioService.getViaggiByTag(tagId);\r\n                \r\n                if (viaggi.isEmpty()) {\r\n                    return ResponseEntity.status(HttpStatus.NOT_FOUND)\r\n                                         .body(\"Nessun viaggio trovato per il tag ID: \" + tagId);\r\n                }\r\n                \r\n                return ResponseEntity.ok(viaggi);\r\n\r\n            } catch (IllegalArgumentException e) {\r\n                return ResponseEntity.status(HttpStatus.BAD_REQUEST)\r\n                                     .body(\"Parametro tagId non valido: \" + e.getMessage());\r\n            } catch (Exception e) {\r\n                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)\r\n                                     .body(\"Errore interno: \" + e.getMessage());\r\n            }\r\n        }\r\n\r\n        @GetMapping(\"/filtra/eta\")\r\n        public ResponseEntity<?> getViaggiByEta(@RequestParam Integer min, @RequestParam Integer max) {\r\n            \r\n        \ttry {\r\n                List<Viaggio> viaggi = viaggioService.getViaggiByEta(min, max);\r\n                \r\n                if (viaggi.isEmpty()) {\r\n                    return ResponseEntity.status(HttpStatus.NOT_FOUND)\r\n                                         .body(\"Nessun viaggio trovato per l'intervallo di età: \" + min + \" - \" + max);\r\n                }\r\n                \r\n                return ResponseEntity.ok(viaggi);\r\n\r\n            } catch (IllegalArgumentException e) {\r\n                return ResponseEntity.status(HttpStatus.BAD_REQUEST)\r\n                                     .body(\"Intervallo di età non valido: \" + e.getMessage());\r\n            } catch (Exception e) {\r\n                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)\r\n                                     .body(\"Errore interno: \" + e.getMessage());\r\n            }\r\n        }\r\n        \r\n        @GetMapping(\"/filtra/destinazione\")\r\n        public ResponseEntity<?> getViaggiByDestinazione(@RequestParam String destinazione) {\r\n            try {\r\n                // Cerca i viaggi per destinazione (luogoArrivo)\r\n                List<Viaggio> viaggi = viaggioService.getViaggiByDestinazione(destinazione);\r\n                \r\n                if (viaggi.isEmpty()) {\r\n                    // Restituisce 404 se non ci sono viaggi trovati per la destinazione\r\n                    return ResponseEntity.status(HttpStatus.NOT_FOUND)\r\n                                         .body(\"Nessun viaggio trovato per la destinazione: \" + destinazione);\r\n                }\r\n\r\n                // Restituisce 200 OK con i viaggi trovati\r\n                return ResponseEntity.ok(viaggi);\r\n\r\n            } catch (IllegalArgumentException e) {\r\n                // Gestione di errori legati a parametri non validi\r\n                return ResponseEntity.status(HttpStatus.BAD_REQUEST)\r\n                                     .body(\"Parametro destinazione non valido: \" + e.getMessage());\r\n            } catch (Exception e) {\r\n                // Gestione generica di errori imprevisti\r\n                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)\r\n                                     .body(\"Errore interno: \" + e.getMessage());\r\n            }\r\n        }\r\n\r\n\r\n    @GetMapping(\"/filtra/partenza\")\r\n    public ResponseEntity<?> getViaggiByPartenza(@RequestParam String partenza) {\r\n        try {\r\n            // Cerca i viaggi per destinazione (luogoArrivo)\r\n            List<Viaggio> viaggi = viaggioService.getViaggiByPartenza(partenza);\r\n\r\n            if (viaggi.isEmpty()) {\r\n                // Restituisce 404 se non ci sono viaggi trovati per la destinazione\r\n                return ResponseEntity.status(HttpStatus.NOT_FOUND)\r\n                        .body(\"Nessun viaggio trovato per la destinazione: \" + partenza);\r\n            }\r\n\r\n            // Restituisce 200 OK con i viaggi trovati\r\n            return ResponseEntity.ok(viaggi);\r\n\r\n        } catch (IllegalArgumentException e) {\r\n            // Gestione di errori legati a parametri non validi\r\n            return ResponseEntity.status(HttpStatus.BAD_REQUEST)\r\n                    .body(\"Parametro destinazione non valido: \" + e.getMessage());\r\n        } catch (Exception e) {\r\n            // Gestione generica di errori imprevisti\r\n            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)\r\n                    .body(\"Errore interno: \" + e.getMessage());\r\n        }\r\n    }\r\n\r\n    @GetMapping(\"/filtra/prezzo\")\r\n    public ResponseEntity<?> getViaggiByPrezzo(@RequestParam Integer min, @RequestParam Integer max) {\r\n\r\n        try {\r\n            List<Viaggio> viaggi = viaggioService.getViaggiByPrezzo(min,max);\r\n\r\n            if (viaggi.isEmpty()) {\r\n                return ResponseEntity.status(HttpStatus.NOT_FOUND)\r\n                        .body(\"Nessun viaggio trovato per l'intervallo di età: \" + min + \" - \" + max);\r\n            }\r\n\r\n            return ResponseEntity.ok(viaggi);\r\n\r\n        } catch (IllegalArgumentException e) {\r\n            return ResponseEntity.status(HttpStatus.BAD_REQUEST)\r\n                    .body(\"Intervallo di età non valido: \" + e.getMessage());\r\n        } catch (Exception e) {\r\n            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)\r\n                    .body(\"Errore interno: \" + e.getMessage());\r\n        }\r\n    }\r\n\r\n    \r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java b/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java
+--- a/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ b/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java	(date 1728394002602)
+@@ -36,13 +36,63 @@
+     
+     @Autowired
+     private UtenteDAO utenteDAO;
+-    
++
++
++
+     @PostMapping("/crea")
++    public ResponseEntity<?> creaViaggio(@RequestBody Viaggio viaggio, HttpSession session) {
++
++        try {
++            Utente utente = (Utente) session.getAttribute("utenteLoggato");
++            Long creatoreId = (Long) utente.getUtenteId();
++            if (creatoreId==null){
++                throw new IllegalArgumentException("Utente non trovato nella sessione ");
++            }
++
++           ViaggioDTO viaggioDTO = new ViaggioDTO();
++
++
++            //qui va utilizzato un object mapper per automatizzare
++            viaggioDTO.setCreatoreId(viaggio.getCreatoreId());
++            viaggioDTO.setViaggioId(viaggio.getViaggioId());
++            viaggioDTO.setDataPartenza(viaggio.getDataPartenza());
++            viaggioDTO.setDataRitorno(viaggio.getDataRitorno());
++            viaggioDTO.setEtaMax(viaggio.getEtaMax());
++            viaggioDTO.setNome(viaggio.getNome());
++            viaggioDTO.setDataScadenza(viaggio.getDataScadenza());
++
++            viaggioService.salvaViaggio(viaggioDTO);
++
++
++            return new ResponseEntity<>(viaggioDTO, HttpStatus.CREATED);
++
++        }
++        catch (Exception e) {
++
++            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
++        }
++
++
++
++
++
++
++
++    }
++
++
++
++
++
++
++
++
++    /* @PostMapping("/crea")
+     public ResponseEntity<?> creaViaggio(@RequestParam ViaggioDTO viaggioDTO, HttpSession session) {
+         try {
+             // Recupera il creatoreId dalla sessione
+             Utente creatore = (Utente) session.getAttribute("utenteLoggato");
+-            Long creatoreId = (Long) creatore.getUtenteId(); 
++            Long creatoreId = (Long) creatore.getUtenteId();
+             if (creatoreId == null) {
+                 throw new IllegalArgumentException("Creatore non trovato nella sessione.");
+             }
+@@ -62,11 +112,14 @@
+             Map<String, String> errorResponse = new HashMap<>();
+             errorResponse.put("error", "Errore nella creazione del viaggio");
+             errorResponse.put("message", e.getMessage());
+-            
++
+             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+         }
+-    }
+-    
++    }*/
++
++
++
++
+     @GetMapping("/viaggio/{id}")
+     public ResponseEntity<?> caricaPaginaViaggio(@PathVariable Long id, HttpSession session) {
+         // Recupera le informazioni del viaggio
+Index: BitWizard/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"https://maven.apache.org/POM/4.0.0\"\r\n\txmlns:xsi=\"https://www.w3.org/2001/XMLSchema-instance\"\r\n\txsi:schemaLocation=\"https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n\t<modelVersion>4.0.0</modelVersion>\r\n\t<parent>\r\n\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t<artifactId>spring-boot-starter-parent</artifactId>\r\n\t\t<version>3.3.3</version>\r\n\t\t<relativePath /> <!-- lookup parent from repository -->\r\n\t</parent>\r\n\t<groupId>com.wizard</groupId>\r\n\t<artifactId>wizard</artifactId>\r\n\t<version>0.0.1-SNAPSHOT</version>\r\n\t<name>BitWizard</name>\r\n\t<description>Demo project for bitwizard</description>\r\n\t<url />\r\n\t<licenses>\r\n\t\t<license />\r\n\t</licenses>\r\n\t<developers>\r\n\t\t<developer />\r\n\t</developers>\r\n\t<scm>\r\n\t\t<connection />\r\n\t\t<developerConnection />\r\n\t\t<tag />\r\n\t\t<url />\r\n\t</scm>\r\n\t<properties>\r\n\t\t<java.version>17</java.version>\r\n\t</properties>\r\n\t<dependencies>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-data-jpa</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-security</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-thymeleaf</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-web</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.thymeleaf.extras</groupId>\r\n\t\t\t<artifactId>thymeleaf-extras-springsecurity6</artifactId>\r\n\t\t</dependency>\r\n\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-devtools</artifactId>\r\n\t\t\t<scope>runtime</scope>\r\n\t\t\t<optional>true</optional>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.mysql</groupId>\r\n\t\t\t<artifactId>mysql-connector-j</artifactId>\r\n\t\t\t<scope>runtime</scope>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-test</artifactId>\r\n\t\t\t<scope>test</scope>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.security</groupId>\r\n\t\t\t<artifactId>spring-security-test</artifactId>\r\n\t\t\t<scope>test</scope>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.fasterxml.jackson.core</groupId>\r\n\t\t\t<artifactId>jackson-core</artifactId>\r\n\t\t\t<version>2.15.2</version>\r\n\t\t</dependency>\r\n\r\n\t\t<!-- Jackson Databind -->\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.fasterxml.jackson.core</groupId>\r\n\t\t\t<artifactId>jackson-databind</artifactId>\r\n\t\t\t<version>2.15.2</version>\r\n\t\t</dependency>\r\n\r\n\t\t<!-- Jackson Annotations -->\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.fasterxml.jackson.core</groupId>\r\n\t\t\t<artifactId>jackson-annotations</artifactId>\r\n\t\t\t<version>2.15.2</version>\r\n\t\t</dependency>\r\n\r\n\t\t<!-- Jackson Datatype Hibernate5 -->\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.fasterxml.jackson.datatype</groupId>\r\n\t\t\t<artifactId>jackson-datatype-hibernate5</artifactId>\r\n\t\t\t<version>2.15.2</version>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.modelmapper</groupId>\r\n\t\t\t<artifactId>modelmapper</artifactId>\r\n\t\t\t<version>3.1.1</version>\r\n\t\t</dependency>\r\n\t</dependencies>\r\n\r\n\t<build>\r\n\t\t<plugins>\r\n\t\t\t<plugin>\r\n\t\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t\t<artifactId>spring-boot-maven-plugin</artifactId>\r\n\t\t\t</plugin>\r\n\t\t</plugins>\r\n\t</build>\r\n\r\n</project>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/BitWizard/pom.xml b/BitWizard/pom.xml
+--- a/BitWizard/pom.xml	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ b/BitWizard/pom.xml	(date 1728391739680)
+@@ -1,31 +1,30 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<project xmlns="https://maven.apache.org/POM/4.0.0"
+-	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+-	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ 	<modelVersion>4.0.0</modelVersion>
+ 	<parent>
+ 		<groupId>org.springframework.boot</groupId>
+ 		<artifactId>spring-boot-starter-parent</artifactId>
+ 		<version>3.3.3</version>
+-		<relativePath /> <!-- lookup parent from repository -->
++		<relativePath/> <!-- lookup parent from repository -->
+ 	</parent>
+ 	<groupId>com.wizard</groupId>
+ 	<artifactId>wizard</artifactId>
+ 	<version>0.0.1-SNAPSHOT</version>
+ 	<name>BitWizard</name>
+ 	<description>Demo project for bitwizard</description>
+-	<url />
++	<url/>
+ 	<licenses>
+-		<license />
++		<license/>
+ 	</licenses>
+ 	<developers>
+-		<developer />
++		<developer/>
+ 	</developers>
+ 	<scm>
+-		<connection />
+-		<developerConnection />
+-		<tag />
+-		<url />
++		<connection/>
++		<developerConnection/>
++		<tag/>
++		<url/>
+ 	</scm>
+ 	<properties>
+ 		<java.version>17</java.version>
+@@ -103,6 +102,10 @@
+ 			<groupId>org.modelmapper</groupId>
+ 			<artifactId>modelmapper</artifactId>
+ 			<version>3.1.1</version>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter</artifactId>
+ 		</dependency>
+ 	</dependencies>
+ 
+@@ -115,4 +118,5 @@
+ 		</plugins>
+ 	</build>
+ 
++
+ </project>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"5bc609c8-5b39-4409-9288-86b87d45d02c\" name=\"Changes\" comment=\"\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\"><![CDATA[{\r\n  \"lastFilter\": {\r\n    \"state\": \"OPEN\",\r\n    \"assignee\": \"geeuleeo\"\r\n  }\r\n}]]></component>\r\n  <component name=\"GithubPullRequestsUISettings\"><![CDATA[{\r\n  \"selectedUrlAndAccountId\": {\r\n    \"url\": \"https://github.com/geeuleeo/BitWizard.git\",\r\n    \"accountId\": \"48483cda-157f-416c-b679-1edaa972a2ef\"\r\n  }\r\n}]]></component>\r\n  <component name=\"ProjectColorInfo\"><![CDATA[{\r\n  \"associatedIndex\": 2\r\n}]]></component>\r\n  <component name=\"ProjectId\" id=\"2mecpdcEyaREppfzxUNN4v3r4fy\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"backend\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"project.structure.last.edited\": \"Modules\",\r\n    \"project.structure.proportion\": \"0.15\",\r\n    \"project.structure.side.proportion\": \"0.2\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.22855.74\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.22855.74\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"5bc609c8-5b39-4409-9288-86b87d45d02c\" name=\"Changes\" comment=\"\" />\r\n      <created>1727440667245</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1727440667245</updated>\r\n      <workItem from=\"1727440668293\" duration=\"718000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ b/.idea/workspace.xml	(date 1728420710164)
+@@ -4,88 +4,158 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="5bc609c8-5b39-4409-9288-86b87d45d02c" name="Changes" comment="" />
++    <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="">
++      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/pom.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/application.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/Crea.html" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/CreaViaggio.html" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/Filters.html" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/IscrizioneViaggio.html" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/home.html" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/login.html" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/application.properties" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/CustomAuthenticationFailureHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/CustomAuthenticationFailureHandler.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/CustomAuthenticationSuccessHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/CustomAuthenticationSuccessHandler.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/Security.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/config/Security.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/CustomDettagliUtente.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/CustomDettagliUtente.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/StringToLongListDeserializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/StringToLongListDeserializer.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Agenzia.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Agenzia.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Immagine.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Immagine.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Tag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Tag.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Utente.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Utente.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteAgenzia.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteAgenzia.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/TagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/TagDAO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteDTO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDTO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/CustomDettagliUtenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/CustomDettagliUtenteService.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteService.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteServiceImpl.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/templateController/ViaggioTemplateController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/templateController/ViaggioTemplateController.class" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
+   </component>
+   <component name="Git.Settings">
+-    <option name="RECENT_BRANCH_BY_REPOSITORY">
+-      <map>
+-        <entry key="$PROJECT_DIR$" value="main" />
+-      </map>
+-    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+-  "lastFilter": {
+-    "state": "OPEN",
+-    "assignee": "geeuleeo"
+-  }
+-}]]></component>
+-  <component name="GithubPullRequestsUISettings"><![CDATA[{
+-  "selectedUrlAndAccountId": {
+-    "url": "https://github.com/geeuleeo/BitWizard.git",
+-    "accountId": "48483cda-157f-416c-b679-1edaa972a2ef"
+-  }
+-}]]></component>
+-  <component name="ProjectColorInfo"><![CDATA[{
+-  "associatedIndex": 2
+-}]]></component>
+-  <component name="ProjectId" id="2mecpdcEyaREppfzxUNN4v3r4fy" />
++  <component name="GitHubPullRequestSearchHistory">{
++  &quot;lastFilter&quot;: {
++    &quot;state&quot;: &quot;OPEN&quot;,
++    &quot;assignee&quot;: &quot;geeuleeo&quot;
++  }
++}</component>
++  <component name="GithubPullRequestsUISettings">{
++  &quot;selectedUrlAndAccountId&quot;: {
++    &quot;url&quot;: &quot;https://github.com/geeuleeo/BitWizard.git&quot;,
++    &quot;accountId&quot;: &quot;09af8a30-17d1-4f5e-ba07-1817857aed2f&quot;
++  }
++}</component>
++  <component name="ProblemsViewState">
++    <option name="selectedTabId" value="CurrentFile" />
++  </component>
++  <component name="ProjectColorInfo">{
++  &quot;associatedIndex&quot;: 0
++}</component>
++  <component name="ProjectId" id="2n9PFZSopLnPOQESar8RqD1VJsV" />
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "git-widget-placeholder": "backend",
+-    "kotlin-language-version-configured": "true",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "project.structure.last.edited": "Modules",
+-    "project.structure.proportion": "0.15",
+-    "project.structure.side.proportion": "0.2",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
++    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
++    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
++    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;Spring Boot.BitWizardApplication.executor&quot;: &quot;Run&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;#10 on backend&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/ICTS23-25.494/Desktop/BitWizard&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;Groovy compiler&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
++  <component name="RunManager">
++    <configuration name="BitWizardApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
++      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
++      <module name="wizard" />
++      <option name="SPRING_BOOT_MAIN_CLASS" value="com.wizard.BitWizardApplication" />
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++  </component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.22855.74" />
+-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.22855.74" />
++        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
++        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+       </set>
+     </attachedChunks>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+-      <changelist id="5bc609c8-5b39-4409-9288-86b87d45d02c" name="Changes" comment="" />
+-      <created>1727440667245</created>
++      <changelist id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="" />
++      <created>1728382216326</created>
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+-      <updated>1727440667245</updated>
+-      <workItem from="1727440668293" duration="718000" />
++      <updated>1728382216326</updated>
++      <workItem from="1728382217490" duration="158000" />
++      <workItem from="1728385650893" duration="7000" />
++      <workItem from="1728385671296" duration="780000" />
++      <workItem from="1728386460526" duration="487000" />
++      <workItem from="1728386959360" duration="304000" />
++      <workItem from="1728387273472" duration="112000" />
++      <workItem from="1728388627110" duration="1145000" />
++      <workItem from="1728390741624" duration="175000" />
++      <workItem from="1728390926022" duration="556000" />
++      <workItem from="1728391489319" duration="2000" />
++      <workItem from="1728391514260" duration="851000" />
++      <workItem from="1728392609325" duration="72000" />
++      <workItem from="1728392703005" duration="2527000" />
++      <workItem from="1728396485113" duration="1707000" />
++      <workItem from="1728412721034" duration="36000" />
++      <workItem from="1728417929381" duration="661000" />
+     </task>
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
+-  <component name="Vcs.Log.Tabs.Properties">
+-    <option name="TAB_STATES">
+-      <map>
+-        <entry key="MAIN">
+-          <value>
+-            <State />
+-          </value>
+-        </entry>
+-      </map>
+-    </option>
++  <component name="VcsManagerConfiguration">
++    <ignored-roots>
++      <path value="$PROJECT_DIR$/.." />
++    </ignored-roots>
++  </component>
++  <component name="XSLT-Support.FileAssociations.UIState">
++    <expand />
++    <select />
+   </component>
+ </project>
+\ No newline at end of file
+Index: BitWizard/src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring.application.name=BitWizard\r\n\r\n\r\n\r\n#spring.datasource.url=jdbc:mysql://my-springboot-mysql-bitwizard.h.aivencloud.com:10134/personal\r\n#spring.datasource.username=${DB_USERNAME}\r\n#spring.datasource.password=${DB_PASSWORD}\r\n#spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver\r\n#\r\n#server.port=10134\r\n#\r\n#spring.jpa.hibernate.ddl-auto=update\r\n#\r\n#spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect\r\n#\r\n## Abilita il logging delle query SQL di Hibernate\r\n#spring.jpa.show-sql=true\r\n#\r\n## Aggiungi anche il log per i parametri delle query\r\n#spring.jpa.properties.hibernate.format_sql=true\r\n#spring.jpa.properties.hibernate.use_sql_comments=true\r\n#logging.level.org.hibernate.SQL=DEBUG\r\n#logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE\r\n#\r\n#spring.servlet.multipart.max-file-size=10MB\r\n#spring.servlet.multipart.max-request-size=10MB\r\n#\r\n#logging.level.org.springframework.security=DEBUG\r\n\r\n\r\n\r\n\r\n\r\nserver.port=9013\r\n\r\nspring.jpa.hibernate.ddl-auto=update\r\n\r\nspring.datasource.username=root\r\nspring.datasource.password=vacca\r\nspring.datasource.url=jdbc:mysql://127.0.0.1:3306/project_by_learning\r\n\r\nspring.jpa.show-sql=true\r\nspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/BitWizard/src/main/resources/application.properties b/BitWizard/src/main/resources/application.properties
+--- a/BitWizard/src/main/resources/application.properties	(revision 8ac1a642f239cd999018cee3b31c84252015537d)
++++ b/BitWizard/src/main/resources/application.properties	(date 1728384858835)
+@@ -31,7 +31,7 @@
+ 
+ 
+ 
+-server.port=9013
++server.port=10000
+ 
+ spring.jpa.hibernate.ddl-auto=update
+ 
