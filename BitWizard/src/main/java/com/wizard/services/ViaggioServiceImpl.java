@@ -72,7 +72,17 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    viaggio.setEtaMin(viaggioDTO.getEtaMin());
 	    viaggio.setEtaMax(viaggioDTO.getEtaMax());
 	    viaggio.setDeleted(false);
-	    viaggio.setCreatoIl(new Date());	    
+	    viaggio.setCreatoIl(new Date());
+	    
+	    Optional<Stato> statoOptional = statoDAO.findById(1);
+
+	    if (statoOptional.isPresent()) {
+	        Stato stato = statoOptional.get();
+	        viaggio.setStato(stato);
+	    } else {
+	        throw new RuntimeException("Stato non trovato");
+	    }
+
 	    
 	    if (Optional.ofNullable(viaggioDTO.getImmagineCopertina()).isPresent() && viaggioDTO.getImmagineCopertina().length > 0) {
 	        try {
