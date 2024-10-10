@@ -12,7 +12,7 @@ public class UtenteDTO {
     private String password;
     private Date dataNascita;
     private String descrizione;
-    private String imgProfilo;
+    private byte[] imgProfilo;
     private int ruoloId;
     private List<Long> tagIds;
     
@@ -58,10 +58,10 @@ public class UtenteDTO {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
-	public String getImgProfilo() {
+	public byte[] getImgProfilo() {
 		return imgProfilo;
 	}
-	public void setImgProfilo(String imgProfilo) {
+	public void setImgProfilo(byte[] imgProfilo) {
 		this.imgProfilo = imgProfilo;
 	}
 	public int getRuoloId() {

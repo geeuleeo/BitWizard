@@ -15,7 +15,7 @@ public class UtenteTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "utente_id", nullable = false)
@@ -25,11 +25,11 @@ public class UtenteTag {
     @JoinColumn(name = "tag_id", nullable = false)
     private Tag tag;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -81,4 +81,9 @@ public class HomeController {
         return "CreaViaggio";
     }
     
+    @GetMapping("/registrazione")
+    public String showSignupPage() {
+        return "registrazione";
+    }
+    
 }

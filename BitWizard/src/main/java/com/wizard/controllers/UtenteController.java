@@ -1,10 +1,14 @@
 package com.wizard.controllers;
 
-import java.util.Base64;
+import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wizard.entities.Immagine;
 import com.wizard.entities.Recensione;
@@ -26,6 +32,7 @@ import com.wizard.repos.UtenteDTO;
 import com.wizard.services.RecensioneService;
 import com.wizard.services.UtenteService;
 
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/utente")
@@ -47,52 +54,77 @@ public class UtenteController {
     private PasswordEncoder passwordEncoder;
     
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody UtenteDTO utenteDTO) {
-    	System.out.println("Tag IDs ricevuti: " + utenteDTO.getTagIds());
-        // 1. Controlla se l'email esiste già
-        if (utenteService.existByEmail(utenteDTO.getEmail())) {
-            return new ResponseEntity<>("Email già esistente", HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<?> signUp(
+            @RequestParam("nome") String nome,
+            @RequestParam("cognome") String cognome,
+            @RequestParam("numeroTelefono") String numeroTelefono,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam("dataNascita") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataNascita,
+            @RequestParam(value = "imgProfilo", required = false) MultipartFile imgProfilo,  // Modificato per gestire MultipartFile
+            @RequestParam("descrizione") String descrizione,
+            @RequestParam("ruoloId") int ruoloId,
+            @RequestParam(value = "tagIds", required = false) List<Long> tagIds,
+            HttpSession session) {
 
-        // 2. Recupera il ruolo dal database
-        Ruolo ruolo = ruoloDAO.findById(utenteDTO.getRuoloId())
-                              .orElseThrow(() -> new RuntimeException("Ruolo non trovato"));
-
-        // 3. Crea un nuovo utente
-        Utente nuovoUtente = new Utente();
-        nuovoUtente.setNome(utenteDTO.getNome());
-        nuovoUtente.setCognome(utenteDTO.getCognome());
-        nuovoUtente.setNumeroTelefono(utenteDTO.getNumeroTelefono());
-        nuovoUtente.setEmail(utenteDTO.getEmail());
-        nuovoUtente.setPassword(passwordEncoder.encode(utenteDTO.getPassword()));
-        nuovoUtente.setDataNascita(utenteDTO.getDataNascita());
-        nuovoUtente.setDescrizione(utenteDTO.getDescrizione());
-        nuovoUtente.setRuolo(ruolo);
-        nuovoUtente.setDeleted(false);
-        nuovoUtente.setCreatoIl(new Date());
-
-        // 4. Gestisci l'immagine se presente
-        if (utenteDTO.getImgProfilo() != null && !utenteDTO.getImgProfilo().isEmpty()) {
-            try {
-                byte[] imgBytes = Base64.getDecoder().decode(utenteDTO.getImgProfilo());
-                Immagine immagine = new Immagine();
-                immagineDAO.save(immagine);
-                nuovoUtente.setImmagine(immagine);
-            } catch (IllegalArgumentException e) {
-                return new ResponseEntity<>("Formato immagine non valido", HttpStatus.BAD_REQUEST);
-            }
-        }
-
-        // 5. Salva l'utente e associa i tag
         try {
-            Utente utenteSalvato = utenteService.salvaUtente(nuovoUtente, utenteDTO.getTagIds());
-            System.out.println("Salvataggio UtenteTag: utente_id=" + utenteSalvato.getUtenteId() + ", tag_id=" + utenteSalvato.getUtenteTags());
+            // Controlla se l'email esiste già
+            if (utenteService.existByEmail(email)) {
+                return new ResponseEntity<>("Email già esistente", HttpStatus.CONFLICT);
+            }
+
+            // Recupera il ruolo dal database
+            Ruolo ruolo = ruoloDAO.findById(ruoloId)
+                    .orElseThrow(() -> new RuntimeException("Ruolo non trovato"));
+
+            // Crea un nuovo utente
+            Utente nuovoUtente = new Utente();
+            nuovoUtente.setNome(nome);
+            nuovoUtente.setCognome(cognome);
+            nuovoUtente.setNumeroTelefono(numeroTelefono);
+            nuovoUtente.setEmail(email);
+            nuovoUtente.setPassword(passwordEncoder.encode(password));
+            nuovoUtente.setDataNascita(dataNascita);
+            nuovoUtente.setDescrizione(descrizione);
+            nuovoUtente.setRuolo(ruolo);
+            nuovoUtente.setDeleted(false);
+            nuovoUtente.setCreatoIl(new Date());
+
+            // Gestione dell'immagine profilo
+            if (imgProfilo != null && !imgProfilo.isEmpty()) {
+                try {
+                    // Controllo sul tipo di file (es. immagini JPEG o PNG)
+                    String contentType = imgProfilo.getContentType();
+                    if (!contentType.equals("image/jpeg") && !contentType.equals("image/png")) {
+                        throw new IllegalArgumentException("Formato immagine non valido. Sono accettati solo JPEG e PNG.");
+                    }
+
+                    // Ottiene i byte dell'immagine e salva
+                    byte[] imgBytes = imgProfilo.getBytes();
+                    Immagine immagine = new Immagine();
+                    immagine.setImg(imgBytes);  // Assicurati che la tua classe Immagine abbia questo campo
+                    immagineDAO.save(immagine);
+
+                    // Imposta l'immagine sull'utente
+                    nuovoUtente.setImmagine(immagine);
+                } catch (IOException e) {
+                    throw new RuntimeException("Errore durante il caricamento dell'immagine", e);
+                }
+            }
+
+            // Salva l'utente e associa i tag
+            Utente utenteSalvato = utenteService.salvaUtente(nuovoUtente, tagIds);
             return new ResponseEntity<>(utenteSalvato, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-        	e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (Exception e) {
+            // Restituisce una risposta di errore
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Errore nella creazione dell'utente");
+            errorResponse.put("message", e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
+
     
     @PostMapping("/recensione")
     public ResponseEntity<?> creaRecensione(@RequestBody RecensioneDTO recensioneDTO) {
