@@ -10,7 +10,7 @@
 - iscriversi ad un viaggio
 
 Esempio di flusso:
-L'utente clicca su un link o naviga alla pagina di un viaggio, ad esempio http://tuosito.com/viaggio/5.
+L'utente clicca su un link o naviga alla pagina di un viaggio.
 Il metodo caricaPaginaViaggio viene chiamato con id = 5.
 Il metodo cerca il viaggio con id = 5 nel database.
 Se il viaggio esiste, il suo id (5) viene memorizzato nella sessione utente con la chiave "viaggioId".
@@ -27,4 +27,9 @@ I dettagli del viaggio vengono restituiti al client (che può essere una pagina 
 	data partenza
 	prezzo
 
-? aggiungere Http Session
+- pagina personale utente
+  tutte le recensioni fatte
+  tutti i viaggio a cui è iscritto
+  tutti i viaggi a cui a partecipato
+  tutti i viaggi che ha creato
+    recensioni dei viaggi
