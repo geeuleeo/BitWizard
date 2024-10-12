@@ -2,15 +2,16 @@ package com.wizard.services;
 
 import java.util.List;
 
+import com.wizard.DTO.TagDTO;
+import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
-import com.wizard.repos.ViaggioDTO;
 
 public interface ViaggioService {
-	// HttpSession session
-	Viaggio salvaViaggio(ViaggioDTO viaggioDTO);
+
+	Viaggio salvaViaggio(Viaggio nuovoViaggio, List<TagDTO> tagDTOs);
 	
-	Utente addPartecipanteViaggio(Utente partecipante, Viaggio viaggio);
+	PartecipantiViaggio addPartecipanteViaggio(Utente partecipante, Viaggio viaggio);
 	
 	List<Viaggio> getViaggiByTag (Integer tagId);
 	

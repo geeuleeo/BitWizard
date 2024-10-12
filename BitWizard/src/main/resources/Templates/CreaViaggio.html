@@ -5,31 +5,178 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creazione Viaggio</title>
     <script>
-    function inviaForm() {
-    	const form = document.getElementById('creaViaggioForm');
-        const formData = new FormData(form); // Manteniamo il file nel suo formato binario
+ // Funzione per ottenere i tag dal backend
+async function getTags() {
+    const response = await fetch('/api/tags/cerca');  // Modifica con l'endpoint corretto
+    const tags = await response.json();
+    console.log("Tag ricevuti dal backend:", tags);  // Controlla i dati ricevuti
+    return tags;
+}
 
-        inviaDati(formData); // Inviamo il formData così com'è, inclusi i file
+
+function displayTags(tags) {
+    const availableTagsDiv = document.getElementById('availableTags');
+
+    tags.forEach(tag => {
+        // Verifica che il campo dell'ID esista nel tag
+        console.log("Tag caricato:", tag);  // Verifica se l'ID è corretto
+
+        const tagElement = document.createElement('div');
+        tagElement.textContent = tag.tipoTag;  // Supponendo che il campo "tipoTag" esista
+        tagElement.className = 'tag';
+        tagElement.setAttribute('data-tag-id', tag.tagId);  // Usa il campo "tagId" o quello corretto
+
+        // Aggiungi evento per selezionare il tag
+        tagElement.onclick = () => selectTag(tagElement);
+
+        availableTagsDiv.appendChild(tagElement);
+    });
+}
+
+    function selectTag(tagElement) {
+        console.log("Tag selezionato:", tagElement);  // Log del tag selezionato
+        
+        const selectedTagsDiv = document.getElementById('selectedTags');
+        const clonedTag = tagElement.cloneNode(true);
+        clonedTag.onclick = () => removeTag(clonedTag);
+        selectedTagsDiv.appendChild(clonedTag);
+        
+        tagElement.remove();
     }
 
+    function removeTag(tagElement) {
+        console.log("Tag rimosso:", tagElement);  // Log del tag rimosso
+        
+        const availableTagsDiv = document.getElementById('availableTags');
+        const clonedTag = tagElement.cloneNode(true);
+        clonedTag.onclick = () => selectTag(clonedTag);
+        availableTagsDiv.appendChild(clonedTag);
+        
+        tagElement.remove();
+    }
+
+    // Aggiungi i tag selezionati al FormData
+    function appendTagsToFormData(formData) {
+        const selectedTagsDiv = document.getElementById('selectedTags');
+        const tagElements = selectedTagsDiv.getElementsByClassName('tag');
+
+        for (let i = 0; i < tagElements.length; i++) {
+            const tagElement = tagElements[i];
+            const tagId = tagElement.getAttribute('data-tag-id');
+            const tagName = tagElement.textContent;
+
+            if (tagId && tagName) {
+                formData.append(`tags[${i}][tagId]`, tagId);
+                formData.append(`tags[${i}][tipoTag]`, tagName);
+            }
+        }
+    }
+
+ // Funzione per inviare il form
+function inviaForm() {
+    const form = document.getElementById('creaViaggioForm');
+
+    // Crea un nuovo oggetto FormData
+    let formData = new FormData(form);
+
+    // Crea l'oggetto viaggioDTO con i dati dal form
+    const viaggioDTO = {
+        nome: document.getElementById('nome').value,
+        luogoPartenza: document.getElementById('luogoPartenza').value,
+        luogoArrivo: document.getElementById('luogoArrivo').value,
+        dataPartenza: document.getElementById('dataPartenza').value,
+        dataRitorno: document.getElementById('dataRitorno').value,
+        dataScadenza: document.getElementById('dataScadenza').value,
+        numPartMin: document.getElementById('numPartMin').value,
+        numPartMax: document.getElementById('numPartMax').value,
+        prezzo: document.getElementById('prezzo').value,
+        etaMin: document.getElementById('etaMin').value,
+        etaMax: document.getElementById('etaMax').value,
+        tags: getSelectedTags()  // Usa la funzione getSelectedTags per raccogliere i tag selezionati
+    };
+
+    // Aggiungi il DTO JSON al FormData come un Blob
+    formData.append('viaggioDTO', new Blob([JSON.stringify(viaggioDTO)], {
+        type: 'application/json'
+    }));
+
+    // Aggiungi l'immagine di copertina, se presente
+    const immagineCopertina = document.getElementById('immagineCopertina').files[0];
+    if (immagineCopertina) {
+        formData.append('immagineCopertina', immagineCopertina);
+    }
+
+    // Invia i dati
+    inviaDati(formData);
+}
+
+    // Funzione per inviare i dati tramite fetch
     function inviaDati(formData) {
-    	fetch('/api/viaggi/crea', {
+        fetch('/api/viaggi/crea', {
             method: 'POST',
-            body: formData // Invia il formData direttamente, il browser gestirà il boundary
+            body: formData
         })
         .then(response => {
             if (response.ok) {
-                mostraFeedback(true);
+                return response.json();
             } else {
                 return response.text().then(text => { throw new Error(text) });
             }
+        })
+        .then(data => {
+            console.log("Viaggio creato con successo:", data);
+            mostraFeedback(true);
         })
         .catch(error => {
             console.error('Errore:', error.message);
             mostraFeedback(false);
         });
     }
+
+    // Funzione per raccogliere i tag selezionati
+function getSelectedTags() {
+    const selectedTagsDiv = document.getElementById('selectedTags');
+    const tagElements = selectedTagsDiv.getElementsByClassName('tag');
+    const selectedTags = [];
+
+    for (let tagElement of tagElements) {
+        const tagId = tagElement.getAttribute('data-tag-id');
+        const tipoTag = tagElement.textContent;
+
+        if (tagId && tipoTag) {
+            selectedTags.push({
+                tagId: tagId,
+                tipoTag: tipoTag
+            });
+        }
+    }
+
+    console.log("Tag selezionati:", selectedTags);  // Verifica che i tag vengano correttamente raccolti
+    return selectedTags;
+}
+
+    // Inizializza la pagina caricando i tag
+    getTags().then(displayTags);
     </script>
+        <style>
+        #availableTags, #selectedTags {
+            width: 45%;
+            float: left;
+            border: 1px solid black;
+            min-height: 100px;
+            padding: 10px;
+            margin: 10px;
+        }
+    .tag {
+    	display: inline-block;
+    	padding: 10px;
+    	margin: 5px;
+    	background-color: lightblue;
+    	border-radius: 5px;
+    	font-size: 16px;
+    	cursor: pointer;
+	}
+    </style>
 </head>
 <body>
     <h1>Creazione di un nuovo viaggio</h1>
@@ -67,8 +214,14 @@
         <label for="etaMax">Età Massima:</label>
         <input type="number" id="etaMax" name="etaMax" required><br><br>
 
-        <label for="tagIds">Tag (separati da virgola, es. 1,2,3):</label>
-        <input type="text" id="tagIds" name="tagIds"><br><br>
+        <!-- Selezione Tag -->
+        <h3>Seleziona i tuoi tag</h3>
+        <div id="availableTags">
+            <h4>Tag disponibili</h4>
+        </div>
+        <div id="selectedTags">
+            <h4>Tag selezionati</h4>
+        </div>
 
         <label for="immagineCopertina">Immagine Copertina del Viaggio:</label>
 		<input type="file" id="immagineCopertina" name="immagineCopertina" accept="image/*"><br><br>

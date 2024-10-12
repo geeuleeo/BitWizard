@@ -1,8 +1,9 @@
 package com.wizard.entities;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -76,7 +77,7 @@ public class Viaggio {
 
     @OneToMany(mappedBy = "viaggio", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<PartecipantiViaggio> partecipanti;
+    private Set<PartecipantiViaggio> partecipanti;
 
     @ManyToMany
     @JoinTable(
@@ -91,10 +92,10 @@ public class Viaggio {
     private Immagine immagineCopertina;
 	
 	
-	public List<PartecipantiViaggio> getPartecipanti() {
+	public Set<PartecipantiViaggio> getPartecipanti() {
 		return partecipanti;
 	}
-	public void setPartecipanti(List<PartecipantiViaggio> partecipanti) {
+	public void setPartecipanti(Set<PartecipantiViaggio> partecipanti) {
 		this.partecipanti = partecipanti;
 	}
 	public Long getViaggioId() {
@@ -207,10 +208,10 @@ public class Viaggio {
 	}
 	public void addPartecipante(PartecipantiViaggio partecipante) {
         if (partecipanti == null) {
-            partecipanti = new ArrayList<>();  // Inizializza la lista solo se è null
+            partecipanti = new HashSet<PartecipantiViaggio>();
         }
         partecipanti.add(partecipante);
-        partecipante.setViaggio(this);  // Associa il partecipante al viaggio
+        partecipante.setViaggio(this);
     }
 	
 }

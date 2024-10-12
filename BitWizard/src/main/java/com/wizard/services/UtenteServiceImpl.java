@@ -74,15 +74,6 @@ public class UtenteServiceImpl implements UtenteService {
 
         return utenteSalvato;
     }
-
-    private Tag findOrCreateTag(TagDTO tagDTO) {
-        return tagDAO.findById(tagDTO.getTagId())
-                .orElseGet(() -> {
-                    Tag newTag = new Tag();
-                    newTag.setTipoTag(tagDTO.getTipoTag());
-                    return tagDAO.save(newTag);
-                });
-    }
     
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
