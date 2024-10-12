@@ -86,4 +86,14 @@ public class HomeController {
         return "registrazione";
     }
     
+    @GetMapping("/paginaPersonale")
+    public String getPaginaPersonaleUtente(HttpSession session) {
+    	Utente utente = (Utente) session.getAttribute("utenteLoggato");
+        if (utente == null) {
+            return "redirect:/login";
+        }
+        return "paginaPersonaleUtente";
+    }
+    
+    
 }

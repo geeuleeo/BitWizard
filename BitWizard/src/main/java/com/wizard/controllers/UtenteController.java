@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,13 +29,17 @@ import com.wizard.entities.Utente;
 import com.wizard.exceptions.EmailAlreadyExistsException;
 import com.wizard.exceptions.RuoloNotFoundException;
 import com.wizard.repos.ImmagineDAO;
+import com.wizard.repos.PartecipantiViaggioDAO;
 import com.wizard.repos.RecensioneDTO;
 import com.wizard.repos.RuoloDAO;
+import com.wizard.repos.UtenteDTO;
 import com.wizard.services.RecensioneService;
 import com.wizard.services.UtenteService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/api/utente")
@@ -56,6 +59,9 @@ public class UtenteController {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private PartecipantiViaggioDAO partecipantiDAO;
     
     @PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
@@ -163,4 +169,48 @@ public class UtenteController {
         return recensioneService.trovaCreatoriConViaggiMigliori();
     }
     */
+    
+    @GetMapping("/me")
+    public ResponseEntity<UtenteDTO> caricaDatiUtente(HttpSession session) {
+    	
+        Utente utente = utenteService.getUtente(session);
+
+        // Converte l'utente in un DTO
+        UtenteDTO utenteDTO = new UtenteDTO();
+        utenteDTO.setDataNascita(utente.getDataNascita());
+        utenteDTO.setNumeroTelefono(utente.getNumeroTelefono());
+        utenteDTO.setUtenteId(utente.getUtenteId());
+        utenteDTO.setNome(utente.getNome());
+        utenteDTO.setCognome(utente.getCognome());
+        utenteDTO.setEmail(utente.getEmail());
+        utenteDTO.setDescrizione(utente.getDescrizione());
+        utenteDTO.setImgProfilo(utente.getImmagine().getImg());
+
+        return ResponseEntity.ok(utenteDTO);
+    }
+    
+    /*
+    @GetMapping("/me/viaggi")
+    public ResponseEntity<List<Viaggio>> caricaDatiUtenteViaggi(HttpSession session) {
+        
+        // Recupera l'utente dalla sessione
+    	Utente utente = (Utente) session.getAttribute("utenteLoggato");
+        
+        // Ottieni la lista delle partecipazioni
+        List<PartecipantiViaggio> partecipazioni = utente.getPartecipazioni();
+        
+        // Crea una lista vuota per raccogliere i viaggi
+        List<Viaggio> viaggi = new ArrayList<>();
+        
+        // Itera sulle partecipazioni e aggiungi i viaggi alla lista
+        for (PartecipantiViaggio partecipazione : partecipazioni) {
+            Viaggio viaggio = partecipazione.getViaggio();
+            viaggi.add(viaggio);
+        }
+        
+        // Restituisci la lista di viaggi come risposta
+        return ResponseEntity.ok(viaggi);
+    }
+    */
+
 }

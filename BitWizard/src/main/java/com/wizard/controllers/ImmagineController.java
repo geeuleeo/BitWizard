@@ -5,18 +5,22 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wizard.entities.Immagine;
+import com.wizard.entities.Utente;
 import com.wizard.services.ImmagineService;
+import com.wizard.services.UtenteService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/immagini")
@@ -24,6 +28,9 @@ public class ImmagineController {
 
     @Autowired
     private ImmagineService immagineService;
+    
+    @Autowired
+    private UtenteService utenteService;
 
     // API per salvare un'immagine
     @PostMapping("/upload")
@@ -36,21 +43,27 @@ public class ImmagineController {
         }
     }
     
-    @GetMapping("/immagine/{id}")
-    @ResponseBody
-    public ResponseEntity<byte[]> getImage(@PathVariable("id") int id) {
-        Immagine imaggine = immagineService.getImmagineById(id);
-        
-        byte[] image = imaggine.getImg();
-        
-        if (image == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    @GetMapping("/utente/immagine")
+    public ResponseEntity<byte[]> getImmagineProfilo(HttpSession session) {
+    	Utente utente = (Utente) session.getAttribute("utenteLoggato");
 
+        byte[] immagine = utente.getImmagine().getImg();
+        
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(org.springframework.http.MediaType.IMAGE_JPEG);
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        
+        return new ResponseEntity<>(immagine, headers, HttpStatus.OK);
+    }
+    
+    @GetMapping("/viaggio/immagine")
+    public ResponseEntity<byte[]> getImmagineCopertina(int id) {
 
-        return new ResponseEntity<>(image, headers, HttpStatus.OK);
+        byte[] immagine = immagineService.findImageById(id);
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        
+        return new ResponseEntity<>(immagine, headers, HttpStatus.OK);
     }
 
 }

@@ -25,6 +25,7 @@ import com.wizard.repos.StatoDAO;
 import com.wizard.repos.TagDAO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.ViaggioDAO;
+import com.wizard.repos.ViaggioDTO;
 import com.wizard.repos.ViaggioImmaginiDAO;
 import com.wizard.repos.ViaggioTagDAO;
 
@@ -158,6 +159,27 @@ public class ViaggioServiceImpl implements ViaggioService {
 	        throw new IllegalArgumentException("Utente con ID " + partecipante.getUtenteId() + " non trovato.");
 	    }
 	}
+	
+    public List<ViaggioDTO> findViaggiByUtenteId(Long utenteId) {
+        List<Viaggio> viaggi = dao.findViaggiByPartecipanteId(utenteId);
+
+        return viaggi.stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+    }
+
+    private ViaggioDTO convertToDTO(Viaggio viaggio) {
+        ViaggioDTO dto = new ViaggioDTO();
+        dto.setViaggioId(viaggio.getViaggioId());
+        dto.setNome(viaggio.getNome());
+        dto.setLuogoPartenza(viaggio.getLuogoPartenza());
+        dto.setLuogoArrivo(viaggio.getLuogoArrivo());
+        dto.setDataPartenza(viaggio.getDataPartenza());
+        dto.setDataRitorno(viaggio.getDataRitorno());
+        dto.setPrezzo(viaggio.getPrezzo());
+
+        return dto;
+    }
 	
 	private void associaTagEViaggio(List<Long> tagIds, Viaggio viaggio) {
 	    if (tagIds != null && !tagIds.isEmpty()) {

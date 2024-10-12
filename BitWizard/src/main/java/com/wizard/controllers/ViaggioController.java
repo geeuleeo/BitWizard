@@ -27,11 +27,13 @@ import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.ViaggioDAO;
+import com.wizard.repos.ViaggioDTO;
 import com.wizard.services.ViaggioService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
 
 
 @RestController
@@ -124,6 +126,24 @@ public class ViaggioController {
         return ResponseEntity.ok(viaggio);
     }
     
+    @GetMapping("/{viaggioId}/immagine")
+    public ResponseEntity<byte[]> getImmagineViaggio(@PathVariable Long viaggioId) {
+        Viaggio viaggio = viaggioDAO.findById(viaggioId)
+            .orElseThrow(() -> new RuntimeException("Viaggio non trovato"));
+
+        if (viaggio.getImmagineCopertina() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        byte[] immagine = viaggio.getImmagineCopertina().getImg();  // Assicurati che il campo `getImg()` restituisca i byte dell'immagine
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);  // Modifica il tipo se necessario, ad esempio PNG
+
+        return new ResponseEntity<>(immagine, headers, HttpStatus.OK);
+    }
+
+    
     @PostMapping("/iscriviti")
     public ResponseEntity<?> iscriviUtenteAlViaggio(HttpSession session) {
         try {
@@ -155,7 +175,18 @@ public class ViaggioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante l'iscrizione al viaggio");
         }
     }
+    
+    @GetMapping("/utente")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiUtente(HttpSession session) {
+        Utente utente = (Utente) session.getAttribute("utenteLoggato");
 
+        if (utente == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        List<ViaggioDTO> viaggi = viaggioService.findViaggiByUtenteId(utente.getUtenteId());
+        return ResponseEntity.ok(viaggi);
+    }
 
     @GetMapping("/filtra/tag")
     public ResponseEntity<?> getViaggiByTag(@RequestParam Integer tagId) {

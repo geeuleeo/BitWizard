@@ -3,6 +3,7 @@ package com.wizard.repos;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.wizard.entities.Viaggio;
@@ -21,6 +22,9 @@ public interface ViaggioDAO extends JpaRepository<Viaggio, Long> {
 	List<Viaggio> findByCreatoreId(Long creatoreId);
 
 	List<Viaggio> findByPrezzoBetween(Integer min, Integer max);
+	
+	@Query("SELECT v FROM Viaggio v JOIN v.partecipanti p WHERE p.utente.id = :utenteId")
+	List<Viaggio> findViaggiByPartecipanteId(Long utenteId);
 
 
 
