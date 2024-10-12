@@ -45,10 +45,6 @@ public class Utente {
     @JoinColumn(name = "immagine_id")
     private Immagine immagine;
     
-    @ManyToOne
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
-    
     @OneToMany(mappedBy = "utente", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
     @JsonIgnore
     private List<UtenteTag> utenteTags = new ArrayList<>();
@@ -180,5 +176,10 @@ public class Utente {
 	public void setUtenteTags(List<UtenteTag> utenteTags) {
 		this.utenteTags = utenteTags;
 	}
+	
+    public void addUtenteTag(UtenteTag utenteTag) {
+        this.utenteTags.add(utenteTag);
+        utenteTag.setUtente(this);
+    }
 	
 }
