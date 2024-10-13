@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.wizard.DTO.TagDTO;
 import com.wizard.customs.StringToLongListDeserializer;
-import com.wizard.entities.Immagine;
 
 public class ViaggioDTO {
 	
@@ -23,12 +23,18 @@ public class ViaggioDTO {
     private int etaMin;
     private int etaMax;
     @JsonDeserialize(using = StringToLongListDeserializer.class)
-    private List<Long> tagIds;
-    //private String immagineCopertina;
+    private List<TagDTO> tagDTOs;
     private byte[] immagineCopertina;
-    
+    private List<byte []> immagini;
     private List<PartecipantiViaggioDTO> partecipanti;
     
+    
+	public List<byte[]> getImmagini() {
+		return immagini;
+	}
+	public void setImmagini(List<byte[]> immagini) {
+		this.immagini = immagini;
+	}
 	public Long getViaggioId() {
 		return viaggioId;
 	}
@@ -107,12 +113,6 @@ public class ViaggioDTO {
 	public void setEtaMax(int etaMax) {
 		this.etaMax = etaMax;
 	}
-	public List<Long> getTagIds() {
-		return tagIds;
-	}
-	public void setTagIds(List<Long> tagIds) {
-		this.tagIds = tagIds;
-	}
 	public List<PartecipantiViaggioDTO> getPartecipanti() {
 		return partecipanti;
 	}
@@ -124,6 +124,12 @@ public class ViaggioDTO {
 	}
 	public void setImmagineCopertina(byte[] immagineCopertina) {
 		this.immagineCopertina = immagineCopertina;
+	}
+	public List<TagDTO> getTagDTOs() {
+		return tagDTOs;
+	}
+	public void setTagDTOs(List<TagDTO> tagDTOs) {
+		this.tagDTOs = tagDTOs;
 	}
 	
 

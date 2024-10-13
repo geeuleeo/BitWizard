@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettagli del Viaggio</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .img-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .immagine-copertina {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .immagini-viaggio img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: lightblue;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="nomeViaggio">Nome del Viaggio</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Immagine copertina -->
+                <img id="immagineCopertina" class="immagine-copertina" alt="Immagine Copertina">
+            </div>
+            <div class="col-md-6">
+                <h3>Dettagli del Viaggio</h3>
+                <p><strong>Luogo di Partenza:</strong> <span id="luogoPartenza"></span></p>
+                <p><strong>Luogo di Arrivo:</strong> <span id="luogoArrivo"></span></p>
+                <p><strong>Data di Partenza:</strong> <span id="dataPartenza"></span></p>
+                <p><strong>Data di Ritorno:</strong> <span id="dataRitorno"></span></p>
+                <p><strong>Prezzo:</strong> €<span id="prezzo"></span></p>
+                <p><strong>Età Minima:</strong> <span id="etaMin"></span></p>
+                <p><strong>Età Massima:</strong> <span id="etaMax"></span></p>
+                <p><strong>Numero Partecipanti:</strong> Min. <span id="numPartMin"></span> / Max. <span id="numPartMax"></span></p>
+            </div>
+        </div>
+
+        <!-- Sezione per le immagini del viaggio -->
+        <h3>Immagini del Viaggio</h3>
+        <div id="immaginiViaggio" class="row immagini-viaggio"></div>
+
+        <!-- Sezione per i tag del viaggio -->
+        <h3>Tag del Viaggio</h3>
+        <div id="tagsViaggio"></div>
+
+        <!-- Sezione per i partecipanti -->
+        <h3>Partecipanti al Viaggio</h3>
+        <ul id="listaPartecipanti" class="list-group"></ul>
+    </div>
+
+    <script>
+        // Funzione per formattare le date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('it-IT', options);
+        }
+
+        // Funzione per caricare i dettagli del viaggio
+        async function caricaDettagliViaggio() {
+            const viaggioId = new URLSearchParams(window.location.search).get('viaggioId'); // Assumi che il viaggioId sia passato nella query string
+            const response = await fetch(`/api/viaggi/${viaggioId}`); // Modifica con l'endpoint corretto
+            const viaggio = await response.json();
+
+            // Mostra i dettagli del viaggio
+            document.getElementById('nomeViaggio').textContent = viaggio.nome;
+            document.getElementById('luogoPartenza').textContent = viaggio.luogoPartenza;
+            document.getElementById('luogoArrivo').textContent = viaggio.luogoArrivo;
+            document.getElementById('dataPartenza').textContent = formatDate(viaggio.dataPartenza);
+            document.getElementById('dataRitorno').textContent = formatDate(viaggio.dataRitorno);
+            document.getElementById('prezzo').textContent = viaggio.prezzo.toFixed(2);
+            document.getElementById('etaMin').textContent = viaggio.etaMin;
+            document.getElementById('etaMax').textContent = viaggio.etaMax;
+            document.getElementById('numPartMin').textContent = viaggio.numPartMin;
+            document.getElementById('numPartMax').textContent = viaggio.numPartMax;
+
+            // Mostra l'immagine di copertina
+            if (viaggio.immagineCopertina) {
+                const copertinaImg = document.getElementById('immagineCopertina');
+                copertinaImg.src = `data:image/jpeg;base64,${viaggio.immagineCopertina}`;
+            }
+
+            // Mostra le immagini del viaggio
+            const immaginiViaggioDiv = document.getElementById('immaginiViaggio');
+            viaggio.immagini.forEach(immagine => {
+                const img = document.createElement('img');
+                img.src = `data:image/jpeg;base64,${immagine}`;
+                immaginiViaggioDiv.appendChild(img);
+            });
+
+            // Mostra i tag del viaggio
+            const tagsViaggioDiv = document.getElementById('tagsViaggio');
+            viaggio.tagDAOs.forEach(tag => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag';
+                tagElement.textContent = tag.tipoTag; // Assumendo che ci sia il campo tipoTag
+                tagsViaggioDiv.appendChild(tagElement);
+            });
+
+            // Mostra i partecipanti del viaggio
+            const listaPartecipanti = document.getElementById('listaPartecipanti');
+            viaggio.partecipanti.forEach(partecipante => {
+                const partecipanteItem = document.createElement('li');
+                partecipanteItem.className = 'list-group-item';
+                partecipanteItem.textContent = partecipante.nome + ' ' + partecipante.cognome;
+                listaPartecipanti.appendChild(partecipanteItem);
+            });
+        }
+
+        // Carica i dati del viaggio al caricamento della pagina
+        caricaDettagliViaggio();
+    </script>
+</body>
+</html>

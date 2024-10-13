@@ -1,7 +1,5 @@
 package com.wizard.entities;
 
-import java.util.Optional;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,21 +12,21 @@ public class ViaggioTag {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "viaggio_id", nullable = false) // Non può essere null
+    @JoinColumn(name = "viaggio_id", nullable = false)
     private Viaggio viaggio;
 
     @ManyToOne
-    @JoinColumn(name = "tag_id", nullable = false) // Non può essere null
+    @JoinColumn(name = "tag_id", nullable = false)
     private Tag tag;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

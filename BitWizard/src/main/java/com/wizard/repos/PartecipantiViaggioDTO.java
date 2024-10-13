@@ -7,6 +7,8 @@ public class PartecipantiViaggioDTO {
     private Long utenteId;
     private Date dataPartecipazione;
     private StatoDTO statoPartecipazione;
+    private String nome;
+    private String cognome;
     
 	public Long getUtenteId() {
 		return utenteId;
@@ -25,6 +27,18 @@ public class PartecipantiViaggioDTO {
 	}
 	public void setStatoPartecipazione(StatoDTO statoPartecipazione) {
 		this.statoPartecipazione = statoPartecipazione;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	public String getCognome() {
+		return cognome;
+	}
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
 	}
 	
 }

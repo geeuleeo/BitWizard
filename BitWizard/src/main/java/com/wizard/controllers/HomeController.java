@@ -98,5 +98,11 @@ public class HomeController {
     @GetMapping ("/ricerca")
         public String showRicercaUtente() { return "Filters";}
     
+    @GetMapping("/viggi/{id}")
+    public String getPaginaViaggio() {
+    	return "Viaggio";
+    }
+    
+    
     
 }

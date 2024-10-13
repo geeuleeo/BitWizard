@@ -1,10 +1,12 @@
 package com.wizard.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -81,16 +83,19 @@ public class Viaggio {
 
     @ManyToMany
     @JoinTable(
-        name = "immagini_viaggio",
+        name = "viaggio_immagini",
         joinColumns = @JoinColumn(name = "viaggio_id"),
-        inverseJoinColumns = @JoinColumn(name = "id_img")
+        inverseJoinColumns = @JoinColumn(name = "immagine_id")
     )
-    private List<Immagine> immaginiViaggio;
+    private List<ViaggioImmagini> immaginiViaggio;
     
     @ManyToOne
     @JoinColumn(name = "immagine_id")
     private Immagine immagineCopertina;
 	
+    @OneToMany(mappedBy = "viaggio", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
+    @JsonIgnore
+    private List<ViaggioTag> viaggioTags = new ArrayList<>();
 	
 	public Set<PartecipantiViaggio> getPartecipanti() {
 		return partecipanti;
@@ -185,10 +190,10 @@ public class Viaggio {
 	public void setCreatoIl(Date creatoIl) {
 		this.creatoIl = creatoIl;
 	}
-	public List<Immagine> getImmaginiViaggio() {
+	public List<ViaggioImmagini> getImmaginiViaggio() {
 		return immaginiViaggio;
 	}
-	public void setImmaginiViaggio(List<Immagine> immaginiViaggio) {
+	public void setImmaginiViaggio(List<ViaggioImmagini> immaginiViaggio) {
 		this.immaginiViaggio = immaginiViaggio;
 	}
 	public void setStato(Stato stato) {
@@ -206,6 +211,13 @@ public class Viaggio {
 	public void setImmagineCopertina(Immagine immagineCopertina) {
 		this.immagineCopertina = immagineCopertina;
 	}
+	public List<ViaggioTag> getViaggioTags() {
+		return viaggioTags;
+	}
+	public void setViaggioTags(List<ViaggioTag> viaggioTags) {
+		this.viaggioTags = viaggioTags;
+	}
+	
 	public void addPartecipante(PartecipantiViaggio partecipante) {
         if (partecipanti == null) {
             partecipanti = new HashSet<PartecipantiViaggio>();
