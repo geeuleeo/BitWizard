@@ -1,17 +1,20 @@
 package com.wizard.services;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wizard.DTO.TagDTO;
 import com.wizard.entities.ChiavePartecipantiViaggio;
-import com.wizard.entities.Immagine;
 import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Stato;
+import com.wizard.entities.Tag;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.entities.ViaggioImmagini;
@@ -25,6 +28,8 @@ import com.wizard.repos.ViaggioDAO;
 import com.wizard.repos.ViaggioDTO;
 import com.wizard.repos.ViaggioImmaginiDAO;
 import com.wizard.repos.ViaggioTagDAO;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ViaggioServiceImpl implements ViaggioService {
@@ -53,113 +58,70 @@ public class ViaggioServiceImpl implements ViaggioService {
 	@Autowired
 	private StatoDAO statoDAO;
 	
-	public Viaggio salvaViaggio(ViaggioDTO viaggioDTO) {
-		
-		System.out.println("Inizio creazione viaggio...");
-		
-		Long creatoreId = viaggioDTO.getCreatoreId();
-		
-	    Viaggio viaggio = new Viaggio();
-	    viaggio.setNome(viaggioDTO.getNome());
-	    viaggio.setLuogoPartenza(viaggioDTO.getLuogoPartenza());
-	    viaggio.setLuogoArrivo(viaggioDTO.getLuogoArrivo());
-	    viaggio.setDataPartenza(viaggioDTO.getDataPartenza());
-	    viaggio.setDataRitorno(viaggioDTO.getDataRitorno());
-	    viaggio.setDataScadenza(viaggioDTO.getDataScadenza());
-	    viaggio.setNumPartMin(viaggioDTO.getNumPartMin());
-	    viaggio.setNumPartMax(viaggioDTO.getNumPartMax());
-	    viaggio.setPrezzo(viaggioDTO.getPrezzo());
-	    viaggio.setEtaMin(viaggioDTO.getEtaMin());
-	    viaggio.setEtaMax(viaggioDTO.getEtaMax());
-	    viaggio.setDeleted(false);
-	    viaggio.setCreatoIl(new Date());
+	@Transactional
+	public Viaggio salvaViaggio(Viaggio viaggio, List<TagDTO> tagDTOs) {
 	    
-	    Optional<Stato> statoOptional = statoDAO.findById(1);
+	    System.out.println("Inizio creazione viaggio...");
 
-	    if (statoOptional.isPresent()) {
-	        Stato stato = statoOptional.get();
-	        viaggio.setStato(stato);
-	    } else {
-	        throw new RuntimeException("Stato non trovato");
-	    }
-
+	    // Imposta lo stato del viaggio (puoi usare uno stato predefinito)
+	    Stato stato = statoDAO.findById(1)
+	        .orElseThrow(() -> new RuntimeException("Stato non trovato"));
+	    viaggio.setStato(stato);
 	    
-	    if (Optional.ofNullable(viaggioDTO.getImmagineCopertina()).isPresent() && viaggioDTO.getImmagineCopertina().length > 0) {
-	        try {
-	            byte[] imgBytes = viaggioDTO.getImmagineCopertina();
-	            
-	            // Aggiungi qui un controllo del formato immagine, se necessario
-	            
-	            Immagine immagine = new Immagine();
-	            immagine.setImg(imgBytes); // Salva i dati dell'immagine
-	            immagineDAO.save(immagine);
-	            
-	            viaggio.setImmagineCopertina(immagine); // Associa l'immagine al viaggio
-	        } catch (IllegalArgumentException e) {
-	            throw new IllegalArgumentException("Formato immagine non valido: " + e.getMessage(), e);
-	        }
-	    }
+	    if (viaggio.getImmagineCopertina() != null) {
+            immagineDAO.save(viaggio.getImmagineCopertina());
+        }
 
-	    // Imposta il creatore del viaggio
-	    viaggio.setCreatoreId(creatoreId);
-	    System.out.println("Creatore ID impostato: " + creatoreId);
-
-	    System.out.println("Tentativo di salvataggio del viaggio...");
-	    
-	    Viaggio viaggioSalvato = new Viaggio();
-	    
+	    // Salva il viaggio
+	    Viaggio viaggioSalvato;
 	    try {
 	        viaggioSalvato = dao.save(viaggio);
 	        System.out.println("Viaggio salvato con ID: " + viaggioSalvato.getViaggioId());
 	    } catch (Exception e) {
 	        System.out.println("Errore durante il salvataggio del viaggio: " + e.getMessage());
-	        e.printStackTrace();
 	        throw e;
 	    }
-        
-        List<Long> tagIds = viaggioDTO.getTagIds();
-        
-        associaTagEViaggio(tagIds, viaggioSalvato);
-        
-        Optional<Utente> creatoreOptional = utenteDAO.findById(viaggioDTO.getCreatoreId());
 
-        // Verifica se il creatore è presente
-        if (creatoreOptional.isPresent()) {
-            Utente creatore = creatoreOptional.get();
-            
-            // Crea una nuova chiave composta per il partecipante
-            ChiavePartecipantiViaggio chiavePartecipantiViaggio = new ChiavePartecipantiViaggio();
-            chiavePartecipantiViaggio.setViaggioId(viaggioSalvato.getViaggioId());
-            chiavePartecipantiViaggio.setUtenteId(creatore.getUtenteId());
+	    // Gestisci i tag
+	    if (tagDTOs != null && !tagDTOs.isEmpty()) {
+	        for (TagDTO tagDTO : tagDTOs) {
+	            Tag tag = tagDAO.findById(tagDTO.getTagId())
+	                .orElseGet(() -> {
+	                    Tag newTag = new Tag();
+	                    newTag.setTipoTag(tagDTO.getTipoTag());
+	                    return tagDAO.save(newTag);
+	                });
 
-            // Crea un record per la tabella PartecipantiViaggio
-            PartecipantiViaggio partecipante = new PartecipantiViaggio();
-            partecipante.setId(chiavePartecipantiViaggio);  // Imposta la chiave composta
-            partecipante.setViaggio(viaggioSalvato);  // Associa il viaggio
-            partecipante.setUtente(creatore);  // Associa l'utente (creatore)
-            partecipante.setDataIscrizione(new Date());  // Imposta la data di partecipazione
+	            ViaggioTag viaggioTag = new ViaggioTag();
+	            viaggioTag.setViaggio(viaggioSalvato);
+	            viaggioTag.setTag(tag);
+	            viaggioTagDAO.save(viaggioTag);
+	        }
+	    }
 
-            // Recupera lo stato di partecipazione predefinito (es. "In attesa")
-            Stato statoPredefinito = statoDAO.findById(1)  // Sostituisci con lo stato predefinito corretto
-                .orElseThrow(() -> new IllegalArgumentException("Stato di partecipazione predefinito non trovato"));
+	    Optional<Utente> creatoreOptional = utenteDAO.findById(viaggio.getCreatoreId());
+	    if (creatoreOptional.isPresent()) {
+	        Utente creatore = creatoreOptional.get();
 
-            // Imposta lo stato di partecipazione
-            partecipante.setStatoPartecipazione(statoPredefinito);
+	        // Crea o recupera il partecipante
+	        PartecipantiViaggio partecipante = addPartecipanteViaggio(creatore, viaggioSalvato);
 
-            // Salva il partecipante nel database
-            partecipantiViaggioDAO.save(partecipante);
+	        // Aggiorna la lista dei partecipanti nel viaggio
+	        Set<PartecipantiViaggio> partecipanti = new HashSet<>(viaggioSalvato.getPartecipanti());
+	        partecipanti.add(partecipante);
+	        viaggioSalvato.setPartecipanti(partecipanti);
+	        
+	        // Aggiorna il viaggio
+	        Viaggio risultatoFinale = dao.save(viaggioSalvato);
 
-            // Aggiungi il partecipante alla lista dei partecipanti del viaggio
-            viaggioSalvato.addPartecipante(partecipante);
-        } else {
-            throw new IllegalArgumentException("Creatore con ID " + viaggioDTO.getCreatoreId() + " non trovato.");
-        }
-        
-        return viaggioSalvato;
+	        return risultatoFinale;
+	    } else {
+	        throw new IllegalArgumentException("Creatore con ID " + viaggio.getCreatoreId() + " non trovato.");
+	    }
 	}
 	
 	@Override
-	public Utente addPartecipanteViaggio(Utente partecipante, Viaggio viaggio) {
+	public PartecipantiViaggio addPartecipanteViaggio(Utente partecipante, Viaggio viaggio) {
 
 	    // Verifica se il partecipante esiste nel database
 	    Optional<Utente> partecipanteOptional = utenteDAO.findById(partecipante.getUtenteId());
@@ -192,11 +154,32 @@ public class ViaggioServiceImpl implements ViaggioService {
 	        // Aggiungi il partecipante alla lista dei partecipanti del viaggio (se necessario)
 	        viaggio.addPartecipante(partecipanteViaggio);
 
-	        return utente;  // Restituisci il partecipante aggiunto
+	        return partecipanteViaggio;  // Restituisci il partecipante aggiunto
 	    } else {
 	        throw new IllegalArgumentException("Utente con ID " + partecipante.getUtenteId() + " non trovato.");
 	    }
 	}
+	
+    public List<ViaggioDTO> findViaggiByUtenteId(Long utenteId) {
+        List<Viaggio> viaggi = dao.findViaggiByPartecipanteId(utenteId);
+
+        return viaggi.stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+    }
+
+    private ViaggioDTO convertToDTO(Viaggio viaggio) {
+        ViaggioDTO dto = new ViaggioDTO();
+        dto.setViaggioId(viaggio.getViaggioId());
+        dto.setNome(viaggio.getNome());
+        dto.setLuogoPartenza(viaggio.getLuogoPartenza());
+        dto.setLuogoArrivo(viaggio.getLuogoArrivo());
+        dto.setDataPartenza(viaggio.getDataPartenza());
+        dto.setDataRitorno(viaggio.getDataRitorno());
+        dto.setPrezzo(viaggio.getPrezzo());
+
+        return dto;
+    }
 	
 	private void associaTagEViaggio(List<Long> tagIds, Viaggio viaggio) {
 	    if (tagIds != null && !tagIds.isEmpty()) {

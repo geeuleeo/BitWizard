@@ -1,22 +1,28 @@
 package com.wizard.controllers;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.wizard.DTO.TagDTO;
+import com.wizard.DTO.ViaggioCreazioneDTO;
+import com.wizard.entities.Immagine;
+import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.repos.UtenteDAO;
@@ -25,6 +31,9 @@ import com.wizard.repos.ViaggioDTO;
 import com.wizard.services.ViaggioService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
 
 
 @RestController
@@ -40,22 +49,13 @@ public class ViaggioController {
     @Autowired
     private UtenteDAO utenteDAO;
     
-    @PostMapping("/crea")
+    @PostMapping(value = "/crea", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Transactional
     public ResponseEntity<?> creaViaggio(
-            @RequestParam("nome") String nome,
-            @RequestParam("luogoPartenza") String luogoPartenza,
-            @RequestParam("luogoArrivo") String luogoArrivo,
-            @RequestParam("dataPartenza") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataPartenza,
-            @RequestParam("dataRitorno") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataRitorno,
-            @RequestParam("dataScadenza") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dataScadenza,
-            @RequestParam("numPartMin") int numPartMin,
-            @RequestParam("numPartMax") int numPartMax,
-            @RequestParam("etaMax") int etaMax,
-            @RequestParam("etaMin") int etaMin,
-            @RequestParam("prezzo") double prezzo,
-            @RequestParam(value = "immagineCopertina", required = false) MultipartFile immagineCopertina,
+            @RequestPart("viaggioDTO") @Valid ViaggioCreazioneDTO viaggioDTO,
+            @RequestPart(value = "immagineCopertina", required = false) MultipartFile immagineCopertina,
             HttpSession session) {
-        
+
         try {
             // Recupera il creatore dalla sessione
             Utente creatore = (Utente) session.getAttribute("utenteLoggato");
@@ -63,36 +63,55 @@ public class ViaggioController {
                 throw new IllegalArgumentException("Creatore non trovato nella sessione.");
             }
 
-            ViaggioDTO viaggioDTO = new ViaggioDTO();
-            viaggioDTO.setNome(nome);
-            viaggioDTO.setLuogoPartenza(luogoPartenza);
-            viaggioDTO.setLuogoArrivo(luogoArrivo);
-            viaggioDTO.setDataPartenza(dataPartenza);
-            viaggioDTO.setDataRitorno(dataRitorno);
-            viaggioDTO.setDataScadenza(dataScadenza);
-            viaggioDTO.setNumPartMin(numPartMin);
-            viaggioDTO.setNumPartMax(numPartMax);
-            viaggioDTO.setEtaMin(etaMin);
-            viaggioDTO.setEtaMax(etaMax);
-            viaggioDTO.setPrezzo(prezzo);
-            viaggioDTO.setCreatoreId(creatore.getUtenteId());
+            // Ottieni la lista di tag dal DTO
+            List<TagDTO> tagDTOs = viaggioDTO.getTags();
 
-            // Se è presente un'immagine, converti l'immagine in byte[]
+            // Creazione del viaggio dall'oggetto DTO
+            Viaggio nuovoViaggio = createViaggioFromDTO(viaggioDTO);
+            
+            nuovoViaggio.setCreatoreId(creatore.getUtenteId());
+            
+            // Gestione dell'immagine di copertina, se presente
             if (immagineCopertina != null && !immagineCopertina.isEmpty()) {
-                viaggioDTO.setImmagineCopertina(immagineCopertina.getBytes());
+                handleProfileImage(nuovoViaggio, immagineCopertina);
             }
 
-            // Salva il viaggio
-            Viaggio viaggio = viaggioService.salvaViaggio(viaggioDTO);
-            return new ResponseEntity<>(viaggio, HttpStatus.CREATED);
+            // Salva il viaggio con i tag associati
+            Viaggio viaggioSalvato = viaggioService.salvaViaggio(nuovoViaggio, tagDTOs);
+
+            return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
+
+        } catch (IllegalArgumentException e) {
+            // Restituisce una risposta di errore specifico
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            // Restituisce una risposta di errore
+            // Restituisce una risposta di errore generico
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Errore nella creazione del viaggio");
             errorResponse.put("message", e.getMessage());
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    private Viaggio createViaggioFromDTO(ViaggioCreazioneDTO viaggioDTO) {
+        Viaggio viaggio = new Viaggio();
+        viaggio.setNome(viaggioDTO.getNome());
+        viaggio.setLuogoPartenza(viaggioDTO.getLuogoPartenza());
+        viaggio.setLuogoArrivo(viaggioDTO.getLuogoArrivo());
+        viaggio.setDataPartenza(viaggioDTO.getDataPartenza());
+        viaggio.setDataRitorno(viaggioDTO.getDataRitorno());
+        viaggio.setDataScadenza(viaggioDTO.getDataScadenza());
+        viaggio.setNumPartMin(viaggioDTO.getNumPartMin());
+        viaggio.setNumPartMax(viaggioDTO.getNumPartMax());
+        viaggio.setEtaMin(viaggioDTO.getEtaMin());
+        viaggio.setEtaMax(viaggioDTO.getEtaMax());
+        viaggio.setPrezzo(viaggioDTO.getPrezzo());
+        viaggio.setCreatoIl(new Date());
+        return viaggio;
+    }
+
     
     @GetMapping("/viaggio/{id}")
     public ResponseEntity<?> caricaPaginaViaggio(@PathVariable Long id, HttpSession session) {
@@ -106,6 +125,24 @@ public class ViaggioController {
         // Restituisce le informazioni del viaggio
         return ResponseEntity.ok(viaggio);
     }
+    
+    @GetMapping("/{viaggioId}/immagine")
+    public ResponseEntity<byte[]> getImmagineViaggio(@PathVariable Long viaggioId) {
+        Viaggio viaggio = viaggioDAO.findById(viaggioId)
+            .orElseThrow(() -> new RuntimeException("Viaggio non trovato"));
+
+        if (viaggio.getImmagineCopertina() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        byte[] immagine = viaggio.getImmagineCopertina().getImg();  // Assicurati che il campo `getImg()` restituisca i byte dell'immagine
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);  // Modifica il tipo se necessario, ad esempio PNG
+
+        return new ResponseEntity<>(immagine, headers, HttpStatus.OK);
+    }
+
     
     @PostMapping("/iscriviti")
     public ResponseEntity<?> iscriviUtenteAlViaggio(HttpSession session) {
@@ -129,7 +166,7 @@ public class ViaggioController {
                 .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
             
             // Chiama il servizio per aggiungere il partecipante al viaggio
-            Utente utenteIscritto = viaggioService.addPartecipanteViaggio(partecipante, viaggio);
+            PartecipantiViaggio utenteIscritto = viaggioService.addPartecipanteViaggio(partecipante, viaggio);
 
             return ResponseEntity.ok(utenteIscritto);
         } catch (IllegalArgumentException e) {
@@ -138,7 +175,18 @@ public class ViaggioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante l'iscrizione al viaggio");
         }
     }
+    
+    @GetMapping("/utente")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiUtente(HttpSession session) {
+        Utente utente = (Utente) session.getAttribute("utenteLoggato");
 
+        if (utente == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        List<ViaggioDTO> viaggi = viaggioService.findViaggiByUtenteId(utente.getUtenteId());
+        return ResponseEntity.ok(viaggi);
+    }
 
     @GetMapping("/filtra/tag")
     public ResponseEntity<?> getViaggiByTag(@RequestParam Integer tagId) {
@@ -258,6 +306,17 @@ public class ViaggioController {
                     .body("Errore interno: " + e.getMessage());
         }
     }
+    
+    private void handleProfileImage(Viaggio viaggio, MultipartFile imgProfilo) throws IOException {
+        String contentType = imgProfilo.getContentType();
+        if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+            throw new IllegalArgumentException("Formato immagine non valido. Sono accettati solo JPEG e PNG.");
+        }
 
+        byte[] imgBytes = imgProfilo.getBytes();
+        Immagine immagine = new Immagine();
+        immagine.setImg(imgBytes);
+        viaggio.setImmagineCopertina(immagine);
+    }
     
 }

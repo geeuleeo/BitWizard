@@ -10,9 +10,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.wizard.DTO.TagDTO;
 import com.wizard.entities.Tag;
 import com.wizard.entities.Utente;
 import com.wizard.entities.UtenteTag;
+import com.wizard.exceptions.UtenteNonTrovatoException;
+import com.wizard.repos.ImmagineDAO;
 import com.wizard.repos.TagDAO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.UtenteTagDAO;
@@ -38,41 +41,35 @@ public class UtenteServiceImpl implements UtenteService {
     @Autowired
     private UtenteTagDAO utenteTagRepository;
     
-    @Transactional
-    public Utente salvaUtente(Utente utente, List<Tag> tag) {
-    	
-        System.out.println("Numero di UtenteTag nell'utente: " + utente.getUtenteTags().size());
-        for (UtenteTag utenteTag : utente.getUtenteTags()) {
-            System.out.println("UtenteTag: utente=" + utenteTag.getUtente() + ", tag=" + utenteTag.getTag());
+    @Autowired
+	private ImmagineDAO immagineDAO;
+    
+    public Utente salvaUtente(Utente utente, List<TagDTO> tagDTOs) {
+        // Salva l'immagine se presente
+        if (utente.getImmagine() != null) {
+            immagineDAO.save(utente.getImmagine());
         }
-        
-              // Salva l'utente nel database
+
+        // Salva l'utente
         Utente utenteSalvato = dao.save(utente);
-        if (utenteSalvato.getUtenteId() == null) {
-            throw new RuntimeException("Errore nel salvataggio dell'utente");
-        }
 
-        // Gestisci le associazioni con i tag
-        if (tag != null && !tag.isEmpty()) {
+        // Gestisci i tag
+        if (tagDTOs != null && !tagDTOs.isEmpty()) {
+            for (TagDTO tagDTO : tagDTOs) {
+                Tag tag = tagDAO.findById(tagDTO.getTagId())
+                    .orElseGet(() -> {
+                        Tag newTag = new Tag();
+                        newTag.setTipoTag(tagDTO.getTipoTag());
+                        return tagDAO.save(newTag);
+                    });
 
-            // Crea e salva le associazioni
-            for (Tag tags : tag) {
-            	
-                if (tag == null) {
-                    throw new RuntimeException("Tag nullo trovato nella lista dei tag recuperati.");
-                }
                 UtenteTag utenteTag = new UtenteTag();
                 utenteTag.setUtente(utenteSalvato);
-                utenteTag.setTag(tags);
-
-                // Aggiungi l'associazione alle liste
-                utenteSalvato.getUtenteTags().add(utenteTag);
-                tags.getUtenteTags().add(utenteTag);
-
-                // Salva l'associazione
+                utenteTag.setTag(tag);
                 utenteTagRepository.save(utenteTag);
+
+                utenteSalvato.getUtenteTags().add(utenteTag);
             }
-            
         }
 
         return utenteSalvato;
@@ -95,20 +92,18 @@ public class UtenteServiceImpl implements UtenteService {
     public List<Utente> getAllUtenti() {
         return dao.findAll();
     }
-
+    
+    @Transactional
     @Override
     public Utente getUtente(HttpSession session) {
-        // Recupera l'ID utente dalla sessione
-        Object utenteIdObj = session.getAttribute("utenteId");
+        // Recupera l'oggetto Utente dalla sessione
+        Utente utente = (Utente) session.getAttribute("utenteLoggato");
         
-        if (utenteIdObj == null) {
+        if (utente == null) {
             throw new IllegalStateException("Nessun utente loggato.");
         }
 
-        Long utenteId = (Long) utenteIdObj;
-        
-        return dao.findById(utenteId)
-                  .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + utenteId));
+        return utente;
     }
     
     public void aggiungiTagAUtente(Utente utente, List<Tag> tags) {

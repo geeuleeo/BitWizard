@@ -7,11 +7,11 @@ import com.wizard.entities.Tag;
 
 public class UtenteDTO {
 	
+	private Long utenteId;
     private String nome;
     private String cognome;
     private String numeroTelefono;
     private String email;
-    private String password;
     private Date dataNascita;
     private String descrizione;
     private byte[] imgProfilo;
@@ -42,12 +42,6 @@ public class UtenteDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
 	public Date getDataNascita() {
 		return dataNascita;
 	}
@@ -77,6 +71,12 @@ public class UtenteDTO {
 	}
 	public void setTag(List<Tag> tag) {
 		this.tag = tag;
+	}
+	public Long getUtenteId() {
+		return utenteId;
+	}
+	public void setUtenteId(Long utenteId) {
+		this.utenteId = utenteId;
 	}
 
 }

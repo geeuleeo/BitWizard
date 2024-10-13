@@ -1,4 +1,4 @@
-package com.wizard.repos;
+package com.wizard.DTO;
 
 public class IscrizioneDTO {
 	
