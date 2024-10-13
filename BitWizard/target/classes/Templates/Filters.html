@@ -1,81 +1,162 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Filtra Viaggi</title>
   <style>
-    .filter-options {
-      display: none; /* Hide all filter options by default */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input, select {
+      margin-right: 10px;
+    }
+    .results {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: #fff;
     }
   </style>
 </head>
 <body>
-<h1>Filtra Viaggi</h1>
-<form th:action="@{/filtra}" method="GET" id="filterForm">
-  <label for="filterType">Seleziona metodo di filtraggio:</label>
-  <select id="filterType" name="filterType" onchange="showFilterOptions()">
-    <option value="" disabled selected>-- Scegli un metodo --</option>
-    <option value="tag">Filtra per Tag</option>
-    <option value="eta">Filtra per Età</option>
-    <option value="destinazione">Filtra per Destinazione</option>
-    <option value="partenza">Filtra per Luogo di Partenza</option>
-    <option value="prezzo">Filtra per Prezzo</option>
-  </select><br><br>
 
-  <!-- Tag Options -->
-  <div id="tagOptions" class="filter-options">
-    <label for="tagId">ID Tag:</label>
-    <input type="number" id="tagId" name="tagId" th:value="${tagId}"><br><br>
-  </div>
+<h1>Filtra i tuoi Viaggi</h1>
 
-  <!-- Età Options -->
-  <div id="etaOptions" class="filter-options">
-    <label for="minEta">Età Minima:</label>
-    <input type="number" id="minEta" name="min" th:value="${minEta}"><br><br>
-
-    <label for="maxEta">Età Massima:</label>
-    <input type="number" id="maxEta" name="max" th:value="${maxEta}"><br><br>
-  </div>
-
-  <!-- Destinazione Options -->
-  <div id="destinazioneOptions" class="filter-options">
-    <label for="destinazione">Destinazione:</label>
-    <input type="text" id="destinazione" name="destinazione" th:value="${destinazione}"><br><br>
-  </div>
-
-  <!-- Luogo di Partenza Options -->
-  <div id="partenzaOptions" class="filter-options">
-    <label for="partenza">Luogo di Partenza:</label>
-    <input type="text" id="partenza" name="partenza" th:value="${partenza}"><br><br>
-  </div>
-
-  <!-- Prezzo Options -->
-  <div id="prezzoOptions" class="filter-options">
-    <label for="minPrezzo">Prezzo Minimo:</label>
-    <input type="number" id="minPrezzo" name="minPrezzo" th:value="${minPrezzo}"><br><br>
-
-    <label for="maxPrezzo">Prezzo Massimo:</label>
-    <input type="number" id="maxPrezzo" name="maxPrezzo" th:value="${maxPrezzo}"><br><br>
-  </div>
-
-  <input type='submit' value='Filtra Viaggi'>
+<!-- Filter by Tag -->
+<form id="filterByTag">
+  <h2>Filtra per Tag</h2>
+  <label for="tagId">Tag ID:</label>
+  <input type="number" id="tagId" required>
+  <button type="submit">Cerca</button>
 </form>
 
+<!-- Filter by Age -->
+<form id="filterByAge">
+  <h2>Filtra per Età</h2>
+  <label for="minAge">Età Minima:</label>
+  <input type="number" id="minAge" required>
+  <label for="maxAge">Età Massima:</label>
+  <input type="number" id="maxAge" required>
+  <button type="submit">Cerca</button>
+</form>
+
+<!-- Filter by Destination -->
+<form id="filterByDestination">
+  <h2>Filtra per Destinazione</h2>
+  <label for="destinazione">Destinazione:</label>
+  <input type="text" id="destinazione" required>
+  <button type="submit">Cerca</button>
+</form>
+
+<!-- Filter by Departure -->
+<form id="filterByPartenza">
+  <h2>Filtra per Partenza</h2>
+  <label for="partenza">Partenza:</label>
+  <input type="text" id="partenza" required>
+  <button type="submit">Cerca</button>
+</form>
+
+<!-- Filter by Price -->
+<form id="filterByPrezzo">
+  <h2>Filtra per Prezzo</h2>
+  <label for="minPrezzo">Prezzo Minimo:</label>
+  <input type="number" id="minPrezzo" required>
+  <label for="maxPrezzo">Prezzo Massimo:</label>
+  <input type="number" id="maxPrezzo" required>
+  <button type="submit">Cerca</button>
+</form>
+
+<div class="results" id="results"></div>
+
 <script>
-  function showFilterOptions() {
-    // Hide all filter option divs
-    const options = document.querySelectorAll('.filter-options');
-    options.forEach(option => option.style.display = 'none');
+  async function fetchData(url) {
+    const response = await fetch(url);
 
-    // Get the selected filter type
-    const filterType = document.getElementById('filterType').value;
-
-    // Show the corresponding filter options
-    if (filterType) {
-      document.getElementById(filterType + 'Options').style.display = 'block';
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);
     }
+
+    return await response.json();
   }
+
+  document.getElementById('filterByTag').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const tagId = document.getElementById('tagId').value;
+
+    try {
+      const result = await fetchData(`api/viaggi/filtra/tag?tagId=${tagId}`);
+      document.getElementById('results').innerText = JSON.stringify(result);
+    } catch (error) {
+      document.getElementById('results').innerText = error.message;
+    }
+  });
+
+  document.getElementById('filterByAge').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const minAge = document.getElementById('minAge').value;
+    const maxAge = document.getElementById('maxAge').value;
+
+    try {
+      const result = await fetchData(`api/viaggi/filtra/eta?min=${minAge}&max=${maxAge}`);
+      document.getElementById('results').innerText = JSON.stringify(result);
+    } catch (error) {
+      document.getElementById('results').innerText = error.message;
+    }
+  });
+
+  document.getElementById('filterByDestination').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const destinazione = document.getElementById('destinazione').value;
+
+    try {
+      const result = await fetchData(`api/viaggi/filtra/destinazione?destinazione=${destinazione}`);
+      document.getElementById('results').innerText = JSON.stringify(result);
+    } catch (error) {
+      document.getElementById('results').innerText = error.message;
+    }
+  });
+
+  document.getElementById('filterByPartenza').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const partenza = document.getElementById('partenza').value;
+
+    try {
+      const result = await fetchData(`api/viaggi/filtra/partenza?partenza=${partenza}`);
+      document.getElementById('results').innerText = JSON.stringify(result);
+    } catch (error) {
+      document.getElementById('results').innerText = error.message;
+    }
+  });
+
+  document.getElementById('filterByPrezzo').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const minPrezzo = document.getElementById('minPrezzo').value;
+    const maxPrezzo = document.getElementById('maxPrezzo').value;
+
+    try {
+      const result = await fetchData(`api/viaggi/filtra/prezzo?min=${minPrezzo}&max=${maxPrezzo}`);
+      document.getElementById('results').innerText = JSON.stringify(result);
+    } catch (error) {
+      document.getElementById('results').innerText = error.message;
+    }
+  });
 </script>
+
 </body>
 </html>
