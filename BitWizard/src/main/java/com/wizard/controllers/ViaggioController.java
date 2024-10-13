@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +27,19 @@ import com.wizard.entities.Immagine;
 import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
+import com.wizard.entities.ViaggioImmagini;
+import com.wizard.repos.ImmagineDAO;
+import com.wizard.repos.PartecipantiViaggioDTO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.ViaggioDAO;
 import com.wizard.repos.ViaggioDTO;
+import com.wizard.repos.ViaggioImmaginiDAO;
+import com.wizard.repos.ViaggioTagDAO;
 import com.wizard.services.ViaggioService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpHeaders;
 
 
 @RestController
@@ -49,11 +55,21 @@ public class ViaggioController {
     @Autowired
     private UtenteDAO utenteDAO;
     
+    @Autowired
+    private ImmagineDAO immagineDAO;
+    
+    @Autowired
+    private ViaggioImmaginiDAO viaggioImmaginiDAO;
+    
+    @Autowired
+    private ViaggioTagDAO viaggioTagDAO;
+    
     @PostMapping(value = "/crea", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
     public ResponseEntity<?> creaViaggio(
             @RequestPart("viaggioDTO") @Valid ViaggioCreazioneDTO viaggioDTO,
             @RequestPart(value = "immagineCopertina", required = false) MultipartFile immagineCopertina,
+            @RequestPart(value = "immagini", required = false) List<MultipartFile> immagini,
             HttpSession session) {
 
         try {
@@ -78,6 +94,26 @@ public class ViaggioController {
 
             // Salva il viaggio con i tag associati
             Viaggio viaggioSalvato = viaggioService.salvaViaggio(nuovoViaggio, tagDTOs);
+            
+            // Gestione delle altre immagini, se presenti
+            if (immagini != null && !immagini.isEmpty()) {
+                for (MultipartFile immagine : immagini) {
+                    if (!immagine.isEmpty()) {
+                        // Crea l'entità Immagine e la salva
+                        Immagine immagineEntity = new Immagine();
+                        immagineEntity.setImg(immagine.getBytes());
+                        immagineDAO.save(immagineEntity);
+
+                        // Crea l'entità ViaggioImmagini per l'associazione
+                        ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
+                        viaggioImmagine.setViaggio(viaggioSalvato);
+                        viaggioImmagine.setImmagine(immagineEntity);
+
+                        // Salva l'associazione nel repository
+                        viaggioImmaginiDAO.save(viaggioImmagine);
+                    }
+                }
+            }
 
             return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
 
@@ -111,19 +147,64 @@ public class ViaggioController {
         viaggio.setCreatoIl(new Date());
         return viaggio;
     }
-
     
     @GetMapping("/viaggio/{id}")
     public ResponseEntity<?> caricaPaginaViaggio(@PathVariable Long id, HttpSession session) {
         // Recupera le informazioni del viaggio
         Viaggio viaggio = viaggioDAO.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
-        
+
         // Salva l'id del viaggio nella sessione
         session.setAttribute("viaggioId", id);
+
+        // Crea un DTO per il viaggio
+        ViaggioDTO viaggioDTO = new ViaggioDTO();
+        viaggioDTO.setViaggioId(viaggio.getViaggioId());
+        viaggioDTO.setCreatoreId(viaggio.getCreatoreId());
+        viaggioDTO.setDataPartenza(viaggio.getDataPartenza());
+        viaggioDTO.setDataRitorno(viaggio.getDataRitorno());
+        viaggioDTO.setDataScadenza(viaggio.getDataScadenza());
+        viaggioDTO.setEtaMax(viaggio.getEtaMax());
+        viaggioDTO.setEtaMin(viaggio.getEtaMin());
+        viaggioDTO.setLuogoArrivo(viaggio.getLuogoArrivo());
+        viaggioDTO.setLuogoPartenza(viaggio.getLuogoPartenza());
+        viaggioDTO.setNome(viaggio.getNome());
+        viaggioDTO.setNumPartMax(viaggio.getNumPartMax());
+        viaggioDTO.setNumPartMin(viaggio.getNumPartMin());
+        viaggioDTO.setPrezzo(viaggio.getPrezzo());
+
+        // Immagine copertina
+        if (viaggio.getImmagineCopertina() != null) {
+            viaggioDTO.setImmagineCopertina(viaggio.getImmagineCopertina().getImg());
+        }
+
+        // Mappiamo le immagini del viaggio in byte[]
+        List<byte[]> immaginiViaggio = viaggio.getImmaginiViaggio().stream()
+        	    .<byte[]>map(viaggioImmagine -> viaggioImmagine.getImmagine().getImg())
+        	    .collect(Collectors.toList());
+        	    
+       viaggioDTO.setImmagini(immaginiViaggio);
         
+        List<TagDTO> tagDTOs = viaggio.getViaggioTags().stream()
+        	    .map(viaggioTag -> new TagDTO(viaggioTag.getTag().getTagId(), viaggioTag.getTag().getTipoTag()))
+        	    .collect(Collectors.toList());
+
+        viaggioDTO.setTagDTOs(tagDTOs);
+        
+        // Mappiamo i partecipanti del viaggio in PartecipantiViaggioDTO
+        List<PartecipantiViaggioDTO> partecipantiDTOs = viaggio.getPartecipanti().stream()
+            .map(partecipante -> {
+                PartecipantiViaggioDTO partecipanteDTO = new PartecipantiViaggioDTO();
+                partecipanteDTO.setNome(partecipante.getUtente().getNome());
+                partecipanteDTO.setCognome(partecipante.getUtente().getCognome());
+                // Aggiungi altri campi necessari per il partecipante
+                return partecipanteDTO;
+            })
+            .collect(Collectors.toList());
+        viaggioDTO.setPartecipanti(partecipantiDTOs);
+
         // Restituisce le informazioni del viaggio
-        return ResponseEntity.ok(viaggio);
+        return ResponseEntity.ok(viaggioDTO);
     }
     
     @GetMapping("/{viaggioId}/immagine")

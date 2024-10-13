@@ -13,10 +13,10 @@ public class UtenteAgenzia {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "utente_id", nullable = false)
-    private int utenteId;
+    private Long utenteId;
     
     @ManyToOne
     @JoinColumn(name = "agenzia_id", nullable = false)
@@ -26,19 +26,19 @@ public class UtenteAgenzia {
     @JoinColumn(name = "ruolo_id", nullable = false)
     private Ruolo ruolo;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public int getUtenteId() {
+	public Long getUtenteId() {
 		return utenteId;
 	}
 
-	public void setUtenteId(int utenteId) {
+	public void setUtenteId(Long utenteId) {
 		this.utenteId = utenteId;
 	}
 

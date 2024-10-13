@@ -14,5 +14,5 @@ public interface TagDAO extends JpaRepository<Tag, Long> {
 	List<Tag> findByTipoTag(String tipoTag);
 	
 	Optional<Tag> findById(Long id);
-
+    
 }

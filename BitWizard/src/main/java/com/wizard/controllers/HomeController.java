@@ -95,5 +95,11 @@ public class HomeController {
         return "paginaPersonaleUtente";
     }
     
+    @GetMapping("/viggi/{id}")
+    public String getPaginaViaggio() {
+    	return "Viaggio";
+    }
+    
+    
     
 }
