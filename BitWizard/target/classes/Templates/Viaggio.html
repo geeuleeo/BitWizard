@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dettagli del Viaggio</title>
@@ -37,11 +36,26 @@
             background-color: lightblue;
             border-radius: 5px;
         }
+    .creatore-section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .creatore-section img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 id="nomeViaggio">Nome del Viaggio</h1>
+        <div class="creatore-section">
+        	<img id="immagineCreatore" class="img-thumbnail" alt="Immagine profilo creatore">
+        	<p><strong>Creatore:</strong> <span id="nomeCreatore"></span></p>
+    	</div>
         <div class="row">
             <div class="col-md-6">
                 <!-- Immagine copertina -->
@@ -71,69 +85,145 @@
         <!-- Sezione per i partecipanti -->
         <h3>Partecipanti al Viaggio</h3>
         <ul id="listaPartecipanti" class="list-group"></ul>
+        
+        <form id="iscrivitiForm" method="POST">
+    		<button type="submit" class="btn btn-primary">Iscriviti al viaggio</button>
+		</form>
+
     </div>
 
-    <script>
-        // Funzione per formattare le date
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const date = new Date(dateString);
-            return date.toLocaleDateString('it-IT', options);
-        }
+<script>
+    // Funzione per formattare le date
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('it-IT', options);
+    }
+    
+    async function getViaggioIdFromSession() {
+        try {
+            const response = await fetch('/api/session/viaggio');
+            if (!response.ok) {
+                throw new Error('Errore durante il recupero del viaggioId dalla sessione');
+            }
+            const viaggioId = await response.json();
+            console.log('Viaggio ID dalla sessione:', viaggioId);
 
-        // Funzione per caricare i dettagli del viaggio
-        async function caricaDettagliViaggio() {
-            const viaggioId = new URLSearchParams(window.location.search).get('viaggioId'); // Assumi che il viaggioId sia passato nella query string
-            const response = await fetch(`/api/viaggi/${viaggioId}`); // Modifica con l'endpoint corretto
-            const viaggio = await response.json();
-
-            // Mostra i dettagli del viaggio
-            document.getElementById('nomeViaggio').textContent = viaggio.nome;
-            document.getElementById('luogoPartenza').textContent = viaggio.luogoPartenza;
-            document.getElementById('luogoArrivo').textContent = viaggio.luogoArrivo;
-            document.getElementById('dataPartenza').textContent = formatDate(viaggio.dataPartenza);
-            document.getElementById('dataRitorno').textContent = formatDate(viaggio.dataRitorno);
-            document.getElementById('prezzo').textContent = viaggio.prezzo.toFixed(2);
-            document.getElementById('etaMin').textContent = viaggio.etaMin;
-            document.getElementById('etaMax').textContent = viaggio.etaMax;
-            document.getElementById('numPartMin').textContent = viaggio.numPartMin;
-            document.getElementById('numPartMax').textContent = viaggio.numPartMax;
-
-            // Mostra l'immagine di copertina
-            if (viaggio.immagineCopertina) {
-                const copertinaImg = document.getElementById('immagineCopertina');
-                copertinaImg.src = `data:image/jpeg;base64,${viaggio.immagineCopertina}`;
+            if (!viaggioId) {
+                throw new Error('Viaggio ID non trovato nella sessione');
             }
 
-            // Mostra le immagini del viaggio
-            const immaginiViaggioDiv = document.getElementById('immaginiViaggio');
+            // Ora passiamo il viaggioId alla funzione per caricare i dettagli del viaggio
+            caricaDettagliViaggio(viaggioId);
+        } catch (error) {
+            console.error('Errore:', error);
+        }
+    }
+
+    // Funzione per caricare i dettagli del viaggio, ora con parametro viaggioId
+    async function caricaDettagliViaggio(viaggioId) {
+    	
+    	console.log('Viaggio ID ricevuto: ', viaggioId);
+    	
+        const response = await fetch(`/viaggio/${viaggioId}`);
+        if (!response.ok) {
+            console.error('Errore nel caricamento del viaggio');
+            return;
+        }
+        const viaggio = await response.json();
+
+        // Mostra i dettagli del viaggio
+        document.getElementById('nomeViaggio').textContent = viaggio.nome || "Nome non disponibile";
+        document.getElementById('luogoPartenza').textContent = viaggio.luogoPartenza || "Non disponibile";
+        document.getElementById('luogoArrivo').textContent = viaggio.luogoArrivo || "Non disponibile";
+        document.getElementById('dataPartenza').textContent = formatDate(viaggio.dataPartenza) || "Data non disponibile";
+        document.getElementById('dataRitorno').textContent = formatDate(viaggio.dataRitorno) || "Data non disponibile";
+        document.getElementById('prezzo').textContent = viaggio.prezzo ? viaggio.prezzo.toFixed(2) : "Prezzo non disponibile";
+        document.getElementById('etaMin').textContent = viaggio.etaMin || "N/A";
+        document.getElementById('etaMax').textContent = viaggio.etaMax || "N/A";
+        document.getElementById('numPartMin').textContent = viaggio.numPartMin || "N/A";
+        document.getElementById('numPartMax').textContent = viaggio.numPartMax || "N/A";
+        document.getElementById('nomeCreatore').textContent = `${viaggio.nomeCreatore} ${viaggio.cognomeCreatore}`;
+
+        // Mostra l'immagine del profilo del creatore
+        if (viaggio.immagineProfiloCreatore) {
+            const immagineCreatore = document.getElementById('immagineCreatore');
+            immagineCreatore.src = `data:image/jpeg;base64,${viaggio.immagineProfiloCreatore}`;
+        }
+        
+        // Mostra l'immagine di copertina
+        if (viaggio.immagineCopertina) {
+            const copertinaImg = document.getElementById('immagineCopertina');
+            copertinaImg.src = `data:image/jpeg;base64,${viaggio.immagineCopertina}`;
+        }
+
+        // Mostra le immagini del viaggio se esistono
+        const immaginiViaggioDiv = document.getElementById('immaginiViaggio');
+        if (viaggio.immagini && viaggio.immagini.length > 0) {
             viaggio.immagini.forEach(immagine => {
                 const img = document.createElement('img');
                 img.src = `data:image/jpeg;base64,${immagine}`;
                 immaginiViaggioDiv.appendChild(img);
             });
+        } else {
+            console.log("Nessuna immagine disponibile per il viaggio.");
+        }
 
-            // Mostra i tag del viaggio
-            const tagsViaggioDiv = document.getElementById('tagsViaggio');
-            viaggio.tagDAOs.forEach(tag => {
+     // Mostra i tag del viaggio
+        const tagsViaggioDiv = document.getElementById('tagsViaggio');
+        if (viaggio.tagDTOs && viaggio.tagDTOs.length > 0) {
+            viaggio.tagDTOs.forEach(tag => {
                 const tagElement = document.createElement('div');
                 tagElement.className = 'tag';
                 tagElement.textContent = tag.tipoTag; // Assumendo che ci sia il campo tipoTag
                 tagsViaggioDiv.appendChild(tagElement);
             });
+        } else {
+            console.log("Nessun tag trovato per il viaggio con ID:", viaggio.viaggioId);
+        }
 
-            // Mostra i partecipanti del viaggio
-            const listaPartecipanti = document.getElementById('listaPartecipanti');
+        // Mostra i partecipanti del viaggio se esistono
+        const listaPartecipanti = document.getElementById('listaPartecipanti');
+        if (viaggio.partecipanti && viaggio.partecipanti.length > 0) {
             viaggio.partecipanti.forEach(partecipante => {
                 const partecipanteItem = document.createElement('li');
                 partecipanteItem.className = 'list-group-item';
-                partecipanteItem.textContent = partecipante.nome + ' ' + partecipante.cognome;
+                partecipanteItem.textContent = `${partecipante.nome} ${partecipante.cognome}`;
                 listaPartecipanti.appendChild(partecipanteItem);
             });
+        } else {
+            console.log("Nessun partecipante disponibile per il viaggio.");
         }
+    }
+    
+    function setFormAction(viaggioId) {
+        const form = document.getElementById('iscrivitiForm');
+        form.action = `/api/viaggi/iscriviti/${viaggioId}`;
+    }
 
-        // Carica i dati del viaggio al caricamento della pagina
-        caricaDettagliViaggio();
-    </script>
+    async function iscrivitiAlViaggio(viaggioId) {
+        setFormAction(viaggioId);
+        try {
+            const response = await fetch(`/api/viaggi/iscriviti/${viaggioId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                alert('Iscrizione avvenuta con successo!');
+            } else {
+                alert('Errore durante l\'iscrizione');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+            alert('Si è verificato un errore');
+        }
+    }
+
+    // Carica i dati del viaggio al caricamento della pagina
+    getViaggioIdFromSession();
+</script>
 </body>
 </html>

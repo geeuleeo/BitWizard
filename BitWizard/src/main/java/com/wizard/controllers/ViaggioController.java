@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,7 +28,6 @@ import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.entities.ViaggioImmagini;
 import com.wizard.repos.ImmagineDAO;
-import com.wizard.repos.PartecipantiViaggioDTO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.ViaggioDAO;
 import com.wizard.repos.ViaggioDTO;
@@ -148,65 +146,6 @@ public class ViaggioController {
         return viaggio;
     }
     
-    @GetMapping("/viaggio/{id}")
-    public ResponseEntity<?> caricaPaginaViaggio(@PathVariable Long id, HttpSession session) {
-        // Recupera le informazioni del viaggio
-        Viaggio viaggio = viaggioDAO.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
-
-        // Salva l'id del viaggio nella sessione
-        session.setAttribute("viaggioId", id);
-
-        // Crea un DTO per il viaggio
-        ViaggioDTO viaggioDTO = new ViaggioDTO();
-        viaggioDTO.setViaggioId(viaggio.getViaggioId());
-        viaggioDTO.setCreatoreId(viaggio.getCreatoreId());
-        viaggioDTO.setDataPartenza(viaggio.getDataPartenza());
-        viaggioDTO.setDataRitorno(viaggio.getDataRitorno());
-        viaggioDTO.setDataScadenza(viaggio.getDataScadenza());
-        viaggioDTO.setEtaMax(viaggio.getEtaMax());
-        viaggioDTO.setEtaMin(viaggio.getEtaMin());
-        viaggioDTO.setLuogoArrivo(viaggio.getLuogoArrivo());
-        viaggioDTO.setLuogoPartenza(viaggio.getLuogoPartenza());
-        viaggioDTO.setNome(viaggio.getNome());
-        viaggioDTO.setNumPartMax(viaggio.getNumPartMax());
-        viaggioDTO.setNumPartMin(viaggio.getNumPartMin());
-        viaggioDTO.setPrezzo(viaggio.getPrezzo());
-
-        // Immagine copertina
-        if (viaggio.getImmagineCopertina() != null) {
-            viaggioDTO.setImmagineCopertina(viaggio.getImmagineCopertina().getImg());
-        }
-
-        // Mappiamo le immagini del viaggio in byte[]
-        List<byte[]> immaginiViaggio = viaggio.getImmaginiViaggio().stream()
-        	    .<byte[]>map(viaggioImmagine -> viaggioImmagine.getImmagine().getImg())
-        	    .collect(Collectors.toList());
-        	    
-       viaggioDTO.setImmagini(immaginiViaggio);
-        
-        List<TagDTO> tagDTOs = viaggio.getViaggioTags().stream()
-        	    .map(viaggioTag -> new TagDTO(viaggioTag.getTag().getTagId(), viaggioTag.getTag().getTipoTag()))
-        	    .collect(Collectors.toList());
-
-        viaggioDTO.setTagDTOs(tagDTOs);
-        
-        // Mappiamo i partecipanti del viaggio in PartecipantiViaggioDTO
-        List<PartecipantiViaggioDTO> partecipantiDTOs = viaggio.getPartecipanti().stream()
-            .map(partecipante -> {
-                PartecipantiViaggioDTO partecipanteDTO = new PartecipantiViaggioDTO();
-                partecipanteDTO.setNome(partecipante.getUtente().getNome());
-                partecipanteDTO.setCognome(partecipante.getUtente().getCognome());
-                // Aggiungi altri campi necessari per il partecipante
-                return partecipanteDTO;
-            })
-            .collect(Collectors.toList());
-        viaggioDTO.setPartecipanti(partecipantiDTOs);
-
-        // Restituisce le informazioni del viaggio
-        return ResponseEntity.ok(viaggioDTO);
-    }
-    
     @GetMapping("/{viaggioId}/immagine")
     public ResponseEntity<byte[]> getImmagineViaggio(@PathVariable Long viaggioId) {
         Viaggio viaggio = viaggioDAO.findById(viaggioId)
@@ -216,23 +155,18 @@ public class ViaggioController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        byte[] immagine = viaggio.getImmagineCopertina().getImg();  // Assicurati che il campo `getImg()` restituisca i byte dell'immagine
+        byte[] immagine = viaggio.getImmagineCopertina().getImg();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);  // Modifica il tipo se necessario, ad esempio PNG
+        headers.setContentType(MediaType.IMAGE_JPEG);
 
         return new ResponseEntity<>(immagine, headers, HttpStatus.OK);
     }
 
     
-    @PostMapping("/iscriviti")
-    public ResponseEntity<?> iscriviUtenteAlViaggio(HttpSession session) {
+    @PostMapping("/iscriviti/{viaggioId}")
+    public ResponseEntity<?> iscriviUtenteAlViaggio(@PathVariable Long viaggioId, HttpSession session) {
         try {
-            // Recupera l'id del viaggio dalla session
-            Long viaggioId = (Long) session.getAttribute("viaggioId");
-            if (viaggioId == null) {
-                throw new IllegalStateException("Nessun viaggio selezionato");
-            }
             
             // Recupera l'id dell'utente dalla session
             Long utenteId = (Long) session.getAttribute("utenteId");

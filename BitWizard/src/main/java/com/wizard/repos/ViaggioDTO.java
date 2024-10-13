@@ -2,10 +2,12 @@ package com.wizard.repos;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.wizard.DTO.TagDTO;
 import com.wizard.customs.StringToLongListDeserializer;
+import com.wizard.entities.Utente;
 
 public class ViaggioDTO {
 	
@@ -27,8 +29,36 @@ public class ViaggioDTO {
     private byte[] immagineCopertina;
     private List<byte []> immagini;
     private List<PartecipantiViaggioDTO> partecipanti;
+    private String nomeCreatore;
+    private String cognomeCreatore;
+    private Long idCreatore;
+    private byte[] immagineProfiloCreatore;
     
     
+	public String getNomeCreatore() {
+		return nomeCreatore;
+	}
+	public void setNomeCreatore(String nomeCreatore) {
+		this.nomeCreatore = nomeCreatore;
+	}
+	public String getCognomeCreatore() {
+		return cognomeCreatore;
+	}
+	public void setCognomeCreatore(String cognomeCreatore) {
+		this.cognomeCreatore = cognomeCreatore;
+	}
+	public Long getIdCreatore() {
+		return idCreatore;
+	}
+	public void setIdCreatore(Long idCreatore) {
+		this.idCreatore = idCreatore;
+	}
+	public byte[] getImmagineProfiloCreatore() {
+		return immagineProfiloCreatore;
+	}
+	public void setImmagineProfiloCreatore(byte[] immagineProfiloCreatore) {
+		this.immagineProfiloCreatore = immagineProfiloCreatore;
+	}
 	public List<byte[]> getImmagini() {
 		return immagini;
 	}

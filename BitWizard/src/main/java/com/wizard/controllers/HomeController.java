@@ -9,12 +9,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.wizard.customs.CustomDettagliUtente;
 import com.wizard.entities.Utente;
+import com.wizard.repos.ViaggioDTO;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -94,15 +96,14 @@ public class HomeController {
         }
         return "paginaPersonaleUtente";
     }
+    
+	@GetMapping("/paginaViaggio/{id}")
+	public String getPaginaViaggio() {    
+	    return "Viaggio";
+	}
 
     @GetMapping ("/ricerca")
         public String showRicercaUtente() { return "Filters";}
-    
-    @GetMapping("/viggi/{id}")
-    public String getPaginaViaggio() {
-    	return "Viaggio";
-    }
-    
     
     
 }
