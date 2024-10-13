@@ -23,7 +23,9 @@ public interface ViaggioService {
 	List<Viaggio> getViaggiByPartenza(String partenza);
 
 	List<Viaggio> getViaggiByPrezzo(Integer min, Integer max);
-	
+
+
+
 	List<ViaggioDTO> findViaggiByUtenteId(Long utenteId);
 	
 }

@@ -94,6 +94,9 @@ public class HomeController {
         }
         return "paginaPersonaleUtente";
     }
+
+    @GetMapping ("/ricerca")
+        public String showRicercaUtente() { return "Filters";}
     
     
 }
