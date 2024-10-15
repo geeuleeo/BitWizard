@@ -1,5 +1,8 @@
 package com.wizard.controllers;
 
+import com.wizard.entities.UtenteTag;
+import com.wizard.entities.Viaggio;
+import com.wizard.repos.UtenteTagDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +26,9 @@ public class HomeController {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+    @Autowired
+    private UtenteTagDAO utenteTagDAO;
+
     // Metodo per servire la pagina di login
     @GetMapping("/login")
     public String showLoginPage() {
@@ -69,8 +74,13 @@ public class HomeController {
     @GetMapping("/home")
     public String home(HttpSession session, Model model) {
         Utente utente = (Utente) session.getAttribute("utenteLoggato");
+
         if (utente != null) {
+
+
+            model.addAttribute("tagsUtente",utente.getUtenteTags().stream().map(UtenteTag::getTag).findAny().get().getTagId().intValue());
             model.addAttribute("nomeUtente", utente.getNome());
+            model.addAttribute("idUtente", utente.getUtenteId());
             model.addAttribute("messaggioBenvenuto", "Benvenuto, " + utente.getNome() + "!");
         }
         return "home";
@@ -99,8 +109,27 @@ public class HomeController {
         public String showRicercaUtente() { return "Filters";}
     
     @GetMapping("/viggi/{id}")
-    public String getPaginaViaggio() {
+    public String getPaginaViaggio(HttpSession session,Model model) {
+        Utente utente = (Utente) session.getAttribute("utenteLoggato");
+        if (utente == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("utenteId", utente.getUtenteId());
     	return "Viaggio";
+    }
+
+
+    @GetMapping("lista")
+    public String getAllViaggi(HttpSession session) {
+
+
+        Utente utente = (Utente) session.getAttribute("utenteLoggato");
+        if (utente == null) {
+            return "redirect:/login";
+
+        }
+        return "listaViaggi";
     }
     
     

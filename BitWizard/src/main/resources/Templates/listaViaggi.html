@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Viaggi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .trip {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Lista dei Viaggi</h1>
+<div id="trip-list"></div>
+
+<script>
+    // Function to fetch trips from the server
+    async function fetchTrips() {
+        try {
+            const response = await fetch('api/viaggi/lista');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const trips = await response.json();
+            displayTrips(trips);
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+    }
+
+    // Function to display trips on the page
+    function displayTrips(trips) {
+        const tripList = document.getElementById('trip-list');
+        tripList.innerHTML = ''; // Clear previous content
+
+        trips.forEach(trip => {
+            const tripDiv = document.createElement('div');
+            tripDiv.className = 'trip';
+
+            // Set up the click event to redirect to the desired URL
+            tripDiv.onclick = () => {
+                window.location.href = `/paginaViaggio/viaggio?viaggioId=${trip.viaggioId}`;
+            };
+
+            tripDiv.innerHTML = `<strong>ID:</strong> ${trip.viaggioId} <br> <strong>Nome:</strong> ${trip.nome}`;
+            tripList.appendChild(tripDiv);
+        });
+    }
+
+    // Fetch trips when the page loads
+    window.onload = fetchTrips;
+
+    // Fetch trips when the page loads
+    window.onload = fetchTrips;
+</script>
+
+</body>
+</html>
