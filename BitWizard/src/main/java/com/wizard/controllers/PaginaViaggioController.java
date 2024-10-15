@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wizard.DTO.TagDTO;
@@ -31,6 +32,7 @@ public class PaginaViaggioController {
 	@Autowired
 	private UtenteDAO utenteDAO;
 	
+	/*
 	@GetMapping("/api/session/viaggio")
 	public ResponseEntity<Long> getViaggioIdFromSession(HttpSession session) {
 	    Long viaggioId = (Long) session.getAttribute("viaggioId");
@@ -39,6 +41,7 @@ public class PaginaViaggioController {
 	    }
 	    return ResponseEntity.ok(viaggioId);
 	}
+	*/
 	
     @GetMapping("/viaggio/{id}")
 	public ViaggioDTO caricaPaginaViaggio(@PathVariable Long id, HttpSession session) {
@@ -132,6 +135,24 @@ public class PaginaViaggioController {
 
         // Restituisce le informazioni del viaggio
         return viaggioDTO;
+    }
+    
+    @GetMapping("/viaggio/{viaggioId}/partecipanti")
+    public ResponseEntity<List<PartecipantiViaggioDTO>> getPartecipantiViaggio(@PathVariable Long viaggioId) {
+        Viaggio viaggio = viaggioDAO.findById(viaggioId)
+            .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
+
+        List<PartecipantiViaggioDTO> partecipantiDTOs = viaggio.getPartecipanti().stream()
+                .map(partecipante -> {
+                    PartecipantiViaggioDTO partecipanteDTO = new PartecipantiViaggioDTO();
+                    partecipanteDTO.setNome(partecipante.getUtente().getNome());
+                    partecipanteDTO.setCognome(partecipante.getUtente().getCognome());
+                    // Aggiungi altri campi necessari per il partecipante
+                    return partecipanteDTO;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(partecipantiDTOs);
     }
 	
 }

@@ -97,13 +97,20 @@ public class HomeController {
         return "paginaPersonaleUtente";
     }
     
-	@GetMapping("/paginaViaggio/{id}")
-	public String getPaginaViaggio() {    
+	@GetMapping("/paginaViaggio/viaggio")
+	public String getPaginaViaggio(@RequestParam Long viaggioId) {    
 	    return "Viaggio";
 	}
 
-    @GetMapping ("/ricerca")
-        public String showRicercaUtente() { return "Filters";}
-    
-    
+	@GetMapping("")
+	public String getAllViaggi(//HttpSession session
+			)
+			{
+	//Utente utente = (Utente) session.getAttribute("utenteLoggato");
+	//if (utente == null) {
+	//return "redirect:/login";
+
+	//}
+	return "listaViaggi";
+	}
 }

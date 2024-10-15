@@ -250,4 +250,13 @@ public class ViaggioServiceImpl implements ViaggioService {
 
 	}
 
+	@Override
+	public List<ViaggioDTO> getAllViaggi() {
+		List<Viaggio> viaggi = dao.findAll();
+		
+		return viaggi.stream()
+	            .map(this::convertToDTO)
+	            .collect(Collectors.toList());
+	}
+
 }

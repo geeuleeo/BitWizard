@@ -39,7 +39,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
-
 @RestController
 @RequestMapping("/api/viaggi")
 public class ViaggioController {
@@ -162,31 +161,54 @@ public class ViaggioController {
 
         return new ResponseEntity<>(immagine, headers, HttpStatus.OK);
     }
-
     
     @PostMapping("/iscriviti/{viaggioId}")
     public ResponseEntity<?> iscriviUtenteAlViaggio(@PathVariable Long viaggioId, HttpSession session) {
+        
+        System.out.println("Inizio dell'iscrizione per il viaggio con ID: " + viaggioId);
+        
         try {
-            
             // Recupera l'id dell'utente dalla session
-            Long utenteId = (Long) session.getAttribute("utenteId");
+        	Utente utente = (Utente) session.getAttribute("utenteLoggato");
+        	Long utenteId = utente.getUtenteId();
             if (utenteId == null) {
+                System.out.println("Utente non autenticato. Nessun utenteId trovato nella sessione.");
                 throw new IllegalStateException("Utente non autenticato");
+            } else {
+                System.out.println("Utente autenticato con ID: " + utenteId);
             }
 
-            // Recupera il viaggio e l'utente dai rispettivi DAO
+            // Recupera il viaggio
+            System.out.println("Tentativo di recuperare il viaggio con ID: " + viaggioId);
             Viaggio viaggio = viaggioDAO.findById(viaggioId)
-                .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
-            Utente partecipante = utenteDAO.findById(utenteId)
-                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
-            
-            // Chiama il servizio per aggiungere il partecipante al viaggio
-            PartecipantiViaggio utenteIscritto = viaggioService.addPartecipanteViaggio(partecipante, viaggio);
+                .orElseThrow(() -> {
+                    System.out.println("Viaggio con ID " + viaggioId + " non trovato.");
+                    return new IllegalArgumentException("Viaggio non trovato");
+                });
+            System.out.println("Viaggio trovato: " + viaggio.getNome());
 
+            // Recupera l'utente
+            System.out.println("Tentativo di recuperare l'utente con ID: " + utenteId);
+            Utente partecipante = utenteDAO.findById(utenteId)
+                .orElseThrow(() -> {
+                    System.out.println("Utente con ID " + utenteId + " non trovato.");
+                    return new IllegalArgumentException("Utente non trovato");
+                });
+            System.out.println("Utente trovato: " + partecipante.getNome() + " " + partecipante.getCognome());
+
+            // Aggiungi il partecipante al viaggio
+            System.out.println("Tentativo di iscrivere l'utente al viaggio...");
+            PartecipantiViaggio utenteIscritto = viaggioService.addPartecipanteViaggio(partecipante, viaggio);
+            System.out.println("Utente iscritto al viaggio con successo!");
+
+            // Restituisci la risposta con i dettagli dell'iscrizione
             return ResponseEntity.ok(utenteIscritto);
+
         } catch (IllegalArgumentException e) {
+            System.out.println("Errore: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Errore generico durante l'iscrizione al viaggio: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante l'iscrizione al viaggio");
         }
     }
@@ -201,6 +223,25 @@ public class ViaggioController {
 
         List<ViaggioDTO> viaggi = viaggioService.findViaggiByUtenteId(utente.getUtenteId());
         return ResponseEntity.ok(viaggi);
+    }
+    
+    @GetMapping("lista")
+    public ResponseEntity<?> getViaggi() {
+
+    	try{
+    		List<ViaggioDTO> allViaggi = viaggioService.getAllViaggi();
+
+    		if (allViaggi.isEmpty()) {
+    			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    					.body("lista non trovata");
+    		}
+    		return ResponseEntity.ok(allViaggi);
+    	}
+    	catch (Exception e) {
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    			.body("Errore interno: " + e.getMessage());
+    	}
+
     }
 
     @GetMapping("/filtra/tag")

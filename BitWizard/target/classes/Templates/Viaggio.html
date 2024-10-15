@@ -87,52 +87,30 @@
         <ul id="listaPartecipanti" class="list-group"></ul>
         
         <form id="iscrivitiForm" method="POST">
-    		<button type="submit" class="btn btn-primary">Iscriviti al viaggio</button>
+    		<button id="iscrivitiBtn" type="submit" class="btn btn-primary">Iscriviti al viaggio</button>
 		</form>
+
+		<!-- Pulsanti specifici per il creatore (inizialmente nascosti) -->
+		<div id="pulsantiCreatore" style="display: none;">
+    		<button class="btn btn-warning">Modifica Viaggio</button>
+    		<button class="btn btn-danger">Cancella Viaggio</button>
+		</div>
 
     </div>
 
 <script>
+    const viaggioId = new URLSearchParams(window.location.search).get('viaggioId');
+    
+    console.log(viaggioId);
+
     // Funzione per formattare le date
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const date = new Date(dateString);
         return date.toLocaleDateString('it-IT', options);
     }
-    
-    async function getViaggioIdFromSession() {
-        try {
-            const response = await fetch('/api/session/viaggio');
-            if (!response.ok) {
-                throw new Error('Errore durante il recupero del viaggioId dalla sessione');
-            }
-            const viaggioId = await response.json();
-            console.log('Viaggio ID dalla sessione:', viaggioId);
 
-            if (!viaggioId) {
-                throw new Error('Viaggio ID non trovato nella sessione');
-            }
-
-            // Ora passiamo il viaggioId alla funzione per caricare i dettagli del viaggio
-            caricaDettagliViaggio(viaggioId);
-        } catch (error) {
-            console.error('Errore:', error);
-        }
-    }
-
-    // Funzione per caricare i dettagli del viaggio, ora con parametro viaggioId
-    async function caricaDettagliViaggio(viaggioId) {
-    	
-    	console.log('Viaggio ID ricevuto: ', viaggioId);
-    	
-        const response = await fetch(`/viaggio/${viaggioId}`);
-        if (!response.ok) {
-            console.error('Errore nel caricamento del viaggio');
-            return;
-        }
-        const viaggio = await response.json();
-
-        // Mostra i dettagli del viaggio
+    function aggiornaDettagliViaggio(viaggio) {
         document.getElementById('nomeViaggio').textContent = viaggio.nome || "Nome non disponibile";
         document.getElementById('luogoPartenza').textContent = viaggio.luogoPartenza || "Non disponibile";
         document.getElementById('luogoArrivo').textContent = viaggio.luogoArrivo || "Non disponibile";
@@ -144,46 +122,57 @@
         document.getElementById('numPartMin').textContent = viaggio.numPartMin || "N/A";
         document.getElementById('numPartMax').textContent = viaggio.numPartMax || "N/A";
         document.getElementById('nomeCreatore').textContent = `${viaggio.nomeCreatore} ${viaggio.cognomeCreatore}`;
-
-        // Mostra l'immagine del profilo del creatore
-        if (viaggio.immagineProfiloCreatore) {
-            const immagineCreatore = document.getElementById('immagineCreatore');
-            immagineCreatore.src = `data:image/jpeg;base64,${viaggio.immagineProfiloCreatore}`;
-        }
+    }
+    
+    async function caricaDettagliViaggio(viaggioId) {
+        console.log('Viaggio ID ricevuto: ', viaggioId);
         
-        // Mostra l'immagine di copertina
-        if (viaggio.immagineCopertina) {
-            const copertinaImg = document.getElementById('immagineCopertina');
-            copertinaImg.src = `data:image/jpeg;base64,${viaggio.immagineCopertina}`;
+        // Effettua la richiesta al server per ottenere i dettagli del viaggio
+        const response = await fetch(`/viaggio/${viaggioId}`);
+        
+        if (!response.ok) {
+            console.error('Errore nel caricamento del viaggio');
+            return;
         }
 
-        // Mostra le immagini del viaggio se esistono
+        const viaggio = await response.json();
+        
+        console.log('id creatore' + viaggio.creatoreId);
+        
+        bottoneIscrizioneViaggio(viaggio.creatoreId);
+        
+        // Mostra le immagini del viaggio
         const immaginiViaggioDiv = document.getElementById('immaginiViaggio');
+        immaginiViaggioDiv.innerHTML = '';  // Pulisci eventuali contenuti precedenti
         if (viaggio.immagini && viaggio.immagini.length > 0) {
             viaggio.immagini.forEach(immagine => {
                 const img = document.createElement('img');
                 img.src = `data:image/jpeg;base64,${immagine}`;
+                img.alt = 'Immagine del viaggio';
+                img.className = 'img-fluid col-md-4';  // Aggiungi classi di stile se necessario
                 immaginiViaggioDiv.appendChild(img);
             });
         } else {
             console.log("Nessuna immagine disponibile per il viaggio.");
         }
 
-     // Mostra i tag del viaggio
+        // Mostra i tag del viaggio
         const tagsViaggioDiv = document.getElementById('tagsViaggio');
+        tagsViaggioDiv.innerHTML = '';  // Pulisci eventuali contenuti precedenti
         if (viaggio.tagDTOs && viaggio.tagDTOs.length > 0) {
             viaggio.tagDTOs.forEach(tag => {
                 const tagElement = document.createElement('div');
-                tagElement.className = 'tag';
-                tagElement.textContent = tag.tipoTag; // Assumendo che ci sia il campo tipoTag
+                tagElement.className = 'badge badge-primary';  // Aggiungi classi di stile se necessario
+                tagElement.textContent = tag.tipoTag;
                 tagsViaggioDiv.appendChild(tagElement);
             });
         } else {
             console.log("Nessun tag trovato per il viaggio con ID:", viaggio.viaggioId);
         }
 
-        // Mostra i partecipanti del viaggio se esistono
+        // Mostra i partecipanti del viaggio
         const listaPartecipanti = document.getElementById('listaPartecipanti');
+        listaPartecipanti.innerHTML = '';  // Pulisci eventuali contenuti precedenti
         if (viaggio.partecipanti && viaggio.partecipanti.length > 0) {
             viaggio.partecipanti.forEach(partecipante => {
                 const partecipanteItem = document.createElement('li');
@@ -194,8 +183,67 @@
         } else {
             console.log("Nessun partecipante disponibile per il viaggio.");
         }
+
+        // Mostra l'immagine di copertina
+        const copertinaImg = document.getElementById('immagineCopertina');
+        if (viaggio.immagineCopertina) {
+            copertinaImg.src = `data:image/jpeg;base64,${viaggio.immagineCopertina}`;
+            copertinaImg.alt = 'Copertina del viaggio';
+        } else {
+            console.log("Nessuna immagine di copertina trovata.");
+        }
+
+        // Mostra l'immagine del creatore
+        const immagineCreatore = document.getElementById('immagineCreatore');
+        if (viaggio.immagineProfiloCreatore) {
+            immagineCreatore.src = `data:image/jpeg;base64,${viaggio.immagineProfiloCreatore}`;
+            immagineCreatore.alt = 'Immagine profilo del creatore';
+        } else {
+            console.log("Nessuna immagine del creatore trovata.");
+        }
+
+        // Mostra il nome del creatore
+        document.getElementById('nomeCreatore').textContent = `${viaggio.nomeCreatore} ${viaggio.cognomeCreatore}`;
+        
+        aggiornaDettagliViaggio(viaggio);
     }
     
+    async function aggiornaPartecipanti(viaggioId) {
+        try {
+            // Effettua la richiesta per ottenere la lista aggiornata dei partecipanti
+            const response = await fetch(`/viaggio/${viaggioId}/partecipanti`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const partecipanti = await response.json();
+
+                // Pulisci la lista dei partecipanti nel DOM
+                const listaPartecipanti = document.getElementById('listaPartecipanti');
+                listaPartecipanti.innerHTML = '';  // Rimuove i partecipanti precedenti
+
+                if (partecipanti && partecipanti.length > 0) {
+                    // Aggiungi i nuovi partecipanti
+                    partecipanti.forEach(partecipante => {
+                        const partecipanteItem = document.createElement('li');
+                        partecipanteItem.className = 'list-group-item';
+                        partecipanteItem.textContent = `${partecipante.nome} ${partecipante.cognome}`;
+                        listaPartecipanti.appendChild(partecipanteItem);
+                    });
+                } else {
+                    console.log("Nessun partecipante disponibile per il viaggio.");
+                }
+            } else {
+                console.error("Errore nel caricamento dei partecipanti.");
+            }
+        } catch (error) {
+            console.error("Errore durante la richiesta:", error);
+        }
+    }
+
     function setFormAction(viaggioId) {
         const form = document.getElementById('iscrivitiForm');
         form.action = `/api/viaggi/iscriviti/${viaggioId}`;
@@ -203,6 +251,7 @@
 
     async function iscrivitiAlViaggio(viaggioId) {
         setFormAction(viaggioId);
+        console.log('Id viaggio inviato per l iscrizione: ' + viaggioId);
         try {
             const response = await fetch(`/api/viaggi/iscriviti/${viaggioId}`, {
                 method: 'POST',
@@ -212,7 +261,8 @@
             });
 
             if (response.ok) {
-                alert('Iscrizione avvenuta con successo!');
+            	aggiornaPartecipanti(viaggioId);
+                alert('Iscrizione avvenuta con successo!');     
             } else {
                 alert('Errore durante l\'iscrizione');
             }
@@ -222,8 +272,62 @@
         }
     }
 
-    // Carica i dati del viaggio al caricamento della pagina
-    getViaggioIdFromSession();
+    // Aggiungi l'evento al form solo dopo che il viaggioId è stato recuperato
+    document.getElementById('iscrivitiForm').addEventListener('submit', function(event) {
+        event.preventDefault();  // Evita il submit del form nativo
+        if (viaggioId) {
+            iscrivitiAlViaggio(viaggioId);
+        } else {
+            console.error('Errore: Viaggio ID non disponibile.');
+        }
+    });
+
+    // Carica i dettagli del viaggio quando la pagina viene caricata
+    if (viaggioId) {
+        caricaDettagliViaggio(viaggioId);  // Chiamata per caricare i dettagli del viaggio
+    } else {
+        console.error('Errore: Viaggio ID non disponibile.');
+    }
+    
+    async function bottoneIscrizioneViaggio(creatoreId) {
+        try {
+            // Effettua la richiesta al server per ottenere l'ID dell'utente loggato
+            const response = await fetch(`/api/utente/session`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const utenteLoggato = await response.json();  // Ottieni l'ID dell'utente loggato dal server
+
+                console.log('ID utente loggato:', utenteLoggato);
+                console.log('ID creatore del viaggio:', creatoreId);
+
+                // Confronta gli ID convertendo entrambi in numeri (se necessario)
+                if (parseInt(utenteLoggato) === parseInt(creatoreId)) {
+                    // Nascondi il pulsante di iscrizione se l'utente è il creatore
+                    document.getElementById('iscrivitiBtn').style.display = 'none';
+
+                    // Mostra i pulsanti del creatore
+                    document.getElementById('pulsantiCreatore').style.display = 'block';
+                } else {
+                    // Mostra il pulsante di iscrizione se l'utente non è il creatore
+                    document.getElementById('iscrivitiBtn').style.display = 'block';
+
+                    // Nascondi i pulsanti del creatore
+                    document.getElementById('pulsantiCreatore').style.display = 'none';
+                }
+            } else {
+                console.error('Errore nel recupero della sessione utente');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+        }
+    }
+
 </script>
+
 </body>
 </html>

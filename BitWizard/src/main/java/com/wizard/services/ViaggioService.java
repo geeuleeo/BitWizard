@@ -29,4 +29,6 @@ public interface ViaggioService {
 
 	List<ViaggioDTO> findViaggiByUtenteId(Long utenteId);
 	
+	List<ViaggioDTO> getAllViaggi();
+	
 }

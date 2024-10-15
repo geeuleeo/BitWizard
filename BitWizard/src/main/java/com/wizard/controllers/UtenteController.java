@@ -103,7 +103,16 @@ public class UtenteController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
+    @GetMapping("/session")
+    public ResponseEntity<Long> getUtenteLoggato(HttpSession session) {
+        Utente utente = (Utente) session.getAttribute("utenteLoggato");
+        Long utenteId = utente.getUtenteId();
+        if (utenteId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(utenteId);
+    }
 
     private Utente createUtenteFromDTO(UtenteRegistrationDTO dto, Ruolo ruolo) {
         Utente utente = new Utente();
