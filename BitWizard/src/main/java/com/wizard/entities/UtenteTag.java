@@ -48,5 +48,4 @@ public class UtenteTag {
 	public void setTag(Tag tag) {
 		this.tag = tag;
 	}
-
 }
