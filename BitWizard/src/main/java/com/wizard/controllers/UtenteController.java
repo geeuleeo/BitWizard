@@ -76,7 +76,7 @@ public class UtenteController {
                 throw new EmailAlreadyExistsException("Email già esistente");
             }
 
-            Ruolo ruolo = ruoloDAO.findById(utenteDTO.getRuoloId())
+            Ruolo ruolo = ruoloDAO.findById(1)
                     .orElseThrow(() -> new RuoloNotFoundException("Ruolo non trovato"));
 
             Utente nuovoUtente = createUtenteFromDTO(utenteDTO, ruolo);

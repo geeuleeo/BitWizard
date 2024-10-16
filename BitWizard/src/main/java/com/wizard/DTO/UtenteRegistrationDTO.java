@@ -40,9 +40,6 @@ public class UtenteRegistrationDTO {
     @Size(max = 500, message = "La descrizione non può superare i 500 caratteri")
     private String descrizione;
 
-    @NotNull(message = "L'ID del ruolo è obbligatorio")
-    private Integer ruoloId;
-
     private List<TagDTO> tags;
 
 	public String getNome() {
@@ -99,14 +96,6 @@ public class UtenteRegistrationDTO {
 
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
-	}
-
-	public Integer getRuoloId() {
-		return ruoloId;
-	}
-
-	public void setRuoloId(Integer ruoloId) {
-		this.ruoloId = ruoloId;
 	}
 
 	public List<TagDTO> getTags() {

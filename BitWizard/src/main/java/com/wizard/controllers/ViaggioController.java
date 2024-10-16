@@ -92,7 +92,7 @@ public class ViaggioController {
             // Salva il viaggio con i tag associati
             Viaggio viaggioSalvato = viaggioService.salvaViaggio(nuovoViaggio, tagDTOs);
             
-            // Gestione delle altre immagini, se presenti
+         // Gestione delle altre immagini, se presenti
             if (immagini != null && !immagini.isEmpty()) {
                 for (MultipartFile immagine : immagini) {
                     if (!immagine.isEmpty()) {
@@ -372,6 +372,8 @@ public class ViaggioController {
         byte[] imgBytes = imgProfilo.getBytes();
         Immagine immagine = new Immagine();
         immagine.setImg(imgBytes);
+        immagineDAO.save(immagine);
+        System.out.println("creata immagine con id: " + immagine.getIdImg());
         viaggio.setImmagineCopertina(immagine);
     }
     

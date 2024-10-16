@@ -88,6 +88,7 @@
         
         <form id="iscrivitiForm" method="POST">
     		<button id="iscrivitiBtn" type="submit" class="btn btn-primary">Iscriviti al viaggio</button>
+    		<button id="annullaIscrizioneBtn" type="button" class="btn btn-secondary" style="display: none;">Annulla Iscrizione</button>
 		</form>
 
 		<!-- Pulsanti specifici per il creatore (inizialmente nascosti) -->
@@ -139,7 +140,7 @@
         
         console.log('id creatore' + viaggio.creatoreId);
         
-        bottoneIscrizioneViaggio(viaggio.creatoreId);
+        bottoneIscrizioneViaggio(viaggioId, viaggio.creatoreId);
         
         // Mostra le immagini del viaggio
         const immaginiViaggioDiv = document.getElementById('immaginiViaggio');
@@ -289,7 +290,8 @@
         console.error('Errore: Viaggio ID non disponibile.');
     }
     
-    async function bottoneIscrizioneViaggio(creatoreId) {
+    async function bottoneIscrizioneViaggio(viaggioId, creatoreId) {
+    	console.log('viaggioId ricevuto da aggiorna bottone ' + viaggioId);
         try {
             // Effettua la richiesta al server per ottenere l'ID dell'utente loggato
             const response = await fetch(`/api/utente/session`, {
@@ -313,14 +315,53 @@
                     // Mostra i pulsanti del creatore
                     document.getElementById('pulsantiCreatore').style.display = 'block';
                 } else {
+                	
                     // Mostra il pulsante di iscrizione se l'utente non è il creatore
                     document.getElementById('iscrivitiBtn').style.display = 'block';
-
                     // Nascondi i pulsanti del creatore
                     document.getElementById('pulsantiCreatore').style.display = 'none';
+                    console.log('controllo iscrizione con viaggioId:', viaggioId);
+                    // Passa correttamente viaggioId alla funzione verificaIscrizioneUtente
+                    verificaIscrizioneUtente(viaggioId, utenteLoggato);
                 }
             } else {
                 console.error('Errore nel recupero della sessione utente');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+        }
+    }
+    
+    async function verificaIscrizioneUtente(viaggioId, utenteLoggato) {
+        try {
+            const response = await fetch(`/viaggio/${viaggioId}/partecipanti`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const partecipanti = await response.json();
+                
+                // Aggiungi un log per vedere i dati dei partecipanti
+                console.log('Partecipanti ricevuti:', partecipanti);
+                console.log('Utente loggato:', utenteLoggato);
+
+                // Confronta gli ID convertendoli in numeri
+                const isUtenteIscritto = partecipanti.some(partecipante => parseInt(partecipante.utenteId) === parseInt(utenteLoggato));
+
+                if (isUtenteIscritto) {
+                    console.log('Utente iscritto');
+                    document.getElementById('iscrivitiBtn').style.display = 'none';
+                    document.getElementById('annullaIscrizioneBtn').style.display = 'block';
+                } else {
+                    console.log('Utente non iscritto');
+                    document.getElementById('iscrivitiBtn').style.display = 'block';
+                    document.getElementById('annullaIscrizioneBtn').style.display = 'none';
+                }
+            } else {
+                console.error('Errore nel caricamento dei partecipanti.');
             }
         } catch (error) {
             console.error('Errore durante la richiesta:', error);

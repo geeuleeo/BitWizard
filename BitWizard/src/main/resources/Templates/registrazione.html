@@ -88,7 +88,6 @@ function displayTags(tags) {
             numeroTelefono: document.getElementById('numeroTelefono').value,
             dataNascita: document.getElementById('dataNascita').value,
             descrizione: document.getElementById('descrizione').value,
-            ruoloId: document.getElementById('ruoloId').value,
             tags: getSelectedTags()  // Usa la funzione getSelectedTags per raccogliere i tag selezionati
         };
 
@@ -197,9 +196,6 @@ function getSelectedTags() {
 
         <label for="descrizione">Descrizione:</label>
         <textarea id="descrizione" name="descrizione"></textarea><br><br>
-
-        <label for="ruoloId">Ruolo (ID):</label>
-        <input type="number" id="ruoloId" name="ruoloId" required><br><br>
         
         <!-- Selezione Tag -->
         <h3>Seleziona i tuoi tag</h3>

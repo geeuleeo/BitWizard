@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creazione Viaggio</title>
-    <script>
+   <script>
         // Funzione per ottenere i tag dal backend
         async function getTags() {
             const response = await fetch('/api/tags/cerca');
@@ -78,8 +78,8 @@
                 reader.readAsDataURL(copertinaInput.files[0]);
             }
         }
-
-        // Funzione per l'anteprima delle immagini multiple
+	
+        // Funzione per inserire più immagini
         function handleMultipleImages() {
             const imageInput = document.getElementById('immagini');
             const previewContainer = document.getElementById('previewContainer');
@@ -87,15 +87,22 @@
 
             Array.from(imageInput.files).forEach(file => {
                 const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.className = 'img-preview';
-                    previewContainer.appendChild(img);
-                };
+
+                // Usa una funzione di callback per mantenere il contesto del file corrente
+                reader.onload = (function(file) {
+                    return function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'img-preview';
+                        previewContainer.appendChild(img);
+                    };
+                })(file);
+
+                // Leggi il file corrente
                 reader.readAsDataURL(file);
             });
         }
+
 
         // Funzione per inviare il form
         function inviaForm() {
@@ -248,7 +255,7 @@
 
         <!-- Sezione per il caricamento di più immagini -->
         <label for="immagini">Altre Immagini del Viaggio:</label>
-        <input type="file" id="immagini" name="immagini" accept="image/*" multiple onchange="handleMultipleImages()"><br><br>
+        <input type="file" id="immagini" name="immagini" accept="image/*" multiple onchange="handleMultipleImages"><br><br>
 
         <!-- Anteprima delle immagini selezionate -->
         <div id="previewContainer"></div>

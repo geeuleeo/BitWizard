@@ -1,16 +1,16 @@
 package com.wizard.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wizard.DTO.TagDTO;
@@ -97,6 +97,7 @@ public class PaginaViaggioController {
                 .map(viaggioImmagine -> viaggioImmagine.getImmagine().getImg())
                 .collect(Collectors.toList())
             : new ArrayList<>();  // Ritorna una lista vuota se nessuna immagine è presente
+        
         viaggioDTO.setImmagini(immaginiViaggio);
 
         // Mappiamo i tag del viaggio, verificando se la lista non è nulla o vuota
@@ -108,10 +109,14 @@ public class PaginaViaggioController {
         viaggioDTO.setTagDTOs(tagDTOs);
         
      // Controlliamo e logghiamo la lista di immagini
-        if (viaggio.getImmaginiViaggio() == null || viaggio.getImmaginiViaggio().isEmpty()) {
-            System.out.println("Nessuna immagine trovata per il viaggio con ID: " + viaggio.getViaggioId());
-        } else {
+        if (viaggio.getImmaginiViaggio() != null && !viaggio.getImmaginiViaggio().isEmpty()) {
             System.out.println("Trovate " + viaggio.getImmaginiViaggio().size() + " immagini per il viaggio con ID: " + viaggio.getViaggioId());
+            for (int i = 0; i < viaggio.getImmaginiViaggio().size(); i++) {
+                byte[] imgData = viaggio.getImmaginiViaggio().get(i).getImmagine().getImg();
+                System.out.println("Immagine " + (i+1) + ": lunghezza dati = " + (imgData != null ? imgData.length : 0) + " bytes");
+            }
+        } else {
+            System.out.println("Nessuna immagine trovata per il viaggio con ID: " + viaggio.getViaggioId());
         }
 
         // Controlliamo e logghiamo la lista di tag
@@ -147,10 +152,13 @@ public class PaginaViaggioController {
                     PartecipantiViaggioDTO partecipanteDTO = new PartecipantiViaggioDTO();
                     partecipanteDTO.setNome(partecipante.getUtente().getNome());
                     partecipanteDTO.setCognome(partecipante.getUtente().getCognome());
+                    partecipanteDTO.setUtenteId(partecipante.getUtente().getUtenteId());
                     // Aggiungi altri campi necessari per il partecipante
                     return partecipanteDTO;
                 })
                 .collect(Collectors.toList());
+        
+        System.out.println("Numero di partecipanti trovati: " + partecipantiDTOs.size());
 
         return ResponseEntity.ok(partecipantiDTOs);
     }
