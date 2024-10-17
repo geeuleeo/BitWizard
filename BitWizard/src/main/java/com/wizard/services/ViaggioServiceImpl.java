@@ -205,7 +205,7 @@ public class ViaggioServiceImpl implements ViaggioService {
 	}
 
 	@Override
-	public List<Viaggio> getViaggiByTag(Integer tagId) {
+	public List<ViaggioDTO> getViaggiByTag(Integer tagId) {
 	    // Recupera tutte le associazioni Viaggio-Tag per il tag specificato
 	    List<ViaggioTag> viaggiTag = viaggioTagDAO.findByTagTagId(tagId);
 	    
@@ -217,36 +217,61 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    // Usa gli ID per recuperare tutti i Viaggi
 	    List<Viaggio> viaggi = dao.findAllById(viaggiId);
 	    
-	    return viaggi;
+	    // Converti ciascun Viaggio in ViaggioDTO
+	    List<ViaggioDTO> viaggiDTO = viaggi.stream()
+	                                       .map(v -> convertToDTO(v))
+	                                       .collect(Collectors.toList());
+	    
+	    return viaggiDTO;
 	}
 
 	@Override
-	public List<Viaggio> getViaggiByEta(Integer min, Integer max) {
+	public List<ViaggioDTO> getViaggiByEta(Integer min, Integer max) {
 	    List<Viaggio> viaggi = dao.findByEtaMinGreaterThanEqualAndEtaMaxLessThanEqual(min, max);
 	    
-	    return viaggi;
+	 // Converti ciascun Viaggio in ViaggioDTO
+	    List<ViaggioDTO> viaggiDTO = viaggi.stream()
+	                                       .map(v -> convertToDTO(v))
+	                                       .collect(Collectors.toList());
+	    
+	    return viaggiDTO;
 	}
 
 	@Override
-	public List<Viaggio> getViaggiByDestinazione(String destinazione) {
+	public List<ViaggioDTO> getViaggiByDestinazione(String destinazione) {
 	    List<Viaggio> viaggi = dao.findByLuogoArrivoContainingIgnoreCase(destinazione);
 	    
-	    return viaggi;
+	 // Converti ciascun Viaggio in ViaggioDTO
+	    List<ViaggioDTO> viaggiDTO = viaggi.stream()
+	                                       .map(v -> convertToDTO(v))
+	                                       .collect(Collectors.toList());
+	    
+	    return viaggiDTO;
 	}
 
 	@Override
-	public List<Viaggio> getViaggiByPartenza(String partenza) {
+	public List<ViaggioDTO> getViaggiByPartenza(String partenza) {
 		List<Viaggio> viaggi = dao.findByLuogoPartenzaContainingIgnoreCase(partenza);
+		
+		// Converti ciascun Viaggio in ViaggioDTO
+	    List<ViaggioDTO> viaggiDTO = viaggi.stream()
+	                                       .map(v -> convertToDTO(v))
+	                                       .collect(Collectors.toList());
 
-	return viaggi;
+	return viaggiDTO;
 
 	}
 
 	@Override
-	public List<Viaggio> getViaggiByPrezzo(Integer min, Integer max) {
+	public List<ViaggioDTO> getViaggiByPrezzo(Integer min, Integer max) {
 		List<Viaggio> viaggi = dao.findByPrezzoBetween(min,max);
+		
+		// Converti ciascun Viaggio in ViaggioDTO
+	    List<ViaggioDTO> viaggiDTO = viaggi.stream()
+	                                       .map(v -> convertToDTO(v))
+	                                       .collect(Collectors.toList());
 
-		return viaggi;
+		return viaggiDTO;
 
 	}
 

@@ -248,7 +248,7 @@ public class ViaggioController {
     public ResponseEntity<?> getViaggiByTag(@RequestParam Integer tagId) {
     	
     	try {
-                List<Viaggio> viaggi = viaggioService.getViaggiByTag(tagId);
+                List<ViaggioDTO> viaggi = viaggioService.getViaggiByTag(tagId);
                 
                 if (viaggi.isEmpty()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -270,7 +270,7 @@ public class ViaggioController {
         public ResponseEntity<?> getViaggiByEta(@RequestParam Integer min, @RequestParam Integer max) {
             
         	try {
-                List<Viaggio> viaggi = viaggioService.getViaggiByEta(min, max);
+                List<ViaggioDTO> viaggi = viaggioService.getViaggiByEta(min, max);
                 
                 if (viaggi.isEmpty()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -292,7 +292,7 @@ public class ViaggioController {
         public ResponseEntity<?> getViaggiByDestinazione(@RequestParam String destinazione) {
             try {
                 // Cerca i viaggi per destinazione (luogoArrivo)
-                List<Viaggio> viaggi = viaggioService.getViaggiByDestinazione(destinazione);
+                List<ViaggioDTO> viaggi = viaggioService.getViaggiByDestinazione(destinazione);
                 
                 if (viaggi.isEmpty()) {
                     // Restituisce 404 se non ci sono viaggi trovati per la destinazione
@@ -319,7 +319,7 @@ public class ViaggioController {
     public ResponseEntity<?> getViaggiByPartenza(@RequestParam String partenza) {
         try {
             // Cerca i viaggi per destinazione (luogoArrivo)
-            List<Viaggio> viaggi = viaggioService.getViaggiByPartenza(partenza);
+            List<ViaggioDTO> viaggi = viaggioService.getViaggiByPartenza(partenza);
 
             if (viaggi.isEmpty()) {
                 // Restituisce 404 se non ci sono viaggi trovati per la destinazione
@@ -345,7 +345,7 @@ public class ViaggioController {
     public ResponseEntity<?> getViaggiByPrezzo(@RequestParam Integer min, @RequestParam Integer max) {
 
         try {
-            List<Viaggio> viaggi = viaggioService.getViaggiByPrezzo(min,max);
+            List<ViaggioDTO> viaggi = viaggioService.getViaggiByPrezzo(min,max);
 
             if (viaggi.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)

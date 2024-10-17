@@ -17,15 +17,15 @@ public interface ViaggioService {
 	
 	PartecipantiViaggio addPartecipanteViaggio(Utente partecipante, Viaggio viaggio);
 	
-	List<Viaggio> getViaggiByTag (Integer tagId);
+	List<ViaggioDTO> getViaggiByTag (Integer tagId);
 	
-	List<Viaggio> getViaggiByEta(Integer min, Integer max);
+	List<ViaggioDTO> getViaggiByEta(Integer min, Integer max);
 	
-	List<Viaggio> getViaggiByDestinazione(String destinazione);
+	List<ViaggioDTO> getViaggiByDestinazione(String destinazione);
 
-	List<Viaggio> getViaggiByPartenza(String partenza);
+	List<ViaggioDTO> getViaggiByPartenza(String partenza);
 
-	List<Viaggio> getViaggiByPrezzo(Integer min, Integer max);
+	List<ViaggioDTO> getViaggiByPrezzo(Integer min, Integer max);
 
 	List<ViaggioDTO> findViaggiByUtenteId(Long utenteId);
 	

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <title>Filtra Viaggi</title>
   <style>
     body {
@@ -76,9 +77,13 @@
   <button type="submit">Cerca</button>
 </form>
 
-<div class="results" id="results"></div>
+
+<div id="cardContainer" class="row">
+<!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+</div>
 
 <script>
+
   async function fetchData(url) {
     const response = await fetch(url);
 
@@ -89,58 +94,100 @@
 
     return await response.json();
   }
+  
+  function createViaggioCard(viaggio) {
+	    const dataPartenza = new Date(viaggio.dataPartenza).toLocaleDateString();
+	    const dataRitorno = new Date(viaggio.dataRitorno).toLocaleDateString();
 
-  document.getElementById('filterByTag').addEventListener('submit', async (e) => {
-    e.preventDefault();
+	    return `
+	      <div class="col-md-4">
+	        <div class="card mb-4">
+	          <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
+	          <div class="card-body">
+	            <h5 class="card-title">${viaggio.nome}</h5>
+	            <p class="card-text">
+	              Luogo di Partenza: ${viaggio.luogoPartenza} <br>
+	              Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
+	              Data di Partenza: ${dataPartenza} <br>
+	              Data di Ritorno: ${dataRitorno} <br>
+	              Prezzo: €${viaggio.prezzo.toFixed(2)}
+	            </p>
+	            <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="btn btn-primary">Dettagli del viaggio</a>
+	          </div>
+	        </div>
+	      </div>
+	    `;
+	  }
 
-    const tagId = document.getElementById('tagId').value;
+	  function displayResults(results) {
+	    const resultsContainer = document.getElementById('results');
+	    resultsContainer.innerHTML = results.map(createViaggioCard).join('');
+	  }
 
-    try {
-      const result = await fetchData(`api/viaggi/filtra/tag?tagId=${tagId}`);
-      document.getElementById('results').innerText = JSON.stringify(result);
-    } catch (error) {
-      document.getElementById('results').innerText = error.message;
-    }
-  });
+	  document.getElementById('filterByTag').addEventListener('submit', async (e) => {
+		    e.preventDefault();
+
+		    const tagId = document.getElementById('tagId').value;
+		    const container = document.getElementById('cardContainer');
+
+		    try {
+		        const result = await fetchData(`api/viaggi/filtra/tag?tagId=${tagId}`);
+		        result.forEach(viaggio => {
+		            container.innerHTML += createViaggioCard(viaggio);
+		        });
+		    } catch (error) {
+		        container.innerText = error.message;
+		    }
+		});
+
 
   document.getElementById('filterByAge').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const minAge = document.getElementById('minAge').value;
     const maxAge = document.getElementById('maxAge').value;
+    const container = document.getElementById('cardContainer');
 
     try {
       const result = await fetchData(`api/viaggi/filtra/eta?min=${minAge}&max=${maxAge}`);
-      document.getElementById('results').innerText = JSON.stringify(result);
-    } catch (error) {
-      document.getElementById('results').innerText = error.message;
-    }
+      result.forEach(viaggio => {
+          container.innerHTML += createViaggioCard(viaggio);
+      });
+  } catch (error) {
+      container.innerText = error.message;
+  }
   });
 
   document.getElementById('filterByDestination').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const destinazione = document.getElementById('destinazione').value;
+    const container = document.getElementById('cardContainer');
 
     try {
       const result = await fetchData(`api/viaggi/filtra/destinazione?destinazione=${destinazione}`);
-      document.getElementById('results').innerText = JSON.stringify(result);
-    } catch (error) {
-      document.getElementById('results').innerText = error.message;
-    }
+      result.forEach(viaggio => {
+          container.innerHTML += createViaggioCard(viaggio);
+      });
+  } catch (error) {
+      container.innerText = error.message;
+  }
   });
 
   document.getElementById('filterByPartenza').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const partenza = document.getElementById('partenza').value;
+    const container = document.getElementById('cardContainer');
 
     try {
       const result = await fetchData(`api/viaggi/filtra/partenza?partenza=${partenza}`);
-      document.getElementById('results').innerText = JSON.stringify(result);
-    } catch (error) {
-      document.getElementById('results').innerText = error.message;
-    }
+      result.forEach(viaggio => {
+          container.innerHTML += createViaggioCard(viaggio);
+      });
+  } catch (error) {
+      container.innerText = error.message;
+  }
   });
 
   document.getElementById('filterByPrezzo').addEventListener('submit', async (e) => {
@@ -148,15 +195,22 @@
 
     const minPrezzo = document.getElementById('minPrezzo').value;
     const maxPrezzo = document.getElementById('maxPrezzo').value;
+    const container = document.getElementById('cardContainer');
 
     try {
       const result = await fetchData(`api/viaggi/filtra/prezzo?min=${minPrezzo}&max=${maxPrezzo}`);
-      document.getElementById('results').innerText = JSON.stringify(result);
-    } catch (error) {
-      document.getElementById('results').innerText = error.message;
-    }
+      result.forEach(viaggio => {
+          container.innerHTML += createViaggioCard(viaggio);
+      });
+  } catch (error) {
+      container.innerText = error.message;
+  }
   });
 </script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>
