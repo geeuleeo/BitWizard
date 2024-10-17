@@ -34,6 +34,7 @@
 
     <p class="text-center">
         <button id="pulsanteLogin" class="btn btn-outline-secondary" onclick="location.href='/login'">Vai al Login</button>
+        <button id="pulsanteAreaPersonale" class="btn btn-outline-primary" onclick="location.href='/paginaPersonale'">Vai Alla tua pagina personale</button>
         <button id="pulsanteLogout" class="btn btn-outline-danger" onclick="effettuaLogout()">Logout</button>
     </p>
 
@@ -336,7 +337,9 @@
                 if (utenteLoggato) {
                     // Nascondi il pulsante di login
                     document.getElementById('pulsanteLogin').style.display = 'none';
-
+	
+                    document.getElementById('pulsanteAreaPersonale').style.display = 'block';
+                    
                     // Mostra il pulsante di logout
                     document.getElementById('pulsanteLogout').style.display = 'block';
                     
@@ -344,7 +347,8 @@
                 } else {
                     // Mostra il pulsante di login
                     document.getElementById('pulsanteLogin').style.display = 'block';
-
+	
+                    document.getElementById('pulsanteAreaPersonale').style.display = 'none';
                     // Nascondi il pulsante di logout
                     document.getElementById('pulsanteLogout').style.display = 'none';
                     
@@ -354,7 +358,8 @@
                 console.error('Errore nel recupero della sessione utente');
              // Mostra il pulsante di login
                 document.getElementById('pulsanteLogin').style.display = 'block';
-
+				
+                document.getElementById('pulsanteAreaPersonale').style.display = 'none';
                 // Nascondi il pulsante di logout
                 document.getElementById('pulsanteLogout').style.display = 'none';
                 
