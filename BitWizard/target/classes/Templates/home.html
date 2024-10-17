@@ -6,6 +6,240 @@
 <body>
     <h1>Benvenuto, <span th:text="${nomeUtente}">Utente</span>!</h1>
     <p>Sei autenticato.</p>
+
+
+    <title>Filtra Viaggi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, select {
+            margin-right: 10px;
+        }
+        .results {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+        }
+    </style>
+    </head>
+
+    <div id="utenteId" th:text="${idUtente} "></div>
+    <div id="tagUtente" th:text="${tagsUtente}"></div>
+
+
+    <h1>Filtra i tuoi Viaggi</h1>
+
+
+    <form id="filterByTag">
+        <h2>Filtra per Tag</h2>
+        <label for="tagId">Tag ID:</label>
+        <input type="number" id="tagId" required>
+        <button type="submit">Cerca</button>
+    </form>
+
+
+    <form id="filterByAge">
+        <h2>Filtra per Età</h2>
+        <label for="minAge">Età Minima:</label>
+        <input type="number" id="minAge" required>
+        <label for="maxAge">Età Massima:</label>
+        <input type="number" id="maxAge" required>
+        <button type="submit">Cerca</button>
+    </form>
+
+
+    <form id="filterByDestination">
+        <h2>Filtra per Destinazione</h2>
+        <label for="destinazione">Destinazione:</label>
+        <input type="text" id="destinazione" required>
+        <button type="submit">Cerca</button>
+    </form>
+
+
+    <form id="filterByPartenza">
+        <h2>Filtra per Partenza</h2>
+        <label for="partenza">Partenza:</label>
+        <input type="text" id="partenza" required>
+        <button type="submit">Cerca</button>
+    </form>
+
+
+    <form id="filterByPrezzo">
+        <h2>Filtra per Prezzo</h2>
+        <label for="minPrezzo">Prezzo Minimo:</label>
+        <input type="number" id="minPrezzo" required>
+        <label for="maxPrezzo">Prezzo Massimo:</label>
+        <input type="number" id="maxPrezzo" required>
+        <button type="submit">Cerca</button>
+    </form>
+
+    <div class="results" id="results"></div>
+    <div class="consigliati" id="consigliati"></div>
+
+
+
+    <script>
+
+
+
+    async function fetchData(url) {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText);
+    }
+
+    return await response.json();
+    }
+
+    document.getElementById('filterByTag').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const tagId = document.getElementById('tagId').value;
+
+    try {
+    const result = await fetchData(`api/viaggi/filtra/tag?tagId=${tagId}`);
+    document.getElementById('results').innerText = JSON.stringify(result);
+    } catch (error) {
+    document.getElementById('results').innerText = error.message;
+    }
+    });
+
+
+
+
+        document.getElementById('filterByAge').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const minAge = document.getElementById('minAge').value;
+            const maxAge = document.getElementById('maxAge').value;
+
+            try {
+                const result = await fetchData(`api/viaggi/filtra/eta?min=${minAge}&max=${maxAge}`);
+                document.getElementById('results').innerText = JSON.stringify(result);
+            } catch (error) {
+                document.getElementById('results').innerText = error.message;
+            }
+        });
+
+        document.getElementById('filterByDestination').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const destinazione = document.getElementById('destinazione').value;
+
+            try {
+                const result = await fetchData(`api/viaggi/filtra/destinazione?destinazione=${destinazione}`);
+                document.getElementById('results').innerText = JSON.stringify(result);
+            } catch (error) {
+                document.getElementById('results').innerText = error.message;
+            }
+        });
+
+        document.getElementById('filterByPartenza').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const partenza = document.getElementById('partenza').value;
+
+            try {
+                const result = await fetchData(`api/viaggi/filtra/partenza?partenza=${partenza}`);
+                document.getElementById('results').innerText = JSON.stringify(result);
+            } catch (error) {
+                document.getElementById('results').innerText = error.message;
+            }
+        });
+
+        document.getElementById('filterByPrezzo').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const minPrezzo = document.getElementById('minPrezzo').value;
+            const maxPrezzo = document.getElementById('maxPrezzo').value;
+
+            try {
+                const result = await fetchData(`api/viaggi/filtra/prezzo?min=${minPrezzo}&max=${maxPrezzo}`);
+                document.getElementById('results').innerText = JSON.stringify(result);
+            } catch (error) {
+                document.getElementById('results').innerText = error.message;
+            }
+        });
+
+
+
+    async function getTags() {
+        try {
+            const response = await fetch('/api/tags/get', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            // Controlla se la risposta è ok
+            if (response.ok) {
+                const tags = await response.json(); N
+
+
+                if (tags.length > 0) {
+
+                    const tagIds = tags.map(tag => tag.tagId);
+
+                    const randomId = tagIds[Math.floor(Math.random() * tagIds.length)];
+
+
+                    const viaggiResponse = await fetch(`/api/viaggi/filtra/tag?tagId=${randomId}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (viaggiResponse.ok) {
+                        const viaggi = await viaggiResponse.json();
+
+
+                        const consigliatiDiv = document.getElementById('consigliati');
+                        consigliatiDiv.innerHTML = '';
+
+
+                        const risultatiDaMostrare = viaggi.slice(0, 3);
+                        risultatiDaMostrare.forEach(viaggio => {
+                            const viaggioElement = document.createElement('div');
+                            viaggioElement.textContent = viaggio.nome + "// luogo partenza = "+viaggio.luogoPartenza+"//luogo arrivo = "+ viaggio.luogoArrivo;
+                            consigliatiDiv.appendChild(viaggioElement);
+                        });
+                    } else {
+                        console.error('Errore durante il recupero dei viaggi:', viaggiResponse.status);
+                    }
+                } else {
+                    console.error('Nessun tag trovato');
+                }
+            }
+        } catch (error) {
+            console.error('Errore durante la fetch:', error);
+        }
+    }
+
+
+    getTags();
+
+
+
+    </script>
+
+
     <a th:href="@{/logout}">Logout</a>
 </body>
 </html>

@@ -10,4 +10,5 @@ public interface UtenteTagDAO extends JpaRepository<UtenteTag, Integer>{
 	
 	public UtenteTag findByUtenteAndTag(Utente utente, Tag tag);
 
+
 }
