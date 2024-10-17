@@ -78,33 +78,72 @@
                 reader.readAsDataURL(copertinaInput.files[0]);
             }
         }
-	
-        // Funzione per inserire più immagini
+        
         function handleMultipleImages() {
             const imageInput = document.getElementById('immagini');
             const previewContainer = document.getElementById('previewContainer');
-            previewContainer.innerHTML = ""; // Pulizia dell'anteprima precedente
+            previewContainer.innerHTML = ""; // Pulisce l'anteprima precedente
 
-            Array.from(imageInput.files).forEach(file => {
-                const reader = new FileReader();
-
-                // Usa una funzione di callback per mantenere il contesto del file corrente
-                reader.onload = (function(file) {
-                    return function(e) {
+            if (imageInput.files && imageInput.files.length > 0) {
+                console.log("Numero di immagini selezionate:", imageInput.files.length); // Verifica il numero di file selezionati
+                
+                Array.from(imageInput.files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.className = 'img-preview';
                         previewContainer.appendChild(img);
+                        console.log(`Immagine ${index + 1} caricata: ${file.name}`);
                     };
-                })(file);
 
-                // Leggi il file corrente
-                reader.readAsDataURL(file);
+                    reader.onerror = function() {
+                        console.error(`Errore nel caricamento dell'immagine ${file.name}`);
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                console.log("Nessun file selezionato.");
+            }
+        }
+
+     // Funzione per inviare i dati tramite fetch
+        function inviaDati(formData) {
+            fetch('/api/viaggi/crea', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                const feedbackMessage = document.getElementById('feedbackMessage');
+                if (response.ok) {
+                    return response.json().then(data => {
+                        console.log("Viaggio creato con successo:", data);
+                        feedbackMessage.textContent = 'Viaggio creato con successo!';
+                        feedbackMessage.style.color = 'green';
+                        feedbackMessage.style.display = 'block';
+                        return data;
+                    });
+                } else {
+                    return response.text().then(errorText => {
+                        feedbackMessage.textContent = 'Errore durante la creazione del viaggio: ' + errorText;
+                        feedbackMessage.style.color = 'red';
+                        feedbackMessage.style.display = 'block';
+                        throw new Error(errorText);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Errore:', error.message);
+                const feedbackMessage = document.getElementById('feedbackMessage');
+                feedbackMessage.textContent = 'Si è verificato un errore. Riprova più tardi.';
+                feedbackMessage.style.color = 'red';
+                feedbackMessage.style.display = 'block';
             });
         }
 
-
-        // Funzione per inviare il form
+     // Funzione per inviare il form
         function inviaForm() {
             const form = document.getElementById('creaViaggioForm');
             let formData = new FormData(form);
@@ -123,39 +162,23 @@
                 tags: getSelectedTags()
             };
 
+            // Aggiungi il viaggioDTO al formData come JSON
             formData.append('viaggioDTO', new Blob([JSON.stringify(viaggioDTO)], { type: 'application/json' }));
+
+            // Aggiungi l'immagine di copertina, se presente
             const immagineCopertina = document.getElementById('immagineCopertina').files[0];
             if (immagineCopertina) {
                 formData.append('immagineCopertina', immagineCopertina);
             }
+
+            // Aggiungi le immagini selezionate al formData
             const immagini = document.getElementById('immagini').files;
             for (let i = 0; i < immagini.length; i++) {
                 formData.append('immagini', immagini[i]);
             }
-            inviaDati(formData);
-        }
 
-        // Funzione per inviare i dati tramite fetch
-        function inviaDati(formData) {
-            fetch('/api/viaggi/crea', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return response.text().then(text => { throw new Error(text) });
-                }
-            })
-            .then(data => {
-                console.log("Viaggio creato con successo:", data);
-                mostraFeedback(true);
-            })
-            .catch(error => {
-                console.error('Errore:', error.message);
-                mostraFeedback(false);
-            });
+            // Invia i dati
+            inviaDati(formData);
         }
 
         // Funzione per raccogliere i tag selezionati
@@ -254,8 +277,8 @@
         <div id="copertinaPreview"></div>
 
         <!-- Sezione per il caricamento di più immagini -->
-        <label for="immagini">Altre Immagini del Viaggio:</label>
-        <input type="file" id="immagini" name="immagini" accept="image/*" multiple onchange="handleMultipleImages"><br><br>
+		<label for="immagini">Altre Immagini del Viaggio:</label>
+		<input type="file" id="immagini" name="immagini" accept="image/*" multiple onchange="handleMultipleImages()"><br><br>
 
         <!-- Anteprima delle immagini selezionate -->
         <div id="previewContainer"></div>
@@ -263,6 +286,9 @@
         <input type="submit" value="Crea Viaggio">
     </form>
     
-    <p id="feedback"></p>
+    <button id="pulsantePaginaPersonale" onclick="location.href='/paginaPersonale'">Vai alla tua area Personale</button>
+    
+    <div id="feedbackMessage" style="display: none; color: green;"></div>
+
 </body>
 </html>

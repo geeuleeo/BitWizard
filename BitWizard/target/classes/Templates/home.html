@@ -89,10 +89,10 @@
     <div class="consigliati" id="consigliati"></div>
 
 	<button onclick="location.href='/lista'">Vai alla Lista di Viaggi</button>
+	
+	<button id="pulsanteCreaViaggio" onclick="location.href='/CreaViaggio'">Crea il tuo Viaggio</button>
 
     <script>
-
-
 
     async function fetchData(url) {
     const response = await fetch(url);
@@ -254,12 +254,16 @@
 
                     // Mostra il pulsante di logout
                     document.getElementById('pulsanteLogout').style.display = 'block';
+                    
+                    document.getElementById('pulsanteCreaViaggio').style.display = 'block';
                 } else {
                     // Mostra il pulsante di login
                     document.getElementById('pulsanteLogin').style.display = 'block';
 
                     // Nascondi il pulsante di logout
                     document.getElementById('pulsanteLogout').style.display = 'none';
+                    
+                    document.getElementById('pulsanteCreaViaggio').style.display = 'none';
                 }
             } else {
                 console.error('Errore nel recupero della sessione utente');
@@ -268,6 +272,8 @@
 
                 // Nascondi il pulsante di logout
                 document.getElementById('pulsanteLogout').style.display = 'none';
+                
+                document.getElementById('pulsanteCreaViaggio').style.display = 'none';
             }
         } catch (error) {
             console.error('Errore durante la richiesta:', error);
