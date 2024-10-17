@@ -123,4 +123,7 @@ public class HomeController {
 	//}
 	return "listaViaggi";
 	}
+	
+	@GetMapping ("/ricerca")
+    public String showRicercaUtente() { return "Filters";}
 }
