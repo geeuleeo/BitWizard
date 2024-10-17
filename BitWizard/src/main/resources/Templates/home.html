@@ -5,8 +5,9 @@
 </head>
 <body>
     <h1>Benvenuto, <span th:text="${nomeUtente}">Utente</span>!</h1>
-    <p>Sei autenticato.</p>
-
+    
+    <button id="pulsanteLogin" onclick="location.href='/login'">Vai al Login</button>
+    <button id="pulsanteLogout" onclick="effettuaLogout()">Logout</button>
 
     <title>Filtra Viaggi</title>
     <style>
@@ -87,7 +88,7 @@
     <div class="results" id="results"></div>
     <div class="consigliati" id="consigliati"></div>
 
-
+	<button onclick="location.href='/lista'">Vai alla Lista di Viaggi</button>
 
     <script>
 
@@ -231,15 +232,75 @@
             console.error('Errore durante la fetch:', error);
         }
     }
+    
+    async function bottoneLogin() {
+        try {
+            // Effettua la richiesta al server per ottenere l'ID dell'utente loggato
+            const response = await fetch(`/api/utente/session`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
+            if (response.ok) {
+                const utenteLoggato = await response.json(); // Ottieni l'ID dell'utente loggato dal server
+
+                console.log('ID utente loggato:', utenteLoggato);
+
+                if (utenteLoggato) {
+                    // Nascondi il pulsante di login
+                    document.getElementById('pulsanteLogin').style.display = 'none';
+
+                    // Mostra il pulsante di logout
+                    document.getElementById('pulsanteLogout').style.display = 'block';
+                } else {
+                    // Mostra il pulsante di login
+                    document.getElementById('pulsanteLogin').style.display = 'block';
+
+                    // Nascondi il pulsante di logout
+                    document.getElementById('pulsanteLogout').style.display = 'none';
+                }
+            } else {
+                console.error('Errore nel recupero della sessione utente');
+             // Mostra il pulsante di login
+                document.getElementById('pulsanteLogin').style.display = 'block';
+
+                // Nascondi il pulsante di logout
+                document.getElementById('pulsanteLogout').style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+        }
+    }
+    
+    async function effettuaLogout() {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const message = await response.text(); // Ottieni il messaggio di risposta dal server
+                alert(message); // Mostra il messaggio di logout effettuato con successo
+                window.location.href = '/';
+            } else {
+                alert('Errore durante il logout. Riprova.');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta di logout:', error);
+        }
+    }
+
+	bottoneLogin();
 
     getTags();
-
-
-
+    
     </script>
 
-
-    <a th:href="@{/logout}">Logout</a>
 </body>
 </html>

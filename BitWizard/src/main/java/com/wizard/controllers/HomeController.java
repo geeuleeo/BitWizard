@@ -1,9 +1,7 @@
 package com.wizard.controllers;
 
-import com.wizard.entities.UtenteTag;
-import com.wizard.entities.Viaggio;
-import com.wizard.repos.UtenteTagDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,14 +10,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.wizard.customs.CustomDettagliUtente;
 import com.wizard.entities.Utente;
-import com.wizard.repos.ViaggioDTO;
+import com.wizard.repos.UtenteTagDAO;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -61,9 +58,14 @@ public class HomeController {
 
             // Memorizza l'utente nella sessione
             session.setAttribute("utenteLoggato", utente);
+            
+         // Recupera l'URL precedente dalla sessione
+          //  String urlPrecedente = (String) session.getAttribute("urlPrecedente");
 
-            // Reindirizza alla pagina home
-            return "redirect:/home";
+            // Reindirizza all'URL precedente o alla home se l'URL non è disponibile
+            // return "redirect:" + (urlPrecedente != null ? urlPrecedente : "/home");
+            
+            return "redirect:/";
 
         } catch (AuthenticationException e) {
             // Autenticazione fallita
@@ -71,18 +73,28 @@ public class HomeController {
             return "redirect:/login";
         }
     }
+    
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        // Invalida la sessione
+        session.invalidate();
 
+        // Rimuovi l'autenticazione dal contesto di sicurezza
+        SecurityContextHolder.clearContext();
 
-    @GetMapping("/home")
+        // Restituisce una risposta di conferma con lo status HTTP 200
+        return ResponseEntity.ok("Logout effettuato con successo.");
+    }
+
+    @GetMapping("")
     public String home(HttpSession session, Model model) {
+    	
         Utente utente = (Utente) session.getAttribute("utenteLoggato");
 
         if (utente != null) {
-
-
-            model.addAttribute("tagsUtente",utente.getUtenteTags().stream().map(UtenteTag::getTag).findAny().get().getTagId().intValue());
+            // model.addAttribute("tagsUtente",utente.getUtenteTags().stream().map(UtenteTag::getTag).findAny().get().getTagId().intValue());
             model.addAttribute("nomeUtente", utente.getNome());
-            model.addAttribute("idUtente", utente.getUtenteId());
+           // model.addAttribute("idUtente", utente.getUtenteId());
             model.addAttribute("messaggioBenvenuto", "Benvenuto, " + utente.getNome() + "!");
         }
         return "home";
@@ -112,7 +124,7 @@ public class HomeController {
 	    return "Viaggio";
 	}
 
-	@GetMapping("")
+	@GetMapping("lista")
 	public String getAllViaggi(//HttpSession session
 			)
 			{
