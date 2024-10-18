@@ -1,5 +1,6 @@
 package com.wizard.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +12,10 @@ public class Agenzia {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long aziendaId;
-
+	
+	@Column(unique = true, nullable = false)
+	private String partitaIva;
+	
 	private String nome;
 	
 	private String descrizione;
@@ -40,6 +44,14 @@ public class Agenzia {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPartitaIva() {
+		return partitaIva;
+	}
+
+	public void setPartitaIva(String partitaIva) {
+		this.partitaIva = partitaIva;
 	}
 
 	public String getNome() {return nome;}
