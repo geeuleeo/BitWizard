@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        h1 {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+    <div id="utenteId" th:text="${idUtente} "></div>
+    <div id="tagUtente" th:text="${tagsUtente}"></div>
+
+
+<div class="container">
+
+    <h1 class="text-center display-4">Benvenuto, <span th:text="${nomeUtente}">Utente</span>!</h1>
+
+    <p class="text-center">
+        <button id="pulsanteLogin" class="btn btn-outline-secondary" onclick="location.href='/login'">Vai al Login</button>
+        <button id="pulsanteAreaPersonale" class="btn btn-outline-primary" onclick="location.href='/paginaPersonale'">Vai Alla tua pagina personale</button>
+        <button id="pulsanteLogout" class="btn btn-outline-danger" onclick="effettuaLogout()">Logout</button>
+    </p>
+
+  <h1 class="text-center display-4">Filtra i tuoi Viaggi</h1>
+
+  <div class="card p-4">
+    <form id="filterByTag" class="form-group">
+      <h3>Filtra per Tag</h3>
+      <div class="row">
+        <div class="col-md-8">
+          <input type="number" class="form-control" id="tagId" placeholder="Inserisci ID del Tag" required>
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-primary w-100">Cerca</button>
+        </div>
+      </div>
+    </form>
+
+    <form id="filterByAge" class="form-group">
+      <h3>Filtra per Età</h3>
+      <div class="row">
+        <div class="col-md-4">
+          <input type="number" class="form-control" id="minAge" placeholder="Età Minima" required>
+        </div>
+        <div class="col-md-4">
+          <input type="number" class="form-control" id="maxAge" placeholder="Età Massima" required>
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-primary w-100">Cerca</button>
+        </div>
+      </div>
+    </form>
+
+    <form id="filterByDestination" class="form-group">
+      <h3>Filtra per Destinazione</h3>
+      <div class="row">
+        <div class="col-md-8">
+          <input type="text" class="form-control" id="destinazione" placeholder="Inserisci Destinazione" required>
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-primary w-100">Cerca</button>
+        </div>
+      </div>
+    </form>
+
+    <form id="filterByPartenza" class="form-group">
+      <h3>Filtra per Partenza</h3>
+      <div class="row">
+        <div class="col-md-8">
+          <input type="text" class="form-control" id="partenza" placeholder="Inserisci Partenza" required>
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-primary w-100">Cerca</button>
+        </div>
+      </div>
+    </form>
+
+    <form id="filterByPrezzo" class="form-group">
+      <h3>Filtra per Prezzo</h3>
+      <div class="row">
+        <div class="col-md-4">
+          <input type="number" class="form-control" id="minPrezzo" placeholder="Prezzo Minimo" required>
+        </div>
+        <div class="col-md-4">
+          <input type="number" class="form-control" id="maxPrezzo" placeholder="Prezzo Massimo" required>
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-primary w-100">Cerca</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="cardContainer" class="row">
+	<!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+	</div>
+	
+	<!-- Consigliati -->
+        <div class="mt-4" id="consigliati">
+            <!-- Sezione consigliati dinamica -->
+        </div>
+
+        <!-- Azioni -->
+        <div class="text-center mt-4">
+            <p class="text-center mt-4"><a href="/lista" class="btn btn-outline-secondary">Vai alla Lista di Viaggi</a></p>
+            <button class="btn btn-outline-primary" id="pulsanteCreaViaggio" onclick="location.href='/CreaViaggio'">Crea il tuo Viaggio</button>
+        </div>
+    </div>
+</div>
+
+<!-- Container per le card dinamiche -->
+<div id="cardContainer" class="row mt-4">
+    <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+</div>
+
+    <script>
+
+    async function fetchData(url) {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText);
+    }
+
+    return await response.json();
+    }
+
+    function createViaggioCard(viaggio) {
+	    const dataPartenza = new Date(viaggio.dataPartenza).toLocaleDateString();
+	    const dataRitorno = new Date(viaggio.dataRitorno).toLocaleDateString();
+
+	    return `
+	      <div class="col-md-4">
+	        <div class="card mb-4">
+	          <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
+	          <div class="card-body">
+	            <h5 class="card-title">${viaggio.nome}</h5>
+	            <p class="card-text">
+	              Luogo di Partenza: ${viaggio.luogoPartenza} <br>
+	              Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
+	              Data di Partenza: ${dataPartenza} <br>
+	              Data di Ritorno: ${dataRitorno} <br>
+	              Prezzo: €${viaggio.prezzo.toFixed(2)}
+	            </p>
+	            <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="btn btn-primary">Dettagli del viaggio</a>
+	          </div>
+	        </div>
+	      </div>
+	    `;
+	  }
+
+	  function displayResults(results) {
+	    const resultsContainer = document.getElementById('results');
+	    resultsContainer.innerHTML = results.map(createViaggioCard).join('');
+	  }
+
+	  document.getElementById('filterByTag').addEventListener('submit', async (e) => {
+		    e.preventDefault();
+
+		    const tagId = document.getElementById('tagId').value;
+		    const container = document.getElementById('cardContainer');
+		    container.innerHTML = "";
+
+		    try {
+		        const result = await fetchData(`api/viaggi/filtra/tag?tagId=${tagId}`);
+		        result.forEach(viaggio => {
+		            container.innerHTML += createViaggioCard(viaggio);
+		        });
+		    } catch (error) {
+		        container.innerText = error.message;
+		    }
+		});
+
+
+  document.getElementById('filterByAge').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const minAge = document.getElementById('minAge').value;
+    const maxAge = document.getElementById('maxAge').value;
+    const container = document.getElementById('cardContainer');
+    
+    container.innerHTML = "";
+
+    try {
+      const result = await fetchData(`api/viaggi/filtra/eta?min=${minAge}&max=${maxAge}`);
+      result.forEach(viaggio => {
+          container.innerHTML += createViaggioCard(viaggio);
+      });
+  } catch (error) {
+      container.innerText = error.message;
+  }
+  });
+
+  document.getElementById('filterByDestination').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const destinazione = document.getElementById('destinazione').value;
+    const container = document.getElementById('cardContainer');
+    
+    container.innerHTML = "";
+
+    try {
+      const result = await fetchData(`api/viaggi/filtra/destinazione?destinazione=${destinazione}`);
+      result.forEach(viaggio => {
+          container.innerHTML += createViaggioCard(viaggio);
+      });
+  } catch (error) {
+      container.innerText = error.message;
+  }
+  });
+
+  document.getElementById('filterByPartenza').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const partenza = document.getElementById('partenza').value;
+    const container = document.getElementById('cardContainer');
+    
+    container.innerHTML = "";
+
+    try {
+      const result = await fetchData(`api/viaggi/filtra/partenza?partenza=${partenza}`);
+      result.forEach(viaggio => {
+          container.innerHTML += createViaggioCard(viaggio);
+      });
+  } catch (error) {
+      container.innerText = error.message;
+  }
+  });
+
+  document.getElementById('filterByPrezzo').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const minPrezzo = document.getElementById('minPrezzo').value;
+    const maxPrezzo = document.getElementById('maxPrezzo').value;
+    const container = document.getElementById('cardContainer');
+    
+    container.innerHTML = "";
+
+    try {
+      const result = await fetchData(`api/viaggi/filtra/prezzo?min=${minPrezzo}&max=${maxPrezzo}`);
+      result.forEach(viaggio => {
+          container.innerHTML += createViaggioCard(viaggio);
+      });
+  } catch (error) {
+      container.innerText = error.message;
+  }
+  });
+
+    async function getTags() {
+        try {
+            const response = await fetch('/api/tags/get', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            // Controlla se la risposta è ok
+            if (response.ok) {
+                const tags = await response.json(); N
+
+
+                if (tags.length > 0) {
+
+                    const tagIds = tags.map(tag => tag.tagId);
+
+                    const randomId = tagIds[Math.floor(Math.random() * tagIds.length)];
+
+
+                    const viaggiResponse = await fetch(`/api/viaggi/filtra/tag?tagId=${randomId}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (viaggiResponse.ok) {
+                        const viaggi = await viaggiResponse.json();
+
+
+                        const consigliatiDiv = document.getElementById('consigliati');
+                        consigliatiDiv.innerHTML = '';
+
+
+                        const risultatiDaMostrare = viaggi.slice(0, 3);
+                        risultatiDaMostrare.forEach(viaggio => {
+                            const viaggioElement = document.createElement('div');
+                            viaggioElement.textContent = viaggio.nome + "// luogo partenza = "+viaggio.luogoPartenza+"//luogo arrivo = "+ viaggio.luogoArrivo;
+                            consigliatiDiv.appendChild(viaggioElement);
+                        });
+                    } else {
+                        console.error('Errore durante il recupero dei viaggi:', viaggiResponse.status);
+                    }
+                } else {
+                    console.error('Nessun tag trovato');
+                }
+            }
+        } catch (error) {
+            console.error('Errore durante la fetch:', error);
+        }
+    }
+    
+    async function bottoneLogin() {
+        try {
+            // Effettua la richiesta al server per ottenere l'ID dell'utente loggato
+            const response = await fetch(`/api/utente/session`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const utenteLoggato = await response.json(); // Ottieni l'ID dell'utente loggato dal server
+
+                console.log('ID utente loggato:', utenteLoggato);
+
+                if (utenteLoggato) {
+                    // Nascondi il pulsante di login
+                    document.getElementById('pulsanteLogin').style.display = 'none';
+	
+                    document.getElementById('pulsanteAreaPersonale').style.display = 'block';
+                    
+                    // Mostra il pulsante di logout
+                    document.getElementById('pulsanteLogout').style.display = 'block';
+                    
+                    document.getElementById('pulsanteCreaViaggio').style.display = 'block';
+                } else {
+                    // Mostra il pulsante di login
+                    document.getElementById('pulsanteLogin').style.display = 'block';
+	
+                    document.getElementById('pulsanteAreaPersonale').style.display = 'none';
+                    // Nascondi il pulsante di logout
+                    document.getElementById('pulsanteLogout').style.display = 'none';
+                    
+                    document.getElementById('pulsanteCreaViaggio').style.display = 'none';
+                }
+            } else {
+                console.error('Errore nel recupero della sessione utente');
+             // Mostra il pulsante di login
+                document.getElementById('pulsanteLogin').style.display = 'block';
+				
+                document.getElementById('pulsanteAreaPersonale').style.display = 'none';
+                // Nascondi il pulsante di logout
+                document.getElementById('pulsanteLogout').style.display = 'none';
+                
+                document.getElementById('pulsanteCreaViaggio').style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+        }
+    }
+    
+    async function effettuaLogout() {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const message = await response.text(); // Ottieni il messaggio di risposta dal server
+                alert(message); // Mostra il messaggio di logout effettuato con successo
+                window.location.href = '/';
+            } else {
+                alert('Errore durante il logout. Riprova.');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta di logout:', error);
+        }
+    }
+
+	bottoneLogin();
+
+    getTags();
+    
+    </script>
+
+</body>
+</html>
