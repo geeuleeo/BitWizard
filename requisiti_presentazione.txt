@@ -8,10 +8,8 @@
   tutti i viaggi che ha creato
 	differenziazione temporale
 
-- recensioni ai viaggi
-
 - chat di viaggio
 
 - ruolo per l'azienda
 
-- sistema di livelli per utenti
+? - sistema di livelli per utenti
