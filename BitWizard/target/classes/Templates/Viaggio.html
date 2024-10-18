@@ -101,6 +101,23 @@
         <div id="messaggioContainer" class="row">
             <!-- Le card dei messaggi verranno inserite qui dinamicamente -->
         </div>
+        
+        <h2>Invia un nuovo messaggio</h2>
+    	<form id="messaggioForm" enctype="multipart/form-data">
+        	<label for="testo">Testo del messaggio:</label><br>
+        	<input type="text" id="testo" name="testo" required><br><br>
+        
+        	<label for="immagine">Immagine del messaggio (opzionale):</label><br>
+        	<input type="file" id="immagine" name="immagineMessaggio"><br><br>
+
+        	<input type="hidden" id="viaggioId" name="viaggioId" value="1"> <!-- ID del viaggio hardcoded -->
+
+        	<button type="submit">Invia Messaggio</button>
+   		</form>
+
+    <p id="result"></p>
+
+    <script src="messaggio.js"></script>
 
     </div>
 
@@ -373,32 +390,53 @@
         }
     }
     
-    // Funzione per caricare i viaggi dell'utente
+ // Funzione per caricare i messaggi di un viaggio specifico
     async function caricaMessaggio(viaggioId) {
-        const response = await fetch('/carica/messaggi/${viaggioId}'); // Endpoint che restituisce i viaggi dell'utente
-        const viaggi = await response.json();
+        // Usa backtick per interpolare correttamente il viaggioId nell'URL
+        const response = await fetch(`/carica/messaggi/${viaggioId}`); // Correzione dell'URL
+        const messaggi = await response.json();
         const container = document.getElementById('messaggioContainer');
 
-        viaggi.forEach(messaggio => {
-            container.innerHTML += createMessaggioCard(viaggio);
-        });
-    }
-    
- // Funzione per creare una card di Bootstrap per un viaggio
-    function createMessaggioCard(messaggio) {
-        // Formatta le date in maniera più leggibile (es. dd/mm/yyyy)
-        const dataInvio = new Date(messaggio.data).toLocaleDateString();
+        // Azzera il contenuto del container prima di caricare i nuovi messaggi
+        container.innerHTML = '';
 
-        // Crea la card HTML per il viaggio
+        // Usa for...of per iterare sugli oggetti asincroni
+        for (let messaggio of messaggi) {
+            const messaggioCard = await createMessaggioCard(messaggio);  // Attendi che la card venga creata
+            container.innerHTML += messaggioCard;  // Aggiungi la card al container
+        }
+    }
+
+    // Funzione per creare una card di Bootstrap per un messaggio
+    async function createMessaggioCard(messaggio) {
+        // Formatta la data in maniera più leggibile (es. dd/mm/yyyy)
+        const dataInvio = new Date(messaggio.data).toLocaleDateString();
+        
+        let utenteNome = 'Anonimo';  // Default se non troviamo l'utente
+
+        // Se utenteId esiste, fai una chiamata per ottenere i dettagli dell'utente
+        if (messaggio.utenteId) {
+            try {
+                // Correggi l'interpolazione dell'URL con i backtick
+                const response = await fetch(`/messaggio/utente/nome/${messaggio.utenteId}`);
+                const utente = await response.json();
+                utenteNome = utente.nome ? utente.nome : 'Anonimo';  // Verifica se l'utente ha un nome
+                utenteCognome = utente.cognome ? utente.cognome : '';  // Verifica se l'utente ha un cognome
+            } catch (error) {
+                console.error('Errore nel recupero dei dati dell\'utente', error);
+            }
+        }
+
+        // Crea la card HTML per il messaggio
         return `
             <div class="col-md-4">
                 <div class="card mb-4">
                     <img src="/messaggio/utente/immagine" class="card-img-top" alt="Immagine profilo utente">
                     <div class="card-body">
-                        <h5 class="card-title">${utente.nome}</h5>
+                    <h5 class="card-title">${utenteNome} ${utenteCognome}</h5>
                         <p class="card-text">
                             ${messaggio.testo} <br>
-                            Ora ${messaggio.data} <br>
+                            Data: ${dataInvio} <br>
                         </p>
                     </div>
                 </div>
@@ -406,7 +444,41 @@
         `;
     }
  
- 	caricaMessaggio();
+ 	caricaMessaggio(viaggioId);
+ 	
+ 	document.getElementById('messaggioForm').addEventListener('submit', async function(event) {
+ 	    event.preventDefault();  // Previene il comportamento predefinito del form (il refresh della pagina)
+
+ 	    const form = document.getElementById('messaggioForm');
+ 	    const formData = new FormData(form);
+
+ 	    // Dati del messaggio
+ 	    const messaggioDTO = {
+ 	        testo: formData.get('testo'),
+ 	        viaggioId: formData.get('viaggioId') // Qui l'ID del viaggio
+ 	    };
+
+ 	    // Aggiungi messaggioDTO come JSON nel FormData
+ 	    formData.append('viaggioDTO', new Blob([JSON.stringify(messaggioDTO)], {
+ 	        type: 'application/json'
+ 	    }));
+
+ 	    try {
+ 	        const response = await fetch('/crea/messaggio', {
+ 	            method: 'POST',
+ 	            body: formData
+ 	        });
+
+ 	        const result = await response.json();
+ 	        if (response.ok) {
+ 	            document.getElementById('result').innerText = 'Messaggio inviato con successo!';
+ 	        } else {
+ 	            document.getElementById('result').innerText = 'Errore: ' + result.error;
+ 	        }
+ 	    } catch (error) {
+ 	        document.getElementById('result').innerText = 'Errore nella richiesta: ' + error;
+ 	    }
+ 	});
 
 </script>
 

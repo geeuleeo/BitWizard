@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 public class Messaggio {
@@ -29,13 +31,13 @@ public class Messaggio {
     private Utente utente;
 
 	@ManyToOne
-    @MapsId("immagineId")
-    @JoinColumn(name = "immagine_id", insertable = false, updatable = false)
+    @JoinColumn(name = "immagine_id")
     @JsonBackReference
     private Immagine immagine;
     
     private String testo;
     
+    @Temporal(TemporalType.TIMESTAMP)
     private Date data;
 
 	public Viaggio getViaggio() {

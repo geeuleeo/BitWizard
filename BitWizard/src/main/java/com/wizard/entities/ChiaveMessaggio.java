@@ -1,7 +1,6 @@
 package com.wizard.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import jakarta.persistence.Column;
 
@@ -15,12 +14,6 @@ public class ChiaveMessaggio implements Serializable{
 
     @Column(name = "utente_id")
     private Long utenteId;
-    
-    @Column(name = "immagine_id")
-    private int immagineId;
-    
-    @Column(name = "utente_id")
-    private Date data;
 
 	public Long getViaggioId() {
 		return viaggioId;
@@ -37,13 +30,5 @@ public class ChiaveMessaggio implements Serializable{
 	public void setUtenteId(Long utenteId) {
 		this.utenteId = utenteId;
 	}
-
-	public Date getData() {
-		return data;
-	}
-
-	public void setData(Date data) {
-		this.data = data;
-	}
-
+	
 }

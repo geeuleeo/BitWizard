@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,7 @@ import com.wizard.repos.ImmagineDAO;
 import com.wizard.repos.PartecipantiViaggioDAO;
 import com.wizard.repos.RecensioneDTO;
 import com.wizard.repos.RuoloDAO;
+import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.UtenteDTO;
 import com.wizard.services.RecensioneService;
 import com.wizard.services.UtenteService;
@@ -53,6 +55,9 @@ public class UtenteController {
     
     @Autowired
     private RuoloDAO ruoloDAO;
+    
+    @Autowired
+    private UtenteDAO utenteDAO;
     
     @Autowired
     private RecensioneService recensioneService;
@@ -102,6 +107,22 @@ public class UtenteController {
             errorResponse.put("message", e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    
+    // metodo per ottenere un'utente dall'id
+    @GetMapping("/{utenteId}")
+    public ResponseEntity<?> getUtente(@PathVariable Long utenteId) {
+        Optional<Utente> optionalUtente = utenteDAO.findById(utenteId) ;
+        
+        // Verifica se il viaggio è presente
+	    if (optionalUtente.isPresent()) {
+	        Utente utente = optionalUtente.get();
+	        return ResponseEntity.ok(utente);
+	    } else {
+	        // Gestisci il caso in cui il viaggio non esista
+	        throw new RuntimeException("Utente non trovato con ID: " + utenteId);
+	    }
+
     }
     
     @GetMapping("/session")
