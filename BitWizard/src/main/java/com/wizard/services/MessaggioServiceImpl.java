@@ -25,11 +25,17 @@ public class MessaggioServiceImpl implements MessaggioService{
 	    ChiaveMessaggio chiaveMessaggio = new ChiaveMessaggio();
 	    chiaveMessaggio.setUtenteId(messaggio.getUtente().getUtenteId());
 	    chiaveMessaggio.setViaggioId(messaggio.getViaggio().getViaggioId());
+	    System.out.println("Chiave composta creata con Utente ID: " + chiaveMessaggio.getUtenteId() 
+	                       + " e Viaggio ID: " + chiaveMessaggio.getViaggioId());
 	    
 	    messaggio.setChiavemessaggio(chiaveMessaggio);
 	    
 	    // Salva il messaggio nel database
-	    return messaggioDAO.save(messaggio);
+	    System.out.println("Tentativo di salvataggio del messaggio con testo: " + messaggio.getTesto());
+	    Messaggio messaggioSalvato = messaggioDAO.save(messaggio);
+	    System.out.println("Messaggio salvato con successo con ID: " + messaggioSalvato.getChiavemessaggio());
+
+	    return messaggioSalvato;
 	}
 
 	@Override
@@ -69,6 +75,5 @@ public class MessaggioServiceImpl implements MessaggioService{
 
 	    return messaggioDTO;
 	}
-
 
 }

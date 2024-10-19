@@ -2,13 +2,12 @@ package com.wizard.DTO;
 
 import java.util.Date;
 
-public class MessaggioDTO {
+public class CreazioneMessaggioDTO {
 	
-    private Long viaggioId;
+	private Long viaggioId;
     private Long utenteId;
     private String testo;
     private Date data;
-    private int immagineId;
     
 	public Long getViaggioId() {
 		return viaggioId;
@@ -33,12 +32,6 @@ public class MessaggioDTO {
 	}
 	public void setData(Date data) {
 		this.data = data;
-	}
-	public int getImmagineId() {
-		return immagineId;
-	}
-	public void setImmagineId(int immagineId) {
-		this.immagineId = immagineId;
 	}
 
 }

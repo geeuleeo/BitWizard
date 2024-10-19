@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ import com.wizard.repos.ViaggioDTO;
 import com.wizard.repos.ViaggioImmaginiDAO;
 import com.wizard.repos.ViaggioTagDAO;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -57,6 +59,15 @@ public class ViaggioServiceImpl implements ViaggioService {
 	
 	@Autowired
 	private StatoDAO statoDAO;
+	
+	@Autowired
+    private EntityManager entityManager;
+	
+	public void abilitaFiltroViaggiNonCancellati() {
+        // Ottieni la sessione Hibernate e abilita il filtro
+        Session session = entityManager.unwrap(Session.class);
+        session.enableFilter("deletedFilter").setParameter("isDeleted", false);
+    }
 	
 	@Transactional
 	public Viaggio salvaViaggio(Viaggio viaggio, List<TagDTO> tagDTOs) {

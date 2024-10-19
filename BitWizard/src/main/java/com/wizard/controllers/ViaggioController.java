@@ -38,6 +38,9 @@ import com.wizard.services.ViaggioService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api/viaggi")
@@ -210,6 +213,37 @@ public class ViaggioController {
         } catch (Exception e) {
             System.out.println("Errore generico durante l'iscrizione al viaggio: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante l'iscrizione al viaggio");
+        }
+    }
+    
+    @PutMapping("/annulla/{viaggioId}")
+    public ResponseEntity<?> annullaViaggio(@PathVariable Long viaggioId) {
+        
+        System.out.println("Inizio dell'annullamento per il viaggio con ID: " + viaggioId);
+        try {
+            // Recupera il viaggio
+            System.out.println("Tentativo di recuperare il viaggio con ID: " + viaggioId);
+            Viaggio viaggio = viaggioDAO.findById(viaggioId)
+                .orElseThrow(() -> {
+                    System.out.println("Viaggio con ID " + viaggioId + " non trovato.");
+                    return new IllegalArgumentException("Viaggio non trovato");
+                });
+            
+            System.out.println("Viaggio trovato: " + viaggio.getNome());
+            
+            // Imposta il flag di cancellazione e salva le modifiche
+            viaggio.setDeleted(true);
+            viaggioDAO.save(viaggio);  // Salva la modifica nel database
+
+            System.out.println("Viaggio con ID " + viaggioId + " annullato con successo.");
+            return ResponseEntity.ok("Viaggio annullato con successo");
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Errore: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Errore generico durante l'annullamento del viaggio: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante l'annullamento del viaggio");
         }
     }
     

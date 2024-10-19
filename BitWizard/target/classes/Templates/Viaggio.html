@@ -90,30 +90,32 @@
     		<button id="iscrivitiBtn" type="submit" class="btn btn-primary">Iscriviti al viaggio</button>
     		<button id="annullaIscrizioneBtn" type="button" class="btn btn-secondary" style="display: none;">Annulla Iscrizione</button>
 		</form>
-
-		<!-- Pulsanti specifici per il creatore (inizialmente nascosti) -->
-		<div id="pulsantiCreatore" style="display: none;">
-    		<button class="btn btn-warning">Modifica Viaggio</button>
-    		<button class="btn btn-danger">Cancella Viaggio</button>
-		</div>
 		
-		<h2>Chat del viaggio</h2>
-        <div id="messaggioContainer" class="row">
-            <!-- Le card dei messaggi verranno inserite qui dinamicamente -->
-        </div>
+		<form id="creatoreForm" method="POST">
+		<!-- Pulsanti specifici per il creatore (inizialmente nascosti) -->
+    		<div id="pulsantiCreatore" style="display: none;">
+    			<button id="modificaBtn" class="btn btn-warning">Modifica Viaggio</button>
+    			<button id="annullaBtn" class="btn btn-danger">Cancella Viaggio</button>
+		</div>
+		</form>
+		
+		<div id="ChatDelViaggio" style="display: none;">
+			<h2>Chat del viaggio</h2>
+        	<div id="messaggioContainer" class="row">
+          	  <!-- Le card dei messaggi verranno inserite qui dinamicamente -->
+       	 	</div>
         
-        <h2>Invia un nuovo messaggio</h2>
-    	<form id="messaggioForm" enctype="multipart/form-data">
-        	<label for="testo">Testo del messaggio:</label><br>
-        	<input type="text" id="testo" name="testo" required><br><br>
+        	<h2>Invia un nuovo messaggio</h2>
+    			<form id="messaggioForm" enctype="multipart/form-data">
+        		<label for="testo">Testo del messaggio:</label><br>
+        		<input type="text" id="testo" name="testo" required><br><br>
         
-        	<label for="immagine">Immagine del messaggio (opzionale):</label><br>
-        	<input type="file" id="immagine" name="immagineMessaggio"><br><br>
+        		<label for="immagine">Immagine del messaggio (opzionale):</label><br>
+        		<input type="file" id="immagine" name="immagineMessaggio"><br><br>
 
-        	<input type="hidden" id="viaggioId" name="viaggioId" value="1"> <!-- ID del viaggio hardcoded -->
-
-        	<button type="submit">Invia Messaggio</button>
-   		</form>
+        		<button type="submit">Invia Messaggio</button>
+   			</form>
+   		</div>
 
     <p id="result"></p>
 
@@ -304,6 +306,72 @@
             console.error('Errore: Viaggio ID non disponibile.');
         }
     });
+    
+    async function annullaViaggio(viaggioId) {
+        setFormAction(viaggioId);
+        console.log('Id viaggio inviato per l annullamento: ' + viaggioId);
+        try {
+            const response = await fetch(`/api/viaggi/annulla/${viaggioId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+            	aggiornaPartecipanti(viaggioId);
+                alert('Annullamento avvenuta con successo!');     
+            } else {
+                alert('Errore durante l\'annullamento');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+            alert('Si è verificato un errore');
+        }
+    }
+    
+    async function modificaViaggio(viaggioId) {
+        setFormAction(viaggioId);
+        console.log('Id viaggio inviato per l annullamento: ' + viaggioId);
+        try {
+            const response = await fetch(`/api/viaggi/modifica/${viaggioId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+            	aggiornaPartecipanti(viaggioId);
+                alert('Annullamento avvenuta con successo!');     
+            } else {
+                alert('Errore durante l\'annullamento');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+            alert('Si è verificato un errore');
+        }
+    }
+    
+        // Aggiungi l'evento per il pulsante di modifica
+        document.getElementById('modificaBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita il comportamento predefinito del form
+            if (viaggioId) {
+                modificaViaggio(viaggioId); // Funzione per modificare il viaggio
+            } else {
+                console.error('Errore: Viaggio ID non disponibile per la modifica.');
+            }
+        });
+
+        // Aggiungi l'evento per il pulsante di annullamento
+        document.getElementById('annullaBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita il comportamento predefinito del form
+            if (viaggioId) {
+                annullaViaggio(viaggioId); // Funzione per annullare il viaggio
+            } else {
+                console.error('Errore: Viaggio ID non disponibile per l\'annullamento.');
+            }
+        });
 
     // Carica i dettagli del viaggio quando la pagina viene caricata
     if (viaggioId) {
@@ -377,10 +445,12 @@
                     console.log('Utente iscritto');
                     document.getElementById('iscrivitiBtn').style.display = 'none';
                     document.getElementById('annullaIscrizioneBtn').style.display = 'block';
+                    document.getElementById('ChatDelViaggio').style.display = 'block';
                 } else {
                     console.log('Utente non iscritto');
                     document.getElementById('iscrivitiBtn').style.display = 'block';
                     document.getElementById('annullaIscrizioneBtn').style.display = 'none';
+                    document.getElementById('ChatDelViaggio').style.display = 'none';
                 }
             } else {
                 console.error('Errore nel caricamento dei partecipanti.');
@@ -410,7 +480,13 @@
     // Funzione per creare una card di Bootstrap per un messaggio
     async function createMessaggioCard(messaggio) {
         // Formatta la data in maniera più leggibile (es. dd/mm/yyyy)
-        const dataInvio = new Date(messaggio.data).toLocaleDateString();
+        const dataInvio = new Date(messaggio.data).toLocaleString('it-IT', {
+    		day: '2-digit',
+    		month: '2-digit',
+    		year: 'numeric',
+    		hour: '2-digit',
+    		minute: '2-digit',
+		});
         
         let utenteNome = 'Anonimo';  // Default se non troviamo l'utente
 
@@ -431,7 +507,7 @@
         return `
             <div class="col-md-4">
                 <div class="card mb-4">
-                    <img src="/messaggio/utente/immagine" class="card-img-top" alt="Immagine profilo utente">
+                <img src="/api/immagini/utente/profilo/${messaggio.utenteId}" class="card-img-top" alt="Immagine profilo utente">
                     <div class="card-body">
                     <h5 class="card-title">${utenteNome} ${utenteCognome}</h5>
                         <p class="card-text">
@@ -455,11 +531,11 @@
  	    // Dati del messaggio
  	    const messaggioDTO = {
  	        testo: formData.get('testo'),
- 	        viaggioId: formData.get('viaggioId') // Qui l'ID del viaggio
+ 	        viaggioId: viaggioId
  	    };
 
  	    // Aggiungi messaggioDTO come JSON nel FormData
- 	    formData.append('viaggioDTO', new Blob([JSON.stringify(messaggioDTO)], {
+ 	    formData.append('messaggioDTO', new Blob([JSON.stringify(messaggioDTO)], {
  	        type: 'application/json'
  	    }));
 

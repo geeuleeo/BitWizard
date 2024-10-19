@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.wizard.DTO.CreazioneMessaggioDTO;
 import com.wizard.DTO.MessaggioDTO;
 import com.wizard.DTO.UtenteMessaggioDTO;
 import com.wizard.entities.Immagine;
@@ -54,7 +55,7 @@ public class MessaggioController {
 	private MessaggioDAO messaggioDAO;
 	
 	@PostMapping("/crea/messaggio")
-	public ResponseEntity<?> inviaMessaggio(@RequestPart("viaggioDTO") @Valid MessaggioDTO messaggioDTO,
+	public ResponseEntity<?> inviaMessaggio(@RequestPart("messaggioDTO") @Valid CreazioneMessaggioDTO messaggioDTO,
 	                                       @RequestPart(value = "immagineMessaggio", required = false) MultipartFile immagineMessaggio,
 	                                       HttpSession session) {
 	    
@@ -62,30 +63,43 @@ public class MessaggioController {
 	        // Recupera il creatore dalla sessione
 	        Utente creatore = (Utente) session.getAttribute("utenteLoggato");
 	        if (creatore == null) {
+	            System.out.println("Creatore non trovato nella sessione.");
 	            return new ResponseEntity<>("Creatore non trovato nella sessione.", HttpStatus.UNAUTHORIZED);
 	        }
 
+	        System.out.println("Creatore trovato nella sessione: " + creatore.getUtenteId());
+	        
+	        messaggioDTO.setUtenteId(creatore.getUtenteId());
+
 	        // Creazione del messaggio dall'oggetto DTO
 	        Messaggio nuovoMessaggio = createMessaggioFromDTO(messaggioDTO);
+	        System.out.println("Messaggio creato dal DTO con testo: " + nuovoMessaggio.getTesto());
 	        nuovoMessaggio.setUtente(creatore);
 
 	        // Gestione dell'immagine di copertina, se presente
 	        if (immagineMessaggio != null && !immagineMessaggio.isEmpty()) {
+	            System.out.println("Immagine ricevuta: " + immagineMessaggio.getOriginalFilename());
 	            handleImage(nuovoMessaggio, immagineMessaggio);
+	        } else {
+	            System.out.println("Nessuna immagine ricevuta.");
 	        }
 
 	        // Salva il messaggio
 	        Messaggio messaggioSalvato = messaggioService.salvaMessaggio(nuovoMessaggio);
+	        System.out.println("Messaggio salvato con ID: " + messaggioSalvato.getChiavemessaggio());
 
 	        return new ResponseEntity<>(messaggioSalvato, HttpStatus.CREATED);
 
 	    } catch (IllegalArgumentException e) {
 	        // Restituisce una risposta di errore specifico
+	        System.out.println("Errore specifico: " + e.getMessage());
 	        Map<String, String> errorResponse = new HashMap<>();
 	        errorResponse.put("error", e.getMessage());
 	        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	    } catch (Exception e) {
 	        // Restituisce una risposta di errore generico
+	        System.out.println("Errore generico durante la creazione del messaggio: " + e.getMessage());
+	        e.printStackTrace();
 	        Map<String, String> errorResponse = new HashMap<>();
 	        errorResponse.put("error", "Errore nella creazione del messaggio");
 	        errorResponse.put("message", e.getMessage());
@@ -112,26 +126,6 @@ public class MessaggioController {
 	        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	    }
 	}
-	
-    @GetMapping("/messaggio/utente/immagine")
-    public ResponseEntity<byte[]> getImmagineViaggio(HttpSession session) {
-    	
-    	Utente utente = (Utente) session.getAttribute("utenteLoggato");
-        if (utente == null) {
-            throw new IllegalArgumentException("Utente non trovato nella sessione.");
-        }
-
-        if (utente.getImmagine() == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        byte[] immagine = utente.getImmagine().getImg();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-
-        return new ResponseEntity<>(immagine, headers, HttpStatus.OK);
-    }
     
     @GetMapping("/messaggio/utente/nome/{utenteId}")
     public ResponseEntity<?> getNomeUtente(@PathVariable Long utenteId) {
@@ -150,8 +144,11 @@ public class MessaggioController {
         }
     }
 	
-	private Messaggio createMessaggioFromDTO(MessaggioDTO messaggioDTO) {
+	private Messaggio createMessaggioFromDTO(CreazioneMessaggioDTO messaggioDTO) {
 	    Messaggio messaggio = new Messaggio();
+	    
+	    Long viaggioId = messaggioDTO.getViaggioId();
+	    System.out.println("Tentativo di recuperare il Viaggio con ID: " + viaggioId);
 	    
 	    // Recupero del Viaggio tramite l'ID dal DTO
 	    Optional<Viaggio> optionalViaggio = viaggioDAO.findById(messaggioDTO.getViaggioId());
@@ -159,11 +156,14 @@ public class MessaggioController {
 	    // Verifica se il viaggio è presente
 	    if (optionalViaggio.isPresent()) {
 	        Viaggio viaggio = optionalViaggio.get();  // Estrae l'oggetto Viaggio dall'Optional
+	        System.out.println("Viaggio trovato: " + viaggio.getNome());
 	        messaggio.setViaggio(viaggio);  // Imposta il viaggio nel messaggio
 	    } else {
 	        // Gestisci il caso in cui il viaggio non esista
 	        throw new RuntimeException("Viaggio non trovato con ID: " + messaggioDTO.getViaggioId());
 	    }
+	    
+	    System.out.println(messaggioDTO.getUtenteId());
 	    
 	 // Recupero del Viaggio tramite l'ID dal DTO
 	    Optional<Utente> optionalUtente = utenteDAO.findById(messaggioDTO.getUtenteId());
@@ -171,6 +171,7 @@ public class MessaggioController {
 	    // Verifica se il viaggio è presente
 	    if (optionalUtente.isPresent()) {
 	        Utente utente = optionalUtente.get();  // Estrae l'oggetto Viaggio dall'Optional
+	        System.out.println("Utente trovato: " + utente.getNome());
 	        messaggio.setUtente(utente);  // Imposta il viaggio nel messaggio
 	    } else {
 	        // Gestisci il caso in cui il viaggio non esista

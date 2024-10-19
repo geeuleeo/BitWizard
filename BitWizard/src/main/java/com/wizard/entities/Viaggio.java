@@ -6,6 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.ParamDef;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -23,6 +28,10 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
 @Entity
+@FilterDef(name = "deletedFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filters({
+    @Filter(name = "deletedFilter", condition = "deleted = :isDeleted")
+})
 public class Viaggio {
 	
     @Id
@@ -69,7 +78,8 @@ public class Viaggio {
     @ManyToOne
     @JoinColumn(name = "stato_id")
     private Stato stato;
-
+    
+    @Column(name = "deleted")
     private boolean deleted;
 
     @Temporal(TemporalType.TIMESTAMP)

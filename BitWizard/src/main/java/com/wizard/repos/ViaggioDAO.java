@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.wizard.entities.Viaggio;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface ViaggioDAO extends JpaRepository<Viaggio, Long> {
 	
@@ -23,6 +25,7 @@ public interface ViaggioDAO extends JpaRepository<Viaggio, Long> {
 
 	List<Viaggio> findByPrezzoBetween(Integer min, Integer max);
 	
+	@Transactional
 	@Query("SELECT v FROM Viaggio v JOIN v.partecipanti p WHERE p.utente.id = :utenteId")
 	List<Viaggio> findViaggiByPartecipanteId(Long utenteId);
 

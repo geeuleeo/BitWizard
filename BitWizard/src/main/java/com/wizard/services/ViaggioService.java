@@ -10,6 +10,8 @@ import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.repos.ViaggioDTO;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public interface ViaggioService {
 
@@ -28,7 +30,7 @@ public interface ViaggioService {
 	List<ViaggioDTO> getViaggiByPrezzo(Integer min, Integer max);
 
 	List<ViaggioDTO> findViaggiByUtenteId(Long utenteId);
-	
+
 	List<ViaggioDTO> getAllViaggi();
 	
 }

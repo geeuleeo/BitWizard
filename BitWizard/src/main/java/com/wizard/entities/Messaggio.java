@@ -31,7 +31,7 @@ public class Messaggio {
     private Utente utente;
 
 	@ManyToOne
-    @JoinColumn(name = "immagine_id")
+    @JoinColumn(name = "immagine_id", nullable = true)
     @JsonBackReference
     private Immagine immagine;
     
