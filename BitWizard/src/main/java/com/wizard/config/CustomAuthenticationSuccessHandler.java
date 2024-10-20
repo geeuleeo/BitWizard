@@ -1,7 +1,10 @@
 package com.wizard.config;
 
 import java.io.IOException;
+import java.util.Optional;
 
+import com.wizard.entities.Agenzia;
+import com.wizard.repos.AgenziaDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -20,6 +23,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	
     @Autowired
     private UtenteDAO utenteRepository;
+    @Autowired
+    private AgenziaDAO agenziaRepository;
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -29,6 +35,17 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         // Recupera l'utente dal database
         Utente utente = utenteRepository.findByEmail(email).orElse(null);
+
+        if  (utente == null) {
+
+            Optional<Agenzia> agenzia = agenziaRepository.findAgenziaByPartitaIva(email);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("agenziaLoggata", agenzia);
+
+            response.sendRedirect("/home");
+
+        }
 
         // Memorizza l'utente nella HttpSession
         HttpSession session = request.getSession();
