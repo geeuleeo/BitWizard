@@ -19,6 +19,7 @@ public class CustomDettagliAgenzia implements UserDetails {
         this.agenzia = agenzia;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -34,6 +35,26 @@ public class CustomDettagliAgenzia implements UserDetails {
     @Override
     public String getUsername() {
         return agenzia.getPartitaIva();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public Agenzia getAgenzia() {return this.agenzia;}

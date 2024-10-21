@@ -1,5 +1,7 @@
 package com.wizard.controllers;
 
+import com.wizard.customs.CustomDettagliAgenzia;
+import com.wizard.entities.Agenzia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -109,6 +111,11 @@ public class HomeController {
     public String showSignupPage() {
         return "registrazione";
     }
+
+    @GetMapping("/registrazioneAgenzia")
+    public String showAziendaSignupPage() {
+        return "registrazioneAgenzia";
+    }
     
     @GetMapping("/paginaPersonale")
     public String getPaginaPersonaleUtente(HttpSession session) {
@@ -138,4 +145,49 @@ public class HomeController {
 	
 	@GetMapping ("/ricerca")
     public String showRicercaUtente() { return "Filters";}
+
+    @GetMapping("loginAgenzia")
+    public String showLoginAgenziaPage(){
+
+        return "loginAgenzia";
+    }
+
+   @PostMapping("/loginAgenzia")
+   public String loginAgenzia(@RequestParam String partitaIva,
+                       @RequestParam String password,
+                       HttpSession session,
+                       RedirectAttributes redirectAttributes) {
+       try {
+           // Crea un token di autenticazione
+           UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(partitaIva, password);
+
+          // Autentica l'agenzia
+           Authentication authentication = authenticationManager.authenticate(authToken);
+
+           // Imposta l'agenzia autenticata nel contesto di sicurezza
+           SecurityContextHolder.getContext().setAuthentication(authentication);
+
+           // Recupera i dettagli dell'agenzia (cast a CustomDettagliAgenzia)
+           CustomDettagliAgenzia customDettagliAgenzia = (CustomDettagliAgenzia) authentication.getPrincipal();
+
+           // Ottieni l'istanza di Agenzia dall'oggetto CustomDettagliAgenzia
+           Agenzia agenzia = customDettagliAgenzia.getAgenzia(); // Supponendo che CustomDettagliAgenzia abbia un metodo getAgenzia()
+
+           // Memorizza l'agenzia nella sessione
+           session.setAttribute("agenziaLoggata", agenzia);
+
+
+           return "redirect:/";
+
+       } catch (AuthenticationException e) {
+
+            e.printStackTrace();
+           return "redirect:/loginAzienda";
+       }
+   }
+
+
+
+
+
 }

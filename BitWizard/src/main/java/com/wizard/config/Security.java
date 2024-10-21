@@ -42,16 +42,18 @@ public class Security{
         http
             .csrf(csrf -> csrf.disable()) // Disabilita CSRF se non necessario
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/login", "/registrazione").permitAll()
+                .requestMatchers("/login", "/registrazione","/registrazioneAgenzia","loginAgenzia").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
                 .permitAll()
-            )
-            .logout(logout -> logout
-                .permitAll()
-            );
+            ).
+                    logout(logout -> logout
+                        .permitAll()
+                );
+
+
 
         return http.build();
     }
