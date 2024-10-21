@@ -1,9 +1,9 @@
 /**
- 	*Logica per la PAgina iniziale 
+ 	*Logica per la Pagina iniziale 
  */
 
 window.onload = function() {
-    window.location.href = "../PaginaIniziale/home.html";
+    window.location.href = "../Pagina Iniziale/home.html";
 };
 
  // Seleziona gli elementi

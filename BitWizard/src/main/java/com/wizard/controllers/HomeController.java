@@ -28,6 +28,7 @@ public class HomeController {
     @Autowired
     private UtenteTagDAO utenteTagDAO;
 
+      
     // Metodo per servire la pagina di login
     @GetMapping("/login")
     public String showLoginPage() {
