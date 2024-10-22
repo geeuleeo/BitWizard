@@ -79,17 +79,53 @@
             }
         }
         
-        function handleMultipleImages() {
-            const imageInput = document.getElementById('immagini');
-            const previewContainer = document.getElementById('previewContainer');
-            previewContainer.innerHTML = ""; // Pulisce l'anteprima precedente
+        let selectedImages = [];
 
-            if (imageInput.files && imageInput.files.length > 0) {
-                console.log("Numero di immagini selezionate:", imageInput.files.length); // Verifica il numero di file selezionati
-                
-                Array.from(imageInput.files).forEach((file, index) => {
+     // Funzione per l'anteprima delle immagini selezionate
+     function handleImages() {
+         const copertinaInput = document.getElementById('immagini');
+         const copertinaPreview = document.getElementById('copertinaPreview');
+         copertinaPreview.innerHTML = "";
+
+         selectedImages = []; // Reset the array
+
+         if (copertinaInput.files && copertinaInput.files.length > 0) {
+             Array.from(copertinaInput.files).forEach((file) => {
+                 // Create image preview
+                 const reader = new FileReader();
+                 reader.onload = function (e) {
+                     const img = document.createElement('img');
+                     img.src = e.target.result;
+                     img.className = 'img-preview';
+                     copertinaPreview.appendChild(img);
+                 };
+                 reader.readAsDataURL(file);
+
+                 // Add file to selectedImages array
+                 selectedImages.push(file);
+             });
+         } else {
+             console.log("Nessun file selezionato.");
+         }
+     }
+
+        
+        <!--
+
+        function handleMultipleImages() {
+            console.log('handleMultipleImages called');
+
+            const imageInput = document.getElementById('immagini');
+            selectedImages = Array.from(imageInput.files);
+            console.log('Selected Images:', selectedImages);
+
+            const previewContainer = document.getElementById('previewContainer');
+            previewContainer.innerHTML = ""; // Clear previous previews
+
+            if (selectedImages.length > 0) {
+                selectedImages.forEach((file, index) => {
                     const reader = new FileReader();
-                    
+
                     reader.onload = function(e) {
                         const img = document.createElement('img');
                         img.src = e.target.result;
@@ -108,6 +144,7 @@
                 console.log("Nessun file selezionato.");
             }
         }
+        -->
 
      // Funzione per inviare i dati tramite fetch
         function inviaDati(formData) {
@@ -170,11 +207,23 @@
             if (immagineCopertina) {
                 formData.append('immagineCopertina', immagineCopertina);
             }
+            
+            console.log("Immagini selezionate per l'invio:", selectedImages);
 
-            // Aggiungi le immagini selezionate al formData
-            const immagini = document.getElementById('immagini').files;
-            for (let i = 0; i < immagini.length; i++) {
-                formData.append('immagini', immagini[i]);
+            console.log('selectedImages in inviaForm:', selectedImages);
+
+            if (selectedImages.length > 0) {
+                selectedImages.forEach((file) => {
+                    console.log(`Aggiungendo l'immagine: ${file.name}`);
+                    formData.append('immagini', file);
+                });
+            } else {
+                console.log("Nessuna immagine da inviare.");
+            }
+
+            // Log FormData entries
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
             }
 
             // Invia i dati
@@ -275,11 +324,16 @@
         <label for="immagineCopertina">Immagine Copertina del Viaggio:</label>
         <input type="file" id="immagineCopertina" name="immagineCopertina" accept="image/*"><br><br>
         <div id="copertinaPreview"></div>
+        
+        <label for="immagini">Immagini del Viaggio:</label>
+        <input type="file" id="immagini" name="immagini" accept="image/*" onchange="handleImages()"><br><br>
+        <div id="copertinaPreview"></div>
 
-        <!-- Sezione per il caricamento di più immagini -->
+        <!-- Sezione per il caricamento di più immagini
 		<label for="immagini">Altre Immagini del Viaggio:</label>
 		<input type="file" id="immagini" name="immagini" accept="image/*" multiple onchange="handleMultipleImages()"><br><br>
-
+		-->
+		
         <!-- Anteprima delle immagini selezionate -->
         <div id="previewContainer"></div>
 

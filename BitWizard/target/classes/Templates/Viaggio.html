@@ -86,8 +86,8 @@
         <h3>Partecipanti al Viaggio</h3>
         <ul id="listaPartecipanti" class="list-group"></ul>
         
-        <form id="iscrivitiForm" method="POST" style="display: none;">
-    		<button id="iscrivitiBtn" type="submit" class="btn btn-primary">Iscriviti al viaggio</button>
+        <form id="iscrivitiForm" method="POST">
+    		<button id="iscrivitiBtn" type="submit" class="btn btn-primary" style="display: none;">Iscriviti al viaggio</button>
     		<button id="annullaIscrizioneBtn" type="button" class="btn btn-secondary" style="display: none;">Annulla Iscrizione</button>
 		</form>
 		
@@ -425,9 +425,9 @@
                 if (parseInt(utenteLoggato) === parseInt(creatoreId)) {
                     // Nascondi il pulsante di iscrizione se l'utente è il creatore
                     document.getElementById('iscrivitiBtn').style.display = 'none';
-
                     // Mostra i pulsanti del creatore
                     document.getElementById('pulsantiCreatore').style.display = 'block';
+                    document.getElementById('ChatDelViaggio').style.display = 'block';
                 } else {
                 	
                     // Mostra il pulsante di iscrizione se l'utente non è il creatore
@@ -486,25 +486,37 @@
         }
     }
     
- // Funzione per caricare i messaggi di un viaggio specifico
     async function caricaMessaggio(viaggioId) {
-        // Usa backtick per interpolare correttamente il viaggioId nell'URL
-        const response = await fetch(`/carica/messaggi/${viaggioId}`); // Correzione dell'URL
-        const messaggi = await response.json();
-        const container = document.getElementById('messaggioContainer');
+        try {
+            const response = await fetch(`/carica/messaggi/${viaggioId}`);
+            
+            // Verifica se la risposta è valida
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Errore nel caricamento dei messaggi: ${errorText}`);
+            }
 
-        // Azzera il contenuto del container prima di caricare i nuovi messaggi
-        container.innerHTML = '';
+            // Prova a convertire la risposta in JSON
+            const messaggi = await response.json();
+            const container = document.getElementById('messaggioContainer');
 
-        // Usa for...of per iterare sugli oggetti asincroni
-        for (let messaggio of messaggi) {
-            const messaggioCard = await createMessaggioCard(messaggio);  // Attendi che la card venga creata
-            container.innerHTML += messaggioCard;  // Aggiungi la card al container
+            // Azzera il contenuto del container prima di caricare i nuovi messaggi
+            container.innerHTML = '';
+
+            // Itera sui messaggi
+            for (let messaggio of messaggi) {
+                console.log("Id immagine messaggio: " + messaggio.immagineId);
+                const messaggioCard = await createMessaggioCard(messaggio);
+                container.innerHTML += messaggioCard;
+            }
+        } catch (error) {
+            console.error("Errore nel caricamento dei messaggi:", error);
         }
     }
 
     // Funzione per creare una card di Bootstrap per un messaggio
     async function createMessaggioCard(messaggio) {
+    	
         // Formatta la data in maniera più leggibile (es. dd/mm/yyyy)
         const dataInvio = new Date(messaggio.data).toLocaleString('it-IT', {
     		day: '2-digit',
@@ -528,6 +540,14 @@
                 console.error('Errore nel recupero dei dati dell\'utente', error);
             }
         }
+        
+        let immagineHTML = '';
+        if (messaggio.immagineId) {
+            immagineHTML = `<img src="/api/immagini/immagine/${messaggio.immagineId}" class="card-img-top" alt="Immagine messaggio">`;
+        } else {
+            // Opzionale: Aggiungi un'immagine di default o lascia vuoto
+            immagineHTML = `<p class="text-muted">Nessuna immagine disponibile</p>`;
+        }
 
         // Crea la card HTML per il messaggio
         return `
@@ -538,6 +558,7 @@
                     <h5 class="card-title">${utenteNome} ${utenteCognome}</h5>
                         <p class="card-text">
                             ${messaggio.testo} <br>
+                            ${immagineHTML} <br>
                             Data: ${dataInvio} <br>
                         </p>
                     </div>

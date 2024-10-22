@@ -13,7 +13,6 @@ public class ChiavePartecipantiViaggio implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	
     @Column(name = "viaggio_id")
     private Long viaggioId;
 

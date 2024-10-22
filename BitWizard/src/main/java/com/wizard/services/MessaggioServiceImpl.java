@@ -1,6 +1,7 @@
 package com.wizard.services;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,15 @@ public class MessaggioServiceImpl implements MessaggioService{
 
 	@Override
 	public Messaggio salvaMessaggio(Messaggio messaggio) {
+		
+		Long ultimoMessaggioId = messaggioDAO.findUltimoMessaggioId(messaggio.getViaggio().getViaggioId(), messaggio.getUtente().getUtenteId());
+		Long nuovoMessaggioId = (ultimoMessaggioId == null) ? 1 : ultimoMessaggioId + 1;
 	    
 	    // Crea e assegna la chiave composta
 	    ChiaveMessaggio chiaveMessaggio = new ChiaveMessaggio();
 	    chiaveMessaggio.setUtenteId(messaggio.getUtente().getUtenteId());
 	    chiaveMessaggio.setViaggioId(messaggio.getViaggio().getViaggioId());
+	    chiaveMessaggio.setMessaggioId(nuovoMessaggioId);
 	    System.out.println("Chiave composta creata con Utente ID: " + chiaveMessaggio.getUtenteId() 
 	                       + " e Viaggio ID: " + chiaveMessaggio.getViaggioId());
 	    
@@ -41,7 +46,9 @@ public class MessaggioServiceImpl implements MessaggioService{
 	@Override
 	public List<MessaggioDTO> caricaMessaggiViaggio(Viaggio viaggio) {
 	    // Recupera la lista dei messaggi associati a un viaggio
-	    List<Messaggio> messaggi = messaggioDAO.findByViaggio(viaggio);
+	    List<Messaggio> messaggiNonOrdinati = messaggioDAO.findByViaggio(viaggio);
+	    
+	    List<Messaggio> messaggi = ordinaMessaggiPerDataDecrescente(messaggiNonOrdinati);
 	    
 	    List<MessaggioDTO> messaggiDTO = new ArrayList<>();
 	    
@@ -52,6 +59,12 @@ public class MessaggioServiceImpl implements MessaggioService{
 	    }
 	    
 	    return messaggiDTO;
+	}
+	
+	public List<Messaggio> ordinaMessaggiPerDataDecrescente(List<Messaggio> messaggi) {
+	    return messaggi.stream()
+	                   .sorted(Comparator.comparing(Messaggio::getData).reversed())
+	                   .toList();
 	}
 	
 	private MessaggioDTO createDTOFromMessaggio(Messaggio messaggio) {
@@ -72,7 +85,10 @@ public class MessaggioServiceImpl implements MessaggioService{
 
 	    // Imposta la data del messaggio
 	    messaggioDTO.setData(messaggio.getData());
-
+	    if (messaggio.getImmagine() != null) {
+	    	messaggioDTO.setImmagineId(messaggio.getImmagine().getIdImg());
+	    }
+	    
 	    return messaggioDTO;
 	}
 

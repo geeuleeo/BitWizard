@@ -1,6 +1,7 @@
 package com.wizard.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +70,9 @@ public class ViaggioController {
     public ResponseEntity<?> creaViaggio(
             @RequestPart("viaggioDTO") @Valid ViaggioCreazioneDTO viaggioDTO,
             @RequestPart(value = "immagineCopertina", required = false) MultipartFile immagineCopertina,
+            @RequestPart(value = "immagineGalleria1", required = false) MultipartFile immagineGalleria1,
+            @RequestPart(value = "immagineGalleria2", required = false) MultipartFile immagineGalleria2,
+            @RequestPart(value = "immagineGalleria3", required = false) MultipartFile immagineGalleria3,
             @RequestPart(value = "immagini", required = false) List<MultipartFile> immagini,
             HttpSession session) {
 
@@ -95,10 +99,26 @@ public class ViaggioController {
             // Salva il viaggio con i tag associati
             Viaggio viaggioSalvato = viaggioService.salvaViaggio(nuovoViaggio, tagDTOs);
             
+            List<MultipartFile> immaginiGalleria = new ArrayList<>();
+            if (immagineGalleria1 != null && !immagineGalleria1.isEmpty()) {
+                immaginiGalleria.add(immagineGalleria1);
+                if (immagineGalleria2 != null && !immagineGalleria2.isEmpty()) {
+                	immaginiGalleria.add(immagineGalleria2);
+                    if (immagineGalleria3 != null && !immagineGalleria3.isEmpty()) {
+                    	immaginiGalleria.add(immagineGalleria3);
+                    }
+                }
+                handleImages(nuovoViaggio, immaginiGalleria);
+            }
+
+            /*
          // Gestione delle altre immagini, se presenti
             if (immagini != null && !immagini.isEmpty()) {
+            	System.out.println("Numero di immagini ricevute: " + immagini.size());
                 for (MultipartFile immagine : immagini) {
-                    if (!immagine.isEmpty()) {
+                	System.out.println("Processando l'immagine: " + immagine.getOriginalFilename());
+                	System.out.println("Nome del file ricevuto: " + immagine.getOriginalFilename());
+                	if (!immagine.isEmpty()) {
                         // Crea l'entità Immagine e la salva
                         Immagine immagineEntity = new Immagine();
                         immagineEntity.setImg(immagine.getBytes());
@@ -114,6 +134,7 @@ public class ViaggioController {
                     }
                 }
             }
+            */
 
             return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
 
@@ -409,6 +430,39 @@ public class ViaggioController {
         immagineDAO.save(immagine);
         System.out.println("creata immagine con id: " + immagine.getIdImg());
         viaggio.setImmagineCopertina(immagine);
+    }
+    
+    private void handleImages(Viaggio viaggio, List<MultipartFile> imgs) throws IOException {
+        if (imgs == null || imgs.isEmpty()) {
+            throw new IllegalArgumentException("Nessuna immagine fornita.");
+        }
+
+        for (MultipartFile img : imgs) {
+            if (img.isEmpty()) {
+                continue; // Skip empty files
+            }
+
+            String contentType = img.getContentType();
+            if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+                throw new IllegalArgumentException("Formato immagine non valido per " + img.getOriginalFilename() + ". Sono accettati solo JPEG e PNG.");
+            }
+
+            byte[] imgBytes = img.getBytes();
+
+            // Create and save the Immagine entity
+            Immagine immagineEntity = new Immagine();
+            immagineEntity.setImg(imgBytes);
+            immagineDAO.save(immagineEntity);
+            System.out.println("Creata immagine con ID: " + immagineEntity.getIdImg());
+
+            // Create the ViaggioImmagini entity for association
+            ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
+            viaggioImmagine.setViaggio(viaggio);
+            viaggioImmagine.setImmagine(immagineEntity);
+
+            // Save the association in the repository
+            viaggioImmaginiDAO.save(viaggioImmagine);
+        }
     }
     
 }

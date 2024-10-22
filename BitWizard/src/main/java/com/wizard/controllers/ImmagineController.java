@@ -52,6 +52,26 @@ public class ImmagineController {
         }
     }
     
+    @GetMapping("/immagine/{immagineId}")
+    public ResponseEntity<byte[]> getImmagine(@PathVariable int immagineId) {
+
+        Optional<Immagine> optionalImmagine = immagineDAO.findById(immagineId);
+        
+        if (optionalImmagine.isPresent()) {
+        	Immagine immagine = optionalImmagine.get();
+        	
+        	byte [] immagineByte = immagine.getImg();
+        
+        	HttpHeaders headers = new HttpHeaders();
+        	headers.setContentType(MediaType.IMAGE_JPEG);
+        
+        return new ResponseEntity<>(immagineByte, headers, HttpStatus.OK);
+    } else {
+        // Gestisci il caso in cui il viaggio non esista
+        throw new RuntimeException("Immaigne non trovato con ID: " + immagineId);
+    }
+    }
+    
     @GetMapping("/utente/immagine")
     public ResponseEntity<byte[]> getImmagineProfilo(HttpSession session) {
     	Utente utente = (Utente) session.getAttribute("utenteLoggato");
