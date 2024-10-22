@@ -86,12 +86,12 @@
         <h3>Partecipanti al Viaggio</h3>
         <ul id="listaPartecipanti" class="list-group"></ul>
         
-        <form id="iscrivitiForm" method="POST">
+        <form id="iscrivitiForm" method="POST" style="display: none;">
     		<button id="iscrivitiBtn" type="submit" class="btn btn-primary">Iscriviti al viaggio</button>
     		<button id="annullaIscrizioneBtn" type="button" class="btn btn-secondary" style="display: none;">Annulla Iscrizione</button>
 		</form>
 		
-		<form id="creatoreForm" method="POST">
+		<form id="creatoreForm" method="POST" >
 		<!-- Pulsanti specifici per il creatore (inizialmente nascosti) -->
     		<div id="pulsantiCreatore" style="display: none;">
     			<button id="modificaBtn" class="btn btn-warning">Modifica Viaggio</button>
@@ -120,6 +120,30 @@
     <p id="result"></p>
 
     <script src="messaggio.js"></script>
+	
+	<form id="recensioneForm" method="POST" style="display: none;">
+		<label for="testo">Testo della recensione:</label>
+		<input type="text" id="testoRecensione" name="testo" required>
+		
+		<div class="rating">
+  			<input type="radio" id="star1" name="rating" value="1" />
+  			<label for="star1" title="1 star">☆</label>
+  			<input type="radio" id="star2" name="rating" value="2" />
+  			<label for="star2" title="2 stars">☆</label>
+  			<input type="radio" id="star3" name="rating" value="3" />
+ 			<label for="star3" title="3 stars">☆</label>
+  			<input type="radio" id="star4" name="rating" value="4" />
+  			<label for="star4" title="4 stars">☆</label>
+  			<input type="radio" id="star5" name="rating" value="5" />
+  			<label for="star5" title="5 stars">☆</label>		
+		</div>	
+		
+    	<button type="submit">Pubblica recensione</button>
+	</form>
+	
+	<div id="recensioneContainer" class="row"></div>
+	
+	<button id="mostraRecensioni" type="button" class="btn btn-primary">Vedi recensioni</button>
 
     </div>
 
@@ -446,11 +470,13 @@
                     document.getElementById('iscrivitiBtn').style.display = 'none';
                     document.getElementById('annullaIscrizioneBtn').style.display = 'block';
                     document.getElementById('ChatDelViaggio').style.display = 'block';
+                    document.getElementById('recensioneForm').style.display = 'block';
                 } else {
                     console.log('Utente non iscritto');
                     document.getElementById('iscrivitiBtn').style.display = 'block';
                     document.getElementById('annullaIscrizioneBtn').style.display = 'none';
                     document.getElementById('ChatDelViaggio').style.display = 'none';
+                    document.getElementById('recensioneForm').style.display = 'none';
                 }
             } else {
                 console.error('Errore nel caricamento dei partecipanti.');
@@ -494,7 +520,7 @@
         if (messaggio.utenteId) {
             try {
                 // Correggi l'interpolazione dell'URL con i backtick
-                const response = await fetch(`/messaggio/utente/nome/${messaggio.utenteId}`);
+                const response = await fetch(`/api/utente/nome/${messaggio.utenteId}`);
                 const utente = await response.json();
                 utenteNome = utente.nome ? utente.nome : 'Anonimo';  // Verifica se l'utente ha un nome
                 utenteCognome = utente.cognome ? utente.cognome : '';  // Verifica se l'utente ha un cognome
@@ -548,6 +574,7 @@
  	        const result = await response.json();
  	        if (response.ok) {
  	            document.getElementById('result').innerText = 'Messaggio inviato con successo!';
+ 	            caricaMessaggio(viaggioId);
  	        } else {
  	            document.getElementById('result').innerText = 'Errore: ' + result.error;
  	        }
@@ -555,6 +582,120 @@
  	        document.getElementById('result').innerText = 'Errore nella richiesta: ' + error;
  	    }
  	});
+ 	
+ 	document.getElementById('recensioneForm').addEventListener('submit', function(event) {
+ 	    event.preventDefault(); // Impedisce il comportamento predefinito del form
+
+ 	    const testo = document.getElementById('testoRecensione').value;
+ 	    const rating = document.querySelector('input[name="rating"]:checked').value;
+
+ 	    // Crea l'oggetto recensioneDTO che verrà inviato al controller
+ 	    const recensioneDTO = {
+ 	        testo: testo,
+ 	        rating: rating,
+ 	        viaggioId: viaggioId
+ 	    };
+
+ 	    // Invia i dati via AJAX con l'intestazione 'application/json'
+ 	    fetch('/recensione/crea', {
+ 	        method: 'POST',
+ 	        headers: {
+ 	            'Content-Type': 'application/json'
+ 	        },
+ 	        body: JSON.stringify(recensioneDTO) // Serializza l'oggetto recensioneDTO in JSON
+ 	    })
+ 	    .then(response => response.json())
+ 	    .then(data => {
+ 	        console.log(data); // Visualizza la risposta del server
+ 	        alert('Recensione inviata con successo!');
+ 	        caricaRecensioni(viaggioId);
+ 	    })
+ 	    .catch(error => console.error('Errore:', error));
+ 	});
+ 	
+ 	document.getElementById('mostraRecensioni').addEventListener('click', function() {
+ 		
+ 	    fetch(`/recensione/viaggio/${viaggioId}`)
+ 	    .then(response => response.json())
+ 	    .then(data => {
+ 	        const recensioniContainer = document.getElementById('recensioniContainer');
+ 	        recensioniContainer.innerHTML = '';
+
+ 	        if (data.length === 0) {
+ 	            recensioniContainer.innerHTML = '<p>Non ci sono recensioni per questo viaggio.</p>';
+ 	        } else {
+ 	        // Usa for...of per iterare sugli oggetti asincroni
+ 	           for (let messaggio of messaggi) {
+ 	               const messaggioCard = createMessaggioCard(messaggio);  // Attendi che la card venga creata
+ 	               container.innerHTML += messaggioCard;  // Aggiungi la card al container
+ 	           }
+ 	        }
+ 	    })
+ 	    .catch(error => console.error('Errore nel recuperare le recensioni:', error));
+ 	});
+ 	
+ 	document.getElementById('mostraRecensioni').addEventListener('click', function() {
+ 		console.log(viaggioId)
+ 	    // Chiama la funzione per caricare le recensioni, passando il viaggioId
+ 	    caricaRecensioni(viaggioId);
+ 	});
+ 	
+ 	async function caricaRecensioni(viaggioId) {
+ 	    try {
+ 	        const response = await fetch(`/recensione/viaggio/${viaggioId}`);
+ 	        const recensioni = await response.json();
+ 	        const recensioniContainer = document.getElementById('recensioneContainer');
+ 	        recensioniContainer.innerHTML = '';  // Pulisce il contenitore precedente
+
+ 	        if (recensioni.length === 0) {
+ 	            recensioniContainer.innerHTML = '<p>Non ci sono recensioni per questo viaggio.</p>';
+ 	        } else {
+ 	            for (let recensione of recensioni) {
+ 	                const cardHTML = await creaCardRecensione(recensione);
+ 	                recensioniContainer.innerHTML += cardHTML;  // Inserisce ogni card nel contenitore
+ 	            }
+ 	        }
+ 	    } catch (error) {
+ 	        console.error("Errore nel caricamento delle recensioni", error);
+ 	    }
+ 	}
+ 	
+ 	async function creaCardRecensione(recensione) {
+ 		
+ 		const dataInvio = new Date(recensione.data).toLocaleString('it-IT', {
+    		day: '2-digit',
+    		month: '2-digit',
+    		year: 'numeric'
+		});
+ 		
+ 		if (recensione.utenteId) {
+            try {
+                // Correggi l'interpolazione dell'URL con i backtick
+                const response = await fetch(`/api/utente/nome/${recensione.utenteId}`);
+                const utente = await response.json();
+                utenteNome = utente.nome ? utente.nome : 'Anonimo';  // Verifica se l'utente ha un nome
+                utenteCognome = utente.cognome ? utente.cognome : '';  // Verifica se l'utente ha un cognome
+            } catch (error) {
+                console.error('Errore nel recupero dei dati dell\'utente', error);
+            }
+        }
+ 		
+ 	    return `
+ 	        <div class="col-md-4">
+ 	            <div class="card mb-4">
+ 	                <img src="/api/immagini/utente/profilo/${recensione.utenteId}" class="card-img-top" alt="Immagine profilo utente">
+ 	                <div class="card-body">
+ 	                    <h5 class="card-title">${utenteNome} ${utenteCognome}</h5>
+ 	                    <p class="card-text">
+ 	                        ${recensione.testo} <br>
+ 	                        Rating: ${recensione.rating} <br>
+ 	                        <small class="text-muted">Data: ${dataInvio}</small>
+ 	                    </p>
+ 	                </div>
+ 	            </div>
+ 	        </div>
+ 	    `;
+ 	}
 
 </script>
 

@@ -126,23 +126,6 @@ public class MessaggioController {
 	        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	    }
 	}
-    
-    @GetMapping("/messaggio/utente/nome/{utenteId}")
-    public ResponseEntity<?> getNomeUtente(@PathVariable Long utenteId) {
-        Optional<Utente> optionalUtente = utenteDAO.findById(utenteId);
-        
-        if (optionalUtente.isPresent()) {
-            Utente utente = optionalUtente.get();
-            UtenteMessaggioDTO utenteMessaggioDTO = new UtenteMessaggioDTO();
-            utenteMessaggioDTO.setNome(utente.getNome());
-            utenteMessaggioDTO.setCognome(utente.getCognome());
-            return ResponseEntity.ok(utenteMessaggioDTO);
-        } else {
-            // Restituisci un errore 404 con un messaggio chiaro
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Utente non trovato con ID: " + utenteId);
-        }
-    }
 	
 	private Messaggio createMessaggioFromDTO(CreazioneMessaggioDTO messaggioDTO) {
 	    Messaggio messaggio = new Messaggio();

@@ -8,18 +8,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wizard.DTO.TagDTO;
+import com.wizard.entities.Recensione;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.repos.PartecipantiViaggioDTO;
+import com.wizard.repos.RecensioneDTO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.ViaggioDAO;
 import com.wizard.repos.ViaggioDTO;
+import com.wizard.services.RecensioneService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -31,6 +37,9 @@ public class PaginaViaggioController {
 	
 	@Autowired
 	private UtenteDAO utenteDAO;
+	
+	@Autowired
+	private RecensioneService recensioneService;
 	
 	/*
 	@GetMapping("/api/session/viaggio")
