@@ -1,11 +1,9 @@
 package com.wizard.controllers;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.wizard.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,12 +25,6 @@ import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.entities.ViaggioImmagini;
-import com.wizard.repos.ImmagineDAO;
-import com.wizard.repos.UtenteDAO;
-import com.wizard.repos.ViaggioDAO;
-import com.wizard.repos.ViaggioDTO;
-import com.wizard.repos.ViaggioImmaginiDAO;
-import com.wizard.repos.ViaggioTagDAO;
 import com.wizard.services.ViaggioService;
 
 import jakarta.servlet.http.HttpSession;
@@ -63,7 +55,7 @@ public class ViaggioController {
     
     @Autowired
     private ViaggioTagDAO viaggioTagDAO;
-    
+
     @PostMapping(value = "/crea", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
     public ResponseEntity<?> creaViaggio(
@@ -258,6 +250,41 @@ public class ViaggioController {
         List<ViaggioDTO> viaggi = viaggioService.findViaggiByUtenteId(utente.getUtenteId());
         return ResponseEntity.ok(viaggi);
     }
+
+    @GetMapping("/creatore")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiByCreatoreId(@RequestParam Long creatoreId){
+
+        Utente creatore = utenteDAO.findById(creatoreId).orElse(null);
+        if (creatore == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+       List<ViaggioDTO> viaggi = viaggioService.findViaggiByCreatore(creatoreId);
+
+        if (viaggi == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+       return ResponseEntity.ok(viaggi);
+
+    }
+
+    @GetMapping("/altroUtente")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiAltroUtente(@RequestParam Long utenteId) {
+
+            Utente utente = utenteDAO.findById(utenteId).orElse(null);
+            if (utente == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            List<ViaggioDTO> viaggi = viaggioService.findViaggiByUtenteId(utenteId);
+            if (viaggi == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return ResponseEntity.ok(viaggi);
+
+
+    }
+
+
     
     @GetMapping("lista")
     public ResponseEntity<?> getViaggi() {
