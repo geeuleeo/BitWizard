@@ -1,5 +1,9 @@
 package com.wizard.entities;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -15,16 +19,20 @@ public class Recensione {
     @ManyToOne
     @MapsId("viaggioId")
     @JoinColumn(name = "id_viaggio")
+    @JsonBackReference
     private Viaggio viaggio;
 
     @ManyToOne
     @MapsId("utenteId")
     @JoinColumn(name = "id_utente")
+    @JsonBackReference
     private Utente utente;
 
     private String testo;
 
     private int rating;
+    
+    private Date data;
 
 	public ChiaveRecensione getId() {
 		return id;
@@ -66,4 +74,12 @@ public class Recensione {
 		this.rating = rating;
 	}
 
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+	
 }

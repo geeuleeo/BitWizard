@@ -1,10 +1,13 @@
 package com.wizard.repos;
 
+import java.util.Date;
+
 public class RecensioneDTO {
 	
     private Long viaggioId;
     private Long utenteId;
     private String testo;
+    private Date data;
     private int rating;
     
 	public Long getViaggioId() {
@@ -30,6 +33,12 @@ public class RecensioneDTO {
 	}
 	public void setRating(int rating) {
 		this.rating = rating;
+	}
+	public Date getData() {
+		return data;
+	}
+	public void setData(Date data) {
+		this.data = data;
 	}
     
 }

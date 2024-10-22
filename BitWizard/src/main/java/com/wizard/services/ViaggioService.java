@@ -28,7 +28,9 @@ public interface ViaggioService {
 	List<ViaggioDTO> getViaggiByPrezzo(Integer min, Integer max);
 
 	List<ViaggioDTO> findViaggiByUtenteId(Long utenteId);
-	
+
+	List<ViaggioDTO> findViaggiByCreatore(Long creatoreId);
+
 	List<ViaggioDTO> getAllViaggi();
 	
 }

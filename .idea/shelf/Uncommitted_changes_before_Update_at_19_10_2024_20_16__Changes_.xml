@@ -1,0 +1,59 @@
+<changelist name="Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]" date="1729361772441" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 19/10/2024 20:16 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/ViaggioServiceImpl.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/DTO/UtenteRegistrationDTO.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/DTO/UtenteRegistrationDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/UtenteRegistrationDTO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/entities/UtenteTag.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/entities/UtenteTag.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/UtenteTag.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/customs/UrlMemorizzazioneFiltro.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/customs/UrlMemorizzazioneFiltro.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/UrlMemorizzazioneFiltro.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/PaginaViaggioController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/UtenteController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/UtenteController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/UtenteController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/UtenteTagDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/TagController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/TagController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/TagController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/ViaggioController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/services/ViaggioService.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/services/ViaggioService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/ViaggioService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/HomeController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/HomeController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_19_10_2024_20_16_[Changes]/HomeController.class" />
+  </binary>
+</changelist>

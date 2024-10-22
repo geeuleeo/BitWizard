@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wizard.DTO.TagDTO;
+import com.wizard.DTO.UtenteMessaggioDTO;
 import com.wizard.DTO.UtenteRegistrationDTO;
 import com.wizard.entities.Immagine;
 import com.wizard.entities.Recensione;
@@ -32,6 +34,7 @@ import com.wizard.repos.ImmagineDAO;
 import com.wizard.repos.PartecipantiViaggioDAO;
 import com.wizard.repos.RecensioneDTO;
 import com.wizard.repos.RuoloDAO;
+import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.UtenteDTO;
 import com.wizard.services.RecensioneService;
 import com.wizard.services.UtenteService;
@@ -53,6 +56,9 @@ public class UtenteController {
     
     @Autowired
     private RuoloDAO ruoloDAO;
+    
+    @Autowired
+    private UtenteDAO utenteDAO;
     
     @Autowired
     private RecensioneService recensioneService;
@@ -104,6 +110,22 @@ public class UtenteController {
         }
     }
     
+    // metodo per ottenere un'utente dall'id
+    @GetMapping("/{utenteId}")
+    public ResponseEntity<?> getUtente(@PathVariable Long utenteId) {
+        Optional<Utente> optionalUtente = utenteDAO.findById(utenteId) ;
+        
+        // Verifica se il viaggio è presente
+	    if (optionalUtente.isPresent()) {
+	        Utente utente = optionalUtente.get();
+	        return ResponseEntity.ok(utente);
+	    } else {
+	        // Gestisci il caso in cui il viaggio non esista
+	        throw new RuntimeException("Utente non trovato con ID: " + utenteId);
+	    }
+
+    }
+    
     @GetMapping("/session")
     public ResponseEntity<Long> getUtenteLoggato(HttpSession session) {
         Utente utente = (Utente) session.getAttribute("utenteLoggato");
@@ -112,6 +134,23 @@ public class UtenteController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(utenteId);
+    }
+    
+    @GetMapping("/nome/{utenteId}")
+    public ResponseEntity<?> getNomeUtente(@PathVariable Long utenteId) {
+        Optional<Utente> optionalUtente = utenteDAO.findById(utenteId);
+        
+        if (optionalUtente.isPresent()) {
+            Utente utente = optionalUtente.get();
+            UtenteMessaggioDTO utenteMessaggioDTO = new UtenteMessaggioDTO();
+            utenteMessaggioDTO.setNome(utente.getNome());
+            utenteMessaggioDTO.setCognome(utente.getCognome());
+            return ResponseEntity.ok(utenteMessaggioDTO);
+        } else {
+            // Restituisci un errore 404 con un messaggio chiaro
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Utente non trovato con ID: " + utenteId);
+        }
     }
 
     private Utente createUtenteFromDTO(UtenteRegistrationDTO dto, Ruolo ruolo) {
@@ -139,21 +178,6 @@ public class UtenteController {
         Immagine immagine = new Immagine();
         immagine.setImg(imgBytes);
         utente.setImmagine(immagine);
-    }
-    
-    @PostMapping("/recensione")
-    public ResponseEntity<?> creaRecensione(@RequestBody RecensioneDTO recensioneDTO) {
-        try {
-            Recensione recensione = recensioneService.salvaRecensione(
-                recensioneDTO.getViaggioId(),
-                recensioneDTO.getUtenteId(),
-                recensioneDTO.getTesto(),
-                recensioneDTO.getRating()
-            );
-            return new ResponseEntity<>(recensione, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
     }
     
     @GetMapping("/recensione/{utenteId}")
