@@ -9,6 +9,7 @@ public class MessaggioDTO {
     private String testo;
     private Date data;
     private int immagineId;
+    private Long messaggioId;
     
 	public Long getViaggioId() {
 		return viaggioId;
@@ -39,6 +40,12 @@ public class MessaggioDTO {
 	}
 	public void setImmagineId(int immagineId) {
 		this.immagineId = immagineId;
+	}
+	public Long getMessaggioId() {
+		return messaggioId;
+	}
+	public void setMessaggioId(Long messaggioId) {
+		this.messaggioId = messaggioId;
 	}
 
 }
