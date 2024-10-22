@@ -1,0 +1,413 @@
+Index: BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml
+===================================================================
+diff --git a/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml b/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml
+deleted file mode 100644
+--- a/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
++++ /dev/null	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
+@@ -1,116 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+-		 xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+-	<modelVersion>4.0.0</modelVersion>
+-	<parent>
+-		<groupId>org.springframework.boot</groupId>
+-		<artifactId>spring-boot-starter-parent</artifactId>
+-		<version>3.3.3</version>
+-		<relativePath/> <!-- lookup parent from repository -->
+-	</parent>
+-	<groupId>com.wizard</groupId>
+-		<artifactId>wizard</artifactId>
+-		<version>0.0.1-SNAPSHOT</version>
+-		<name>BitWizard</name>
+-		<description>Demo project for bitwizard</description>
+-	<properties>
+-		<java.version>17</java.version>
+-	</properties>
+-	<dependencies>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-security</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-web</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.thymeleaf.extras</groupId>
+-			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+-		</dependency>
+-		<dependency>
+-    		<groupId>org.springframework.boot</groupId>
+-    		<artifactId>spring-boot-starter-validation</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-devtools</artifactId>
+-			<scope>runtime</scope>
+-			<optional>true</optional>
+-		</dependency>
+-		<dependency>
+-			<groupId>com.mysql</groupId>
+-			<artifactId>mysql-connector-j</artifactId>
+-			<scope>runtime</scope>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-test</artifactId>
+-			<scope>test</scope>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.security</groupId>
+-			<artifactId>spring-security-test</artifactId>
+-			<scope>test</scope>
+-		</dependency>
+-		<dependency>
+-			<groupId>com.fasterxml.jackson.core</groupId>
+-			<artifactId>jackson-core</artifactId>
+-			<version>2.15.2</version>
+-		</dependency>
+-
+-		<!-- Jackson Databind -->
+-		<dependency>
+-			<groupId>com.fasterxml.jackson.core</groupId>
+-			<artifactId>jackson-databind</artifactId>
+-			<version>2.15.2</version>
+-		</dependency>
+-
+-		<!-- Jackson Annotations -->
+-		<dependency>
+-			<groupId>com.fasterxml.jackson.core</groupId>
+-			<artifactId>jackson-annotations</artifactId>
+-			<version>2.15.2</version>
+-		</dependency>
+-		<dependency>
+-        	<groupId>org.mapstruct</groupId>
+-        	<artifactId>mapstruct</artifactId>
+-        	<version>1.5.3.Final</version> <!-- Sostituisci con l'ultima versione -->
+-    	</dependency>
+-		<!-- Jackson Datatype Hibernate5 -->
+-		<dependency>
+-			<groupId>com.fasterxml.jackson.datatype</groupId>
+-			<artifactId>jackson-datatype-hibernate5</artifactId>
+-			<version>2.15.2</version>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.modelmapper</groupId>
+-			<artifactId>modelmapper</artifactId>
+-			<version>3.1.1</version>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter</artifactId>
+-		</dependency>
+-	</dependencies>
+-
+-	<build>
+-		<plugins>
+-			<plugin>
+-				<groupId>org.springframework.boot</groupId>
+-				<artifactId>spring-boot-maven-plugin</artifactId>
+-			</plugin>
+-		</plugins>
+-	</build>
+-
+-
+-</project>
+Index: BitWizard/src/main/java/com/wizard/services/CustomDettagliAgenziaService.java
+===================================================================
+diff --git a/BitWizard/src/main/java/com/wizard/services/CustomDettagliAgenziaService.java b/BitWizard/src/main/java/com/wizard/services/CustomDettagliAgenziaService.java
+deleted file mode 100644
+--- a/BitWizard/src/main/java/com/wizard/services/CustomDettagliAgenziaService.java	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
++++ /dev/null	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
+@@ -1,31 +0,0 @@
+-package com.wizard.services;
+-
+-import com.wizard.customs.CustomDettagliAgenzia;
+-import com.wizard.entities.Agenzia;
+-import com.wizard.repos.AgenziaDAO;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.security.core.userdetails.UserDetails;
+-import org.springframework.security.core.userdetails.UserDetailsService;
+-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+-import org.springframework.stereotype.Service;
+-
+-import java.util.Optional;
+-
+-@Service
+-public class CustomDettagliAgenziaService implements UserDetailsService {
+-
+-    @Autowired
+-    private AgenziaDAO agenziaDAO;
+-
+-
+-    @Override
+-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+-        Agenzia agenzia = agenziaDAO.findAgenziaByPartitaIva(username).orElse(null);
+-        if (agenzia == null) {
+-            throw new UsernameNotFoundException("Agenzia non trovata con partita IVA : " + username);
+-        }
+-
+-
+-        return new CustomDettagliAgenzia(agenzia);
+-    }
+-}
+Index: BitWizard/target/classes/META-INF/MANIFEST.MF
+===================================================================
+diff --git a/BitWizard/target/classes/META-INF/MANIFEST.MF b/BitWizard/target/classes/META-INF/MANIFEST.MF
+deleted file mode 100644
+--- a/BitWizard/target/classes/META-INF/MANIFEST.MF	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
++++ /dev/null	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
+@@ -1,6 +0,0 @@
+-Manifest-Version: 1.0
+-Build-Jdk-Spec: 21
+-Implementation-Title: BitWizard
+-Implementation-Version: 0.0.1-SNAPSHOT
+-Created-By: Maven Integration for Eclipse
+-
+Index: BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties
+===================================================================
+diff --git a/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties b/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties
+deleted file mode 100644
+--- a/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
++++ /dev/null	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
+@@ -1,7 +0,0 @@
+-#Generated by Maven Integration for Eclipse
+-#Sat Oct 19 09:39:21 CEST 2024
+-artifactId=wizard
+-groupId=com.wizard
+-m2e.projectLocation=Z\:\\BitWizard\\BitWizard
+-m2e.projectName=BitWizard_BitWizard
+-version=0.0.1-SNAPSHOT
+Index: .idea/dataSources.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"DataSourceManagerImpl\" format=\"xml\" multifile-model=\"true\">\r\n    <data-source source=\"LOCAL\" name=\"project_by_learning@127.0.0.1\" uuid=\"ac95d1ab-d5b1-4e86-9980-e7b2d0c5bb83\">\r\n      <driver-ref>mysql.8</driver-ref>\r\n      <synchronize>true</synchronize>\r\n      <imported>true</imported>\r\n      <remarks>$PROJECT_DIR$/BitWizard/src/main/resources/application.properties</remarks>\r\n      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>\r\n      <jdbc-url>jdbc:mysql://127.0.0.1:3306/project_by_learning</jdbc-url>\r\n      <jdbc-additional-properties>\r\n        <property name=\"com.intellij.clouds.kubernetes.db.host.port\" />\r\n        <property name=\"com.intellij.clouds.kubernetes.db.enabled\" value=\"false\" />\r\n        <property name=\"com.intellij.clouds.kubernetes.db.container.port\" />\r\n      </jdbc-additional-properties>\r\n      <working-dir>$ProjectFileDir$</working-dir>\r\n    </data-source>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/dataSources.xml b/.idea/dataSources.xml
+--- a/.idea/dataSources.xml	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
++++ b/.idea/dataSources.xml	(date 1729361788046)
+@@ -15,5 +15,19 @@
+       </jdbc-additional-properties>
+       <working-dir>$ProjectFileDir$</working-dir>
+     </data-source>
++    <data-source source="LOCAL" name="personal@my-springboot-mysql-bitwizard.h.aivencloud.com" uuid="3305607e-2a37-4d50-a4a6-da1c2a20becb">
++      <driver-ref>mysql.8</driver-ref>
++      <synchronize>true</synchronize>
++      <imported>true</imported>
++      <remarks>$PROJECT_DIR$/BitWizard/src/main/resources/application.properties</remarks>
++      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
++      <jdbc-url>jdbc:mysql://my-springboot-mysql-bitwizard.h.aivencloud.com:10134/personal</jdbc-url>
++      <jdbc-additional-properties>
++        <property name="com.intellij.clouds.kubernetes.db.host.port" />
++        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
++        <property name="com.intellij.clouds.kubernetes.db.container.port" />
++      </jdbc-additional-properties>
++      <working-dir>$ProjectFileDir$</working-dir>
++    </data-source>
+   </component>
+ </project>
+\ No newline at end of file
+Index: BitWizard/target/classes/Templates/registrazione.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"it\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Registrazione Utente</title>\r\n    <script>\r\n // Funzione per ottenere i tag dal backend\r\nasync function getTags() {\r\n    const response = await fetch('/api/tags/cerca');  // Modifica con l'endpoint corretto\r\n    const tags = await response.json();\r\n    console.log(\"Tag ricevuti dal backend:\", tags);  // Controlla i dati ricevuti\r\n    return tags;\r\n}\r\n\r\n\r\nfunction displayTags(tags) {\r\n    const availableTagsDiv = document.getElementById('availableTags');\r\n\r\n    tags.forEach(tag => {\r\n        // Verifica che il campo dell'ID esista nel tag\r\n        console.log(\"Tag caricato:\", tag);  // Verifica se l'ID è corretto\r\n\r\n        const tagElement = document.createElement('div');\r\n        tagElement.textContent = tag.tipoTag;  // Supponendo che il campo \"tipoTag\" esista\r\n        tagElement.className = 'tag';\r\n        tagElement.setAttribute('data-tag-id', tag.tagId);  // Usa il campo \"tagId\" o quello corretto\r\n\r\n        // Aggiungi evento per selezionare il tag\r\n        tagElement.onclick = () => selectTag(tagElement);\r\n\r\n        availableTagsDiv.appendChild(tagElement);\r\n    });\r\n}\r\n\r\n    function selectTag(tagElement) {\r\n        console.log(\"Tag selezionato:\", tagElement);  // Log del tag selezionato\r\n        \r\n        const selectedTagsDiv = document.getElementById('selectedTags');\r\n        const clonedTag = tagElement.cloneNode(true);\r\n        clonedTag.onclick = () => removeTag(clonedTag);\r\n        selectedTagsDiv.appendChild(clonedTag);\r\n        \r\n        tagElement.remove();\r\n    }\r\n\r\n    function removeTag(tagElement) {\r\n        console.log(\"Tag rimosso:\", tagElement);  // Log del tag rimosso\r\n        \r\n        const availableTagsDiv = document.getElementById('availableTags');\r\n        const clonedTag = tagElement.cloneNode(true);\r\n        clonedTag.onclick = () => selectTag(clonedTag);\r\n        availableTagsDiv.appendChild(clonedTag);\r\n        \r\n        tagElement.remove();\r\n    }\r\n\r\n    // Aggiungi i tag selezionati al FormData\r\n    function appendTagsToFormData(formData) {\r\n        const selectedTagsDiv = document.getElementById('selectedTags');\r\n        const tagElements = selectedTagsDiv.getElementsByClassName('tag');\r\n\r\n        for (let i = 0; i < tagElements.length; i++) {\r\n            const tagElement = tagElements[i];\r\n            const tagId = tagElement.getAttribute('data-tag-id');\r\n            const tagName = tagElement.textContent;\r\n\r\n            if (tagId && tagName) {\r\n                formData.append(`tags[${i}][tagId]`, tagId);\r\n                formData.append(`tags[${i}][tipoTag]`, tagName);\r\n            }\r\n        }\r\n    }\r\n\r\n // Funzione per inviare il form\r\n    function inviaForm() {\r\n        const form = document.getElementById('signup');\r\n        \r\n        // Crea un nuovo oggetto FormData\r\n        let formData = new FormData(form);  // Assicurati di dichiarare formData qui\r\n\r\n        // Aggiungi il DTO come JSON stringificato\r\n        const utenteDTO = {\r\n            nome: document.getElementById('nome').value,\r\n            cognome: document.getElementById('cognome').value,\r\n            email: document.getElementById('email').value,\r\n            password: document.getElementById('password').value,\r\n            numeroTelefono: document.getElementById('numeroTelefono').value,\r\n            dataNascita: document.getElementById('dataNascita').value,\r\n            descrizione: document.getElementById('descrizione').value,\r\n            tags: getSelectedTags()  // Usa la funzione getSelectedTags per raccogliere i tag selezionati\r\n        };\r\n\r\n        // Aggiungi il DTO JSON al FormData\r\n        formData.append('utenteDTO', new Blob([JSON.stringify(utenteDTO)], {\r\n            type: 'application/json'\r\n        }));\r\n\r\n        // Invia i dati\r\n        inviaDati(formData);\r\n    }\r\n\r\n    // Funzione per inviare i dati tramite fetch\r\n    function inviaDati(formData) {\r\n        fetch('/api/utente/signup', {\r\n            method: 'POST',\r\n            body: formData\r\n        })\r\n        .then(response => {\r\n            if (response.ok) {\r\n                return response.json();\r\n            } else {\r\n                return response.text().then(text => { throw new Error(text) });\r\n            }\r\n        })\r\n        .then(data => {\r\n            console.log(\"Utente creato con successo:\", data);\r\n            const successo = document.getElementById(\"successo\");\r\n\r\n            successo.innerText=(\"Registrazione avvenuta con successo! Verrai reindirizzato alla pagina di login in 3 secondi .\");\r\n\r\n\r\n            const bottoneLogin = document.getElementById(\"pulsanteLogin\");\r\n            setTimeout(() => {\r\n                window.location.assign(\"login\")\r\n                //bottoneLogin.click();\r\n            }, 3000);\r\n\r\n        })\r\n        .catch(error => {\r\n            console.error('Errore:', error.message);\r\n            const erroriDiv = document.getElementById(\"errori\");\r\n            erroriDiv.innerText= error.message;\r\n\r\n        });\r\n    }\r\n\r\n    // Funzione per raccogliere i tag selezionati\r\nfunction getSelectedTags() {\r\n    const selectedTagsDiv = document.getElementById('selectedTags');\r\n    const tagElements = selectedTagsDiv.getElementsByClassName('tag');\r\n    const selectedTags = [];\r\n\r\n    for (let tagElement of tagElements) {\r\n        const tagId = tagElement.getAttribute('data-tag-id');\r\n        const tipoTag = tagElement.textContent;\r\n\r\n        if (tagId && tipoTag) {\r\n            selectedTags.push({\r\n                tagId: tagId,\r\n                tipoTag: tipoTag\r\n            });\r\n        }\r\n    }\r\n\r\n    console.log(\"Tag selezionati:\", selectedTags);  // Verifica che i tag vengano correttamente raccolti\r\n    return selectedTags;\r\n}\r\n\r\n    // Inizializza la pagina caricando i tag\r\n    getTags().then(displayTags);\r\n\r\n\r\n    </script>\r\n    <style>\r\n        #availableTags, #selectedTags {\r\n            width: 45%;\r\n            float: left;\r\n            border: 1px solid black;\r\n            min-height: 100px;\r\n            padding: 10px;\r\n            margin: 10px;\r\n        }\r\n    .tag {\r\n    \tdisplay: inline-block;\r\n    \tpadding: 10px;\r\n    \tmargin: 5px;\r\n    \tbackground-color: lightblue;\r\n    \tborder-radius: 5px;\r\n    \tfont-size: 16px;\r\n    \tcursor: pointer;\r\n\t}\r\n    </style>\r\n</head>\r\n<body>\r\n\r\n    <h2>Registrazione Nuovo Utente</h2>\r\n\r\n    <form id=\"signup\" action=\"#\" method=\"POST\" enctype=\"multipart/form-data\">\r\n        \r\n        <label for=\"nome\">Nome:</label>\r\n        <input type=\"text\" id=\"nome\" name=\"nome\" required><br><br>\r\n\r\n        <label for=\"cognome\">Cognome:</label>\r\n        <input type=\"text\" id=\"cognome\" name=\"cognome\" required><br><br>\r\n\r\n        <label for=\"numeroTelefono\">Numero di Telefono:</label>\r\n        <input type=\"text\" id=\"numeroTelefono\" name=\"numeroTelefono\" required><br><br>\r\n\r\n        <label for=\"email\">Email:</label>\r\n        <input type=\"email\" id=\"email\" name=\"email\" required><br><br>\r\n\r\n        <label for=\"password\">Password:</label>\r\n        <input type=\"password\" id=\"password\" name=\"password\" required><br><br>\r\n\r\n        <label for=\"dataNascita\">Data di Nascita:</label>\r\n        <input type=\"date\" id=\"dataNascita\" name=\"dataNascita\" required><br><br>\r\n\r\n        <label for=\"descrizione\">Descrizione:</label>\r\n        <textarea id=\"descrizione\" name=\"descrizione\"></textarea><br><br>\r\n        \r\n        <!-- Selezione Tag -->\r\n        <h3>Seleziona i tuoi tag</h3>\r\n        <div id=\"availableTags\">\r\n            <h4>Tag disponibili</h4>\r\n        </div>\r\n        <div id=\"selectedTags\">\r\n            <h4>Tag selezionati</h4>\r\n        </div>\r\n\t\t\r\n        <label for=\"imgProfilo\">Immagine Profilo:</label>\r\n        <input type=\"file\" id=\"imgProfilo\" name=\"imgProfilo\"><br><br>\r\n\r\n        <div id = \"errori\"></div>\r\n        <div id = \"successo\"></div>\r\n\r\n        <button type=\"button\" onclick=\"inviaForm()\">Crea Utente</button>\r\n        \r\n        <button id=\"pulsanteLogin\" class=\"btn btn-outline-secondary\" onclick=\"location.href='/login'\">Vai al Login</button>\r\n    </form>\r\n\r\n</body>\r\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/BitWizard/target/classes/Templates/registrazione.html b/BitWizard/target/classes/Templates/registrazione.html
+--- a/BitWizard/target/classes/Templates/registrazione.html	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
++++ b/BitWizard/target/classes/Templates/registrazione.html	(date 1729365472111)
+@@ -120,9 +120,9 @@
+             successo.innerText=("Registrazione avvenuta con successo! Verrai reindirizzato alla pagina di login in 3 secondi .");
+ 
+ 
+-            const bottoneLogin = document.getElementById("pulsanteLogin");
++            //const bottoneLogin = document.getElementById("pulsanteLogin");
+             setTimeout(() => {
+-                window.location.assign("login")
++                window.location.assign("login");
+                 //bottoneLogin.click();
+             }, 3000);
+ 
+Index: .idea/dataSources.local.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"dataSourceStorageLocal\" created-in=\"IU-242.23339.11\">\r\n    <data-source name=\"project_by_learning@127.0.0.1\" uuid=\"ac95d1ab-d5b1-4e86-9980-e7b2d0c5bb83\">\r\n      <database-info product=\"\" version=\"\" jdbc-version=\"\" driver-name=\"\" driver-version=\"\" dbms=\"MYSQL\" />\r\n      <user-name>root</user-name>\r\n      <schema-mapping />\r\n    </data-source>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/dataSources.local.xml b/.idea/dataSources.local.xml
+--- a/.idea/dataSources.local.xml	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
++++ b/.idea/dataSources.local.xml	(date 1729421618370)
+@@ -6,5 +6,18 @@
+       <user-name>root</user-name>
+       <schema-mapping />
+     </data-source>
++    <data-source name="personal@my-springboot-mysql-bitwizard.h.aivencloud.com" uuid="3305607e-2a37-4d50-a4a6-da1c2a20becb">
++      <database-info product="MySQL" version="8.0.30" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MYSQL" exact-version="8.0.30" exact-driver-version="8.2">
++        <extra-name-characters>#@</extra-name-characters>
++        <identifier-quote-string>&quot;</identifier-quote-string>
++      </database-info>
++      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
++      <user-name>avnadmin</user-name>
++      <schema-mapping>
++        <introspection-scope>
++          <node kind="schema" qname="@" />
++        </introspection-scope>
++      </schema-mapping>
++    </data-source>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"c5a118e0-2116-4f21-baf4-91041972526f\" name=\"Changes\" comment=\"lista viaggi\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/dataSources.local.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/dataSources.local.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/dataSources.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/dataSources.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_09_10_2024_18_13__Changes_.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/templateController/GlobalExceptionHandler.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/templateController/GlobalExceptionHandler.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/src/main/resources/Templates/registrazione.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/src/main/resources/Templates/registrazione.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/Templates/registrazione.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/Templates/registrazione.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/BitWizardApplication.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/BitWizardApplication.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/CreazioneMessaggioDTO.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/CreazioneMessaggioDTO.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/MessaggioDTO.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/MessaggioDTO.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/UtenteMessaggioDTO.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/UtenteMessaggioDTO.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/UtenteRegistrationDTO.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/UtenteRegistrationDTO.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ImmagineController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ImmagineController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/MessaggioController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/MessaggioController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/TagController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/TagController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/FilterAspect.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/FilterAspect.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/UrlMemorizzazioneFiltro.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/UrlMemorizzazioneFiltro.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Agenzia.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Agenzia.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ChiaveMessaggio.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ChiaveMessaggio.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Messaggio.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Messaggio.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/MessaggioDAO.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/MessaggioDAO.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDAO.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDAO.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioService.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioService.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioServiceImpl.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioServiceImpl.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Interface\" />\r\n        <option value=\"Class\" />\r\n        <option value=\"HTML File\" />\r\n        <option value=\"Exception\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"092ab797816b0dde492e053898a550b209edec06\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;geeuleeo&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/geeuleeo/BitWizard.git&quot;,\r\n    &quot;accountId&quot;: &quot;09af8a30-17d1-4f5e-ba07-1817857aed2f&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProblemsViewState\">\r\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 0\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2n9PFZSopLnPOQESar8RqD1VJsV\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,\r\n    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,\r\n    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,\r\n    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,\r\n    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;Spring Boot.BitWizardApplication.executor&quot;: &quot;Run&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;#10 on backend&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/ICTS23-25.494/Desktop/BitWizard&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;Groovy compiler&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"BitWizardApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\" nameIsGenerated=\"true\">\r\n      <option name=\"FRAME_DEACTIVATION_UPDATE_POLICY\" value=\"UpdateClassesAndResources\" />\r\n      <module name=\"wizard\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.wizard.BitWizardApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"c5a118e0-2116-4f21-baf4-91041972526f\" name=\"Changes\" comment=\"\" />\r\n      <created>1728382216326</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1728382216326</updated>\r\n      <workItem from=\"1728382217490\" duration=\"158000\" />\r\n      <workItem from=\"1728385650893\" duration=\"7000\" />\r\n      <workItem from=\"1728385671296\" duration=\"780000\" />\r\n      <workItem from=\"1728386460526\" duration=\"487000\" />\r\n      <workItem from=\"1728386959360\" duration=\"304000\" />\r\n      <workItem from=\"1728387273472\" duration=\"112000\" />\r\n      <workItem from=\"1728388627110\" duration=\"1145000\" />\r\n      <workItem from=\"1728390741624\" duration=\"175000\" />\r\n      <workItem from=\"1728390926022\" duration=\"556000\" />\r\n      <workItem from=\"1728391489319\" duration=\"2000\" />\r\n      <workItem from=\"1728391514260\" duration=\"851000\" />\r\n      <workItem from=\"1728392609325\" duration=\"72000\" />\r\n      <workItem from=\"1728392703005\" duration=\"2527000\" />\r\n      <workItem from=\"1728396485113\" duration=\"1707000\" />\r\n      <workItem from=\"1728412721034\" duration=\"36000\" />\r\n      <workItem from=\"1728417929381\" duration=\"661000\" />\r\n      <workItem from=\"1728490399013\" duration=\"6043000\" />\r\n      <workItem from=\"1728566581893\" duration=\"1615000\" />\r\n      <workItem from=\"1728813576084\" duration=\"7115000\" />\r\n      <workItem from=\"1728829504836\" duration=\"4952000\" />\r\n      <workItem from=\"1728843403047\" duration=\"1420000\" />\r\n      <workItem from=\"1728845408005\" duration=\"487000\" />\r\n      <workItem from=\"1728901387073\" duration=\"3604000\" />\r\n      <workItem from=\"1728913245356\" duration=\"3618000\" />\r\n      <workItem from=\"1728978237564\" duration=\"4729000\" />\r\n      <workItem from=\"1728994214337\" duration=\"6424000\" />\r\n      <workItem from=\"1729081965725\" duration=\"5025000\" />\r\n      <workItem from=\"1729361757152\" duration=\"3710000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"-\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728496343342</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728496343342</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"lista viaggi\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728999400062</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728999400062</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"3\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <ignored-roots>\r\n      <path value=\"$PROJECT_DIR$/..\" />\r\n    </ignored-roots>\r\n    <MESSAGE value=\"-\" />\r\n    <MESSAGE value=\"lista viaggi\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"lista viaggi\" />\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 953e4dd1d07f49d371bdeb1dcacdf370f1860e15)
++++ b/.idea/workspace.xml	(date 1729581766578)
+@@ -4,38 +4,53 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="lista viaggi">
++    <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="Registrazione e login fixato  agenzia">
+       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_09_10_2024_18_13__Changes_.xml" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/templateController/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/templateController/GlobalExceptionHandler.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/registrazione.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/registrazione.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/services/CustomDettagliAgenziaService.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.properties" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/META-INF/maven/com.wizard/wizard/pom.xml" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/registrazione.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/Templates/registrazione.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/BitWizardApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/BitWizardApplication.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/CreazioneMessaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/CreazioneMessaggioDTO.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/MessaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/MessaggioDTO.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/UtenteMessaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/UtenteMessaggioDTO.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/UtenteRegistrationDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/DTO/UtenteRegistrationDTO.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ImmagineController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ImmagineController.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/MessaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/MessaggioController.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/TagController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/TagController.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/FilterAspect.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/FilterAspect.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/UrlMemorizzazioneFiltro.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/customs/UrlMemorizzazioneFiltro.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Agenzia.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Agenzia.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ChiaveMessaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ChiaveMessaggio.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Messaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Messaggio.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/PartecipantiViaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/PartecipantiViaggio.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Recensione.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Recensione.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Tag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Tag.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Utente.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Utente.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ViaggioImmagini.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ViaggioImmagini.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ViaggioTag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ViaggioTag.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/MessaggioDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/MessaggioDAO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/PartecipantiViaggioDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/PartecipantiViaggioDAO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/PartecipantiViaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/PartecipantiViaggioDTO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/RecensioneDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/RecensioneDAO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteDAO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteDTO.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/UtenteTagDAO.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDAO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDTO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioImmaginiDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioImmaginiDAO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioTagDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioTagDAO.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/CustomDettagliUtenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/CustomDettagliUtenteService.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioService.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioServiceImpl.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/RecensioneService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/RecensioneService.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/RecensioneServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/RecensioneServiceImpl.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/UtenteServiceImpl.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" afterDir="false" />
+     </list>
+@@ -48,9 +63,9 @@
+     <option name="RECENT_TEMPLATES">
+       <list>
+         <option value="Interface" />
++        <option value="Exception" />
+         <option value="Class" />
+         <option value="HTML File" />
+-        <option value="Exception" />
+       </list>
+     </option>
+   </component>
+@@ -163,7 +178,12 @@
+       <workItem from="1728978237564" duration="4729000" />
+       <workItem from="1728994214337" duration="6424000" />
+       <workItem from="1729081965725" duration="5025000" />
+-      <workItem from="1729361757152" duration="3710000" />
++      <workItem from="1729361757152" duration="3857000" />
++      <workItem from="1729420969715" duration="8897000" />
++      <workItem from="1729441000140" duration="261000" />
++      <workItem from="1729441699635" duration="3044000" />
++      <workItem from="1729503028053" duration="4300000" />
++      <workItem from="1729512706044" duration="2731000" />
+     </task>
+     <task id="LOCAL-00001" summary="-">
+       <option name="closed" value="true" />
+@@ -181,7 +201,31 @@
+       <option name="project" value="LOCAL" />
+       <updated>1728999400062</updated>
+     </task>
+-    <option name="localTasksCounter" value="3" />
++    <task id="LOCAL-00003" summary="Gestione messaggi di errori pagina di registrazione">
++      <option name="closed" value="true" />
++      <created>1729365609047</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1729365609047</updated>
++    </task>
++    <task id="LOCAL-00004" summary="Registrazione agenzia">
++      <option name="closed" value="true" />
++      <created>1729426970844</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1729426970845</updated>
++    </task>
++    <task id="LOCAL-00005" summary="Registrazione e login fixato  agenzia">
++      <option name="closed" value="true" />
++      <created>1729514038324</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1729514038324</updated>
++    </task>
++    <option name="localTasksCounter" value="6" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -193,7 +237,10 @@
+     </ignored-roots>
+     <MESSAGE value="-" />
+     <MESSAGE value="lista viaggi" />
+-    <option name="LAST_COMMIT_MESSAGE" value="lista viaggi" />
++    <MESSAGE value="Gestione messaggi di errori pagina di registrazione" />
++    <MESSAGE value="Registrazione agenzia" />
++    <MESSAGE value="Registrazione e login fixato  agenzia" />
++    <option name="LAST_COMMIT_MESSAGE" value="Registrazione e login fixato  agenzia" />
+   </component>
+   <component name="XSLT-Support.FileAssociations.UIState">
+     <expand />

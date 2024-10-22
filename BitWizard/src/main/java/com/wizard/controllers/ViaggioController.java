@@ -1,12 +1,9 @@
 package com.wizard.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.wizard.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,12 +25,6 @@ import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.entities.ViaggioImmagini;
-import com.wizard.repos.ImmagineDAO;
-import com.wizard.repos.UtenteDAO;
-import com.wizard.repos.ViaggioDAO;
-import com.wizard.repos.ViaggioDTO;
-import com.wizard.repos.ViaggioImmaginiDAO;
-import com.wizard.repos.ViaggioTagDAO;
 import com.wizard.services.ViaggioService;
 
 import jakarta.servlet.http.HttpSession;
@@ -64,15 +55,12 @@ public class ViaggioController {
     
     @Autowired
     private ViaggioTagDAO viaggioTagDAO;
-    
+
     @PostMapping(value = "/crea", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
     public ResponseEntity<?> creaViaggio(
             @RequestPart("viaggioDTO") @Valid ViaggioCreazioneDTO viaggioDTO,
             @RequestPart(value = "immagineCopertina", required = false) MultipartFile immagineCopertina,
-            @RequestPart(value = "immagineGalleria1", required = false) MultipartFile immagineGalleria1,
-            @RequestPart(value = "immagineGalleria2", required = false) MultipartFile immagineGalleria2,
-            @RequestPart(value = "immagineGalleria3", required = false) MultipartFile immagineGalleria3,
             @RequestPart(value = "immagini", required = false) List<MultipartFile> immagini,
             HttpSession session) {
 
@@ -99,26 +87,10 @@ public class ViaggioController {
             // Salva il viaggio con i tag associati
             Viaggio viaggioSalvato = viaggioService.salvaViaggio(nuovoViaggio, tagDTOs);
             
-            List<MultipartFile> immaginiGalleria = new ArrayList<>();
-            if (immagineGalleria1 != null && !immagineGalleria1.isEmpty()) {
-                immaginiGalleria.add(immagineGalleria1);
-                if (immagineGalleria2 != null && !immagineGalleria2.isEmpty()) {
-                	immaginiGalleria.add(immagineGalleria2);
-                    if (immagineGalleria3 != null && !immagineGalleria3.isEmpty()) {
-                    	immaginiGalleria.add(immagineGalleria3);
-                    }
-                }
-                handleImages(nuovoViaggio, immaginiGalleria);
-            }
-
-            /*
          // Gestione delle altre immagini, se presenti
             if (immagini != null && !immagini.isEmpty()) {
-            	System.out.println("Numero di immagini ricevute: " + immagini.size());
                 for (MultipartFile immagine : immagini) {
-                	System.out.println("Processando l'immagine: " + immagine.getOriginalFilename());
-                	System.out.println("Nome del file ricevuto: " + immagine.getOriginalFilename());
-                	if (!immagine.isEmpty()) {
+                    if (!immagine.isEmpty()) {
                         // Crea l'entità Immagine e la salva
                         Immagine immagineEntity = new Immagine();
                         immagineEntity.setImg(immagine.getBytes());
@@ -134,7 +106,6 @@ public class ViaggioController {
                     }
                 }
             }
-            */
 
             return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
 
@@ -279,6 +250,41 @@ public class ViaggioController {
         List<ViaggioDTO> viaggi = viaggioService.findViaggiByUtenteId(utente.getUtenteId());
         return ResponseEntity.ok(viaggi);
     }
+
+    @GetMapping("/creatore")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiByCreatoreId(@RequestParam Long creatoreId){
+
+        Utente creatore = utenteDAO.findById(creatoreId).orElse(null);
+        if (creatore == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+       List<ViaggioDTO> viaggi = viaggioService.findViaggiByCreatore(creatoreId);
+
+        if (viaggi == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+       return ResponseEntity.ok(viaggi);
+
+    }
+
+    @GetMapping("/altroUtente")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiAltroUtente(@RequestParam Long utenteId) {
+
+            Utente utente = utenteDAO.findById(utenteId).orElse(null);
+            if (utente == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            List<ViaggioDTO> viaggi = viaggioService.findViaggiByUtenteId(utenteId);
+            if (viaggi == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return ResponseEntity.ok(viaggi);
+
+
+    }
+
+
     
     @GetMapping("lista")
     public ResponseEntity<?> getViaggi() {
@@ -430,39 +436,6 @@ public class ViaggioController {
         immagineDAO.save(immagine);
         System.out.println("creata immagine con id: " + immagine.getIdImg());
         viaggio.setImmagineCopertina(immagine);
-    }
-    
-    private void handleImages(Viaggio viaggio, List<MultipartFile> imgs) throws IOException {
-        if (imgs == null || imgs.isEmpty()) {
-            throw new IllegalArgumentException("Nessuna immagine fornita.");
-        }
-
-        for (MultipartFile img : imgs) {
-            if (img.isEmpty()) {
-                continue; // Skip empty files
-            }
-
-            String contentType = img.getContentType();
-            if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
-                throw new IllegalArgumentException("Formato immagine non valido per " + img.getOriginalFilename() + ". Sono accettati solo JPEG e PNG.");
-            }
-
-            byte[] imgBytes = img.getBytes();
-
-            // Create and save the Immagine entity
-            Immagine immagineEntity = new Immagine();
-            immagineEntity.setImg(imgBytes);
-            immagineDAO.save(immagineEntity);
-            System.out.println("Creata immagine con ID: " + immagineEntity.getIdImg());
-
-            // Create the ViaggioImmagini entity for association
-            ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
-            viaggioImmagine.setViaggio(viaggio);
-            viaggioImmagine.setImmagine(immagineEntity);
-
-            // Save the association in the repository
-            viaggioImmaginiDAO.save(viaggioImmagine);
-        }
     }
     
 }

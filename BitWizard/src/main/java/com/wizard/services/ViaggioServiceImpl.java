@@ -179,7 +179,16 @@ public class ViaggioServiceImpl implements ViaggioService {
             .collect(Collectors.toList());
     }
 
-    private ViaggioDTO convertToDTO(Viaggio viaggio) {
+	@Override
+	public List<ViaggioDTO> findViaggiByCreatore(Long creatoreId) {
+		List<Viaggio> viaggi = dao.findByCreatoreId(creatoreId);
+
+		return viaggi.stream()
+				.map(this::convertToDTO)
+				.collect(Collectors.toList());
+	}
+
+	private ViaggioDTO convertToDTO(Viaggio viaggio) {
         ViaggioDTO dto = new ViaggioDTO();
         dto.setViaggioId(viaggio.getViaggioId());
         dto.setNome(viaggio.getNome());
