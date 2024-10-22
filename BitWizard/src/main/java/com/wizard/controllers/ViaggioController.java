@@ -1,9 +1,11 @@
 package com.wizard.controllers;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.wizard.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -25,13 +28,17 @@ import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.entities.ViaggioImmagini;
+import com.wizard.repos.ImmagineDAO;
+import com.wizard.repos.UtenteDAO;
+import com.wizard.repos.ViaggioDAO;
+import com.wizard.repos.ViaggioDTO;
+import com.wizard.repos.ViaggioImmaginiDAO;
+import com.wizard.repos.ViaggioTagDAO;
 import com.wizard.services.ViaggioService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
