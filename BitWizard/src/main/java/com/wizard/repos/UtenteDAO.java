@@ -15,4 +15,8 @@ public interface UtenteDAO extends JpaRepository<Utente, Long> {
 
 	void save(UtenteTag utenteTag);
 
+	Optional<Utente> findByUtenteId(Long utenteId);
+
+	boolean existsByEmail(String email);
+
 }

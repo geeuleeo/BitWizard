@@ -87,7 +87,7 @@
 
         <div id="previewContainer"></div>
 
-        <input type="submit" id="submitButton" value="Crea Viaggio">
+        <input type="submit" id="submitButton" value="Modifica Viaggio">
     </form>
     
     <button id="pulsantePaginaPersonale" onclick="location.href='/paginaPersonale'">Vai alla tua area Personale</button>
@@ -130,7 +130,7 @@
                 document.getElementById("etaMax").value = data.etaMax;
 
                 // Recupera i tag del viaggio
-                const viaggiotags = data.tagDTOs;
+                const viaggiotags = data.tags;
                 console.log("Tag associati al viaggio:", viaggiotags);
 
                 // Carica i tag disponibili e poi visualizzali

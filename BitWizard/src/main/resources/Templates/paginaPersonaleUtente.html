@@ -60,7 +60,7 @@
         <div id="notificheContainer" class="column"></div>
         
         <div class="actions">
-            <button onclick="modificaProfilo()">Modifica Profilo</button>
+            <button id="modificaBtn" class="btn btn-warning">Modifica Profilo</button>
         </div>
 
         <h2>I tuoi viaggi</h2>
@@ -188,6 +188,17 @@
 
             return cardHtml;
         }
+        
+        async function modificaUtente() {
+            // Reindirizza l'utente alla pagina di modifica del viaggio
+            window.location.href = `/ModificaProfilo`;
+        }
+
+        document.getElementById('modificaBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita il comportamento predefinito del form
+
+                modificaUtente(); // Funzione per reindirizzare l'utente alla pagina di modifica
+        });
 
         // Chiamate per caricare i dati all'avvio
         caricaDatiUtente();
