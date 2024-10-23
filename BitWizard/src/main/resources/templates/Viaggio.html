@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettagli del Viaggio</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .img-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .immagine-copertina {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .immagini-viaggio img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: lightblue;
+            border-radius: 5px;
+        }
+    .creatore-section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .creatore-section img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="nomeViaggio">Nome del Viaggio</h1>
+        <div class="creatore-section">
+        	<img id="immagineCreatore" class="img-thumbnail" alt="Immagine profilo creatore">
+        	<p><strong>Creatore:</strong> <span id="nomeCreatore"></span></p>
+    	</div>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Immagine copertina -->
+                <img id="immagineCopertina" class="immagine-copertina" alt="Immagine Copertina">
+            </div>
+            <div class="col-md-6">
+                <h3>Dettagli del Viaggio</h3>
+                <p><strong>Luogo di Partenza:</strong> <span id="luogoPartenza"></span></p>
+                <p><strong>Luogo di Arrivo:</strong> <span id="luogoArrivo"></span></p>
+                <p><strong>Data di Partenza:</strong> <span id="dataPartenza"></span></p>
+                <p><strong>Data di Ritorno:</strong> <span id="dataRitorno"></span></p>
+                <p><strong>Prezzo:</strong> €<span id="prezzo"></span></p>
+                <p><strong>Età Minima:</strong> <span id="etaMin"></span></p>
+                <p><strong>Età Massima:</strong> <span id="etaMax"></span></p>
+                <p><strong>Numero Partecipanti:</strong> Min. <span id="numPartMin"></span> / Max. <span id="numPartMax"></span></p>
+            </div>
+        </div>
+
+        <!-- Sezione per le immagini del viaggio -->
+        <h3>Immagini del Viaggio</h3>
+        <div id="immaginiViaggio" class="row immagini-viaggio"></div>
+
+        <!-- Sezione per i tag del viaggio -->
+        <h3>Tag del Viaggio</h3>
+        <div id="tagsViaggio"></div>
+
+        <!-- Sezione per i partecipanti -->
+        <h3>Partecipanti al Viaggio</h3>
+        <ul id="listaPartecipanti" class="list-group"></ul>
+        
+        <form id="iscrivitiForm" method="POST">
+    		<button id="iscrivitiBtn" type="submit" class="btn btn-primary" style="display: none;">Iscriviti al viaggio</button>
+    		<button id="annullaIscrizioneBtn" type="button" class="btn btn-secondary" style="display: none;">Annulla Iscrizione</button>
+		</form>
+		
+		<form id="creatoreForm" method="POST" >
+		<!-- Pulsanti specifici per il creatore (inizialmente nascosti) -->
+    		<div id="pulsantiCreatore" style="display: none;">
+    			<button id="modificaBtn" class="btn btn-warning">Modifica Viaggio</button>
+    			<button id="annullaBtn" class="btn btn-danger">Cancella Viaggio</button>
+		</div>
+		</form>
+		
+		<div id="ChatDelViaggio" style="display: none;">
+			<h2>Chat del viaggio</h2>
+        	<div id="messaggioContainer" class="row">
+          	  <!-- Le card dei messaggi verranno inserite qui dinamicamente -->
+       	 	</div>
+        
+        	<h2>Invia un nuovo messaggio</h2>
+    			<form id="messaggioForm" enctype="multipart/form-data">
+        		<label for="testo">Testo del messaggio:</label><br>
+        		<input type="text" id="testo" name="testo" required><br><br>
+        
+        		<label for="immagine">Immagine del messaggio (opzionale):</label><br>
+        		<input type="file" id="immagine" name="immagineMessaggio"><br><br>
+
+        		<button type="submit">Invia Messaggio</button>
+   			</form>
+   		</div>
+
+    <p id="result"></p>
+
+    <script src="messaggio.js"></script>
+	
+	<form id="recensioneForm" method="POST" style="display: none;">
+		<label for="testo">Testo della recensione:</label>
+		<input type="text" id="testoRecensione" name="testo" required>
+		
+		<div class="rating">
+  			<input type="radio" id="star1" name="rating" value="1" />
+  			<label for="star1" title="1 star">☆</label>
+  			<input type="radio" id="star2" name="rating" value="2" />
+  			<label for="star2" title="2 stars">☆</label>
+  			<input type="radio" id="star3" name="rating" value="3" />
+ 			<label for="star3" title="3 stars">☆</label>
+  			<input type="radio" id="star4" name="rating" value="4" />
+  			<label for="star4" title="4 stars">☆</label>
+  			<input type="radio" id="star5" name="rating" value="5" />
+  			<label for="star5" title="5 stars">☆</label>		
+		</div>	
+		
+    	<button type="submit">Pubblica recensione</button>
+	</form>
+	
+	<div id="recensioneContainer" class="row"></div>
+	
+	<button id="mostraRecensioni" type="button" class="btn btn-primary">Vedi recensioni</button>
+
+    </div>
+
+<script>
+    const viaggioId = new URLSearchParams(window.location.search).get('viaggioId');
+    
+    console.log(viaggioId);
+
+    // Funzione per formattare le date
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('it-IT', options);
+    }
+
+    function aggiornaDettagliViaggio(viaggio) {
+        document.getElementById('nomeViaggio').textContent = viaggio.nome || "Nome non disponibile";
+        document.getElementById('luogoPartenza').textContent = viaggio.luogoPartenza || "Non disponibile";
+        document.getElementById('luogoArrivo').textContent = viaggio.luogoArrivo || "Non disponibile";
+        document.getElementById('dataPartenza').textContent = formatDate(viaggio.dataPartenza) || "Data non disponibile";
+        document.getElementById('dataRitorno').textContent = formatDate(viaggio.dataRitorno) || "Data non disponibile";
+        document.getElementById('prezzo').textContent = viaggio.prezzo ? viaggio.prezzo.toFixed(2) : "Prezzo non disponibile";
+        document.getElementById('etaMin').textContent = viaggio.etaMin || "N/A";
+        document.getElementById('etaMax').textContent = viaggio.etaMax || "N/A";
+        document.getElementById('numPartMin').textContent = viaggio.numPartMin || "N/A";
+        document.getElementById('numPartMax').textContent = viaggio.numPartMax || "N/A";
+        document.getElementById('nomeCreatore').textContent = `${viaggio.nomeCreatore} ${viaggio.cognomeCreatore}`;
+    }
+    
+    async function caricaDettagliViaggio(viaggioId) {
+        console.log('Viaggio ID ricevuto: ', viaggioId);
+        
+        // Effettua la richiesta al server per ottenere i dettagli del viaggio
+        const response = await fetch(`/viaggio/${viaggioId}`);
+        
+        if (!response.ok) {
+            console.error('Errore nel caricamento del viaggio');
+            return;
+        }
+
+        const viaggio = await response.json();
+        
+        console.log('id creatore' + viaggio.creatoreId);
+        
+        bottoneIscrizioneViaggio(viaggioId, viaggio.creatoreId);
+        
+        // Mostra le immagini del viaggio
+        const immaginiViaggioDiv = document.getElementById('immaginiViaggio');
+        immaginiViaggioDiv.innerHTML = '';  // Pulisci eventuali contenuti precedenti
+        if (viaggio.immagini && viaggio.immagini.length > 0) {
+            viaggio.immagini.forEach(immagine => {
+                const img = document.createElement('img');
+                img.src = `data:image/jpeg;base64,${immagine}`;
+                img.alt = 'Immagine del viaggio';
+                img.className = 'img-fluid col-md-4';  // Aggiungi classi di stile se necessario
+                immaginiViaggioDiv.appendChild(img);
+            });
+        } else {
+            console.log("Nessuna immagine disponibile per il viaggio.");
+        }
+
+        // Mostra i tag del viaggio
+        const tagsViaggioDiv = document.getElementById('tagsViaggio');
+        tagsViaggioDiv.innerHTML = '';  // Pulisci eventuali contenuti precedenti
+        if (viaggio.tagDTOs && viaggio.tagDTOs.length > 0) {
+            viaggio.tagDTOs.forEach(tag => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'badge badge-primary';  // Aggiungi classi di stile se necessario
+                tagElement.textContent = tag.tipoTag;
+                tagsViaggioDiv.appendChild(tagElement);
+            });
+        } else {
+            console.log("Nessun tag trovato per il viaggio con ID:", viaggio.viaggioId);
+        }
+
+        // Mostra i partecipanti del viaggio
+        const listaPartecipanti = document.getElementById('listaPartecipanti');
+        listaPartecipanti.innerHTML = '';  // Pulisci eventuali contenuti precedenti
+        if (viaggio.partecipanti && viaggio.partecipanti.length > 0) {
+            viaggio.partecipanti.forEach(partecipante => {
+                const partecipanteItem = document.createElement('li');
+                partecipanteItem.className = 'list-group-item';
+                partecipanteItem.textContent = `${partecipante.nome} ${partecipante.cognome}`;
+                listaPartecipanti.appendChild(partecipanteItem);
+            });
+        } else {
+            console.log("Nessun partecipante disponibile per il viaggio.");
+        }
+
+        // Mostra l'immagine di copertina
+        const copertinaImg = document.getElementById('immagineCopertina');
+        if (viaggio.immagineCopertina) {
+            copertinaImg.src = `data:image/jpeg;base64,${viaggio.immagineCopertina}`;
+            copertinaImg.alt = 'Copertina del viaggio';
+        } else {
+            console.log("Nessuna immagine di copertina trovata.");
+        }
+
+        // Mostra l'immagine del creatore
+        const immagineCreatore = document.getElementById('immagineCreatore');
+        if (viaggio.immagineProfiloCreatore) {
+            immagineCreatore.src = `data:image/jpeg;base64,${viaggio.immagineProfiloCreatore}`;
+            immagineCreatore.alt = 'Immagine profilo del creatore';
+        } else {
+            console.log("Nessuna immagine del creatore trovata.");
+        }
+
+        // Mostra il nome del creatore
+        document.getElementById('nomeCreatore').textContent = `${viaggio.nomeCreatore} ${viaggio.cognomeCreatore}`;
+        
+        aggiornaDettagliViaggio(viaggio);
+    }
+    
+    async function aggiornaPartecipanti(viaggioId) {
+        try {
+            // Effettua la richiesta per ottenere la lista aggiornata dei partecipanti
+            const response = await fetch(`/viaggio/${viaggioId}/partecipanti`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const partecipanti = await response.json();
+
+                // Pulisci la lista dei partecipanti nel DOM
+                const listaPartecipanti = document.getElementById('listaPartecipanti');
+                listaPartecipanti.innerHTML = '';  // Rimuove i partecipanti precedenti
+
+                if (partecipanti && partecipanti.length > 0) {
+                    // Aggiungi i nuovi partecipanti
+                    partecipanti.forEach(partecipante => {
+                        const partecipanteItem = document.createElement('li');
+                        partecipanteItem.className = 'list-group-item';
+                        partecipanteItem.textContent = `${partecipante.nome} ${partecipante.cognome}`;
+                        listaPartecipanti.appendChild(partecipanteItem);
+                    });
+                } else {
+                    console.log("Nessun partecipante disponibile per il viaggio.");
+                }
+            } else {
+                console.error("Errore nel caricamento dei partecipanti.");
+            }
+        } catch (error) {
+            console.error("Errore durante la richiesta:", error);
+        }
+    }
+
+    function setFormAction(viaggioId) {
+        const form = document.getElementById('iscrivitiForm');
+        form.action = `/api/viaggi/iscriviti/${viaggioId}`;
+    }
+
+    async function iscrivitiAlViaggio(viaggioId) {
+        setFormAction(viaggioId);
+        console.log('Id viaggio inviato per l iscrizione: ' + viaggioId);
+        try {
+            const response = await fetch(`/api/viaggi/iscriviti/${viaggioId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+            	aggiornaPartecipanti(viaggioId);
+                alert('Iscrizione avvenuta con successo!');     
+            } else {
+                alert('Errore durante l\'iscrizione');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+            alert('Si è verificato un errore');
+        }
+    }
+
+    // Aggiungi l'evento al form solo dopo che il viaggioId è stato recuperato
+    document.getElementById('iscrivitiForm').addEventListener('submit', function(event) {
+        event.preventDefault();  // Evita il submit del form nativo
+        if (viaggioId) {
+            iscrivitiAlViaggio(viaggioId);
+        } else {
+            console.error('Errore: Viaggio ID non disponibile.');
+        }
+    });
+    
+    async function annullaViaggio(viaggioId) {
+        setFormAction(viaggioId);
+        console.log('Id viaggio inviato per l annullamento: ' + viaggioId);
+        try {
+            const response = await fetch(`/api/viaggi/annulla/${viaggioId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+            	aggiornaPartecipanti(viaggioId);
+                alert('Annullamento avvenuta con successo!');     
+            } else {
+                alert('Errore durante l\'annullamento');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+            alert('Si è verificato un errore');
+        }
+    }
+    
+    async function modificaViaggio(viaggioId) {
+        setFormAction(viaggioId);
+        console.log('Id viaggio inviato per l annullamento: ' + viaggioId);
+        try {
+            const response = await fetch(`/api/viaggi/modifica/${viaggioId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+            	aggiornaPartecipanti(viaggioId);
+                alert('Annullamento avvenuta con successo!');     
+            } else {
+                alert('Errore durante l\'annullamento');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+            alert('Si è verificato un errore');
+        }
+    }
+    
+        // Aggiungi l'evento per il pulsante di modifica
+        document.getElementById('modificaBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita il comportamento predefinito del form
+            if (viaggioId) {
+                modificaViaggio(viaggioId); // Funzione per modificare il viaggio
+            } else {
+                console.error('Errore: Viaggio ID non disponibile per la modifica.');
+            }
+        });
+
+        // Aggiungi l'evento per il pulsante di annullamento
+        document.getElementById('annullaBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita il comportamento predefinito del form
+            if (viaggioId) {
+                annullaViaggio(viaggioId); // Funzione per annullare il viaggio
+            } else {
+                console.error('Errore: Viaggio ID non disponibile per l\'annullamento.');
+            }
+        });
+
+    // Carica i dettagli del viaggio quando la pagina viene caricata
+    if (viaggioId) {
+        caricaDettagliViaggio(viaggioId);  // Chiamata per caricare i dettagli del viaggio
+    } else {
+        console.error('Errore: Viaggio ID non disponibile.');
+    }
+    
+    async function bottoneIscrizioneViaggio(viaggioId, creatoreId) {
+    	console.log('viaggioId ricevuto da aggiorna bottone ' + viaggioId);
+        try {
+            // Effettua la richiesta al server per ottenere l'ID dell'utente loggato
+            const response = await fetch(`/api/utente/session`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const utenteLoggato = await response.json();  // Ottieni l'ID dell'utente loggato dal server
+
+                console.log('ID utente loggato:', utenteLoggato);
+                console.log('ID creatore del viaggio:', creatoreId);
+
+                // Confronta gli ID convertendo entrambi in numeri (se necessario)
+                if (parseInt(utenteLoggato) === parseInt(creatoreId)) {
+                    // Nascondi il pulsante di iscrizione se l'utente è il creatore
+                    document.getElementById('iscrivitiBtn').style.display = 'none';
+                    // Mostra i pulsanti del creatore
+                    document.getElementById('pulsantiCreatore').style.display = 'block';
+                    document.getElementById('ChatDelViaggio').style.display = 'block';
+                } else {
+                	
+                    // Mostra il pulsante di iscrizione se l'utente non è il creatore
+                    document.getElementById('iscrivitiBtn').style.display = 'block';
+                    // Nascondi i pulsanti del creatore
+                    document.getElementById('pulsantiCreatore').style.display = 'none';
+                    console.log('controllo iscrizione con viaggioId:', viaggioId);
+                    // Passa correttamente viaggioId alla funzione verificaIscrizioneUtente
+                    verificaIscrizioneUtente(viaggioId, utenteLoggato);
+                }
+            } else {
+                console.error('Errore nel recupero della sessione utente');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+        }
+    }
+    
+    async function verificaIscrizioneUtente(viaggioId, utenteLoggato) {
+        try {
+            const response = await fetch(`/viaggio/${viaggioId}/partecipanti`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const partecipanti = await response.json();
+                
+                // Aggiungi un log per vedere i dati dei partecipanti
+                console.log('Partecipanti ricevuti:', partecipanti);
+                console.log('Utente loggato:', utenteLoggato);
+
+                // Confronta gli ID convertendoli in numeri
+                const isUtenteIscritto = partecipanti.some(partecipante => parseInt(partecipante.utenteId) === parseInt(utenteLoggato));
+
+                if (isUtenteIscritto) {
+                    console.log('Utente iscritto');
+                    document.getElementById('iscrivitiBtn').style.display = 'none';
+                    document.getElementById('annullaIscrizioneBtn').style.display = 'block';
+                    document.getElementById('ChatDelViaggio').style.display = 'block';
+                    document.getElementById('recensioneForm').style.display = 'block';
+                } else {
+                    console.log('Utente non iscritto');
+                    document.getElementById('iscrivitiBtn').style.display = 'block';
+                    document.getElementById('annullaIscrizioneBtn').style.display = 'none';
+                    document.getElementById('ChatDelViaggio').style.display = 'none';
+                    document.getElementById('recensioneForm').style.display = 'none';
+                }
+            } else {
+                console.error('Errore nel caricamento dei partecipanti.');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+        }
+    }
+    
+    async function caricaMessaggio(viaggioId) {
+        try {
+            const response = await fetch(`/carica/messaggi/${viaggioId}`);
+            
+            // Verifica se la risposta è valida
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Errore nel caricamento dei messaggi: ${errorText}`);
+            }
+
+            // Prova a convertire la risposta in JSON
+            const messaggi = await response.json();
+            const container = document.getElementById('messaggioContainer');
+
+            // Azzera il contenuto del container prima di caricare i nuovi messaggi
+            container.innerHTML = '';
+
+            // Itera sui messaggi
+            for (let messaggio of messaggi) {
+                console.log("Id immagine messaggio: " + messaggio.immagineId);
+                const messaggioCard = await createMessaggioCard(messaggio);
+                container.innerHTML += messaggioCard;
+            }
+        } catch (error) {
+            console.error("Errore nel caricamento dei messaggi:", error);
+        }
+    }
+
+    // Funzione per creare una card di Bootstrap per un messaggio
+    async function createMessaggioCard(messaggio) {
+    	
+        // Formatta la data in maniera più leggibile (es. dd/mm/yyyy)
+        const dataInvio = new Date(messaggio.data).toLocaleString('it-IT', {
+    		day: '2-digit',
+    		month: '2-digit',
+    		year: 'numeric',
+    		hour: '2-digit',
+    		minute: '2-digit',
+		});
+        
+        let utenteNome = 'Anonimo';  // Default se non troviamo l'utente
+
+        // Se utenteId esiste, fai una chiamata per ottenere i dettagli dell'utente
+        if (messaggio.utenteId) {
+            try {
+                // Correggi l'interpolazione dell'URL con i backtick
+                const response = await fetch(`/api/utente/nome/${messaggio.utenteId}`);
+                const utente = await response.json();
+                utenteNome = utente.nome ? utente.nome : 'Anonimo';  // Verifica se l'utente ha un nome
+                utenteCognome = utente.cognome ? utente.cognome : '';  // Verifica se l'utente ha un cognome
+            } catch (error) {
+                console.error('Errore nel recupero dei dati dell\'utente', error);
+            }
+        }
+        
+        let immagineHTML = '';
+        if (messaggio.immagineId) {
+            immagineHTML = `<img src="/api/immagini/immagine/${messaggio.immagineId}" class="card-img-top" alt="Immagine messaggio">`;
+        } else {
+            // Opzionale: Aggiungi un'immagine di default o lascia vuoto
+            immagineHTML = `<p class="text-muted">Nessuna immagine disponibile</p>`;
+        }
+
+        // Crea la card HTML per il messaggio
+        return `
+            <div class="col-md-4">
+                <div class="card mb-4">
+                <img src="/api/immagini/utente/profilo/${messaggio.utenteId}" class="card-img-top" alt="Immagine profilo utente">
+                    <div class="card-body">
+                    <h5 class="card-title">${utenteNome} ${utenteCognome}</h5>
+                        <p class="card-text">
+                            ${messaggio.testo} <br>
+                            ${immagineHTML} <br>
+                            Data: ${dataInvio} <br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+ 
+ 	caricaMessaggio(viaggioId);
+ 	
+ 	document.getElementById('messaggioForm').addEventListener('submit', async function(event) {
+ 	    event.preventDefault();  // Previene il comportamento predefinito del form (il refresh della pagina)
+
+ 	    const form = document.getElementById('messaggioForm');
+ 	    const formData = new FormData(form);
+
+ 	    // Dati del messaggio
+ 	    const messaggioDTO = {
+ 	        testo: formData.get('testo'),
+ 	        viaggioId: viaggioId
+ 	    };
+
+ 	    // Aggiungi messaggioDTO come JSON nel FormData
+ 	    formData.append('messaggioDTO', new Blob([JSON.stringify(messaggioDTO)], {
+ 	        type: 'application/json'
+ 	    }));
+
+ 	    try {
+ 	        const response = await fetch('/crea/messaggio', {
+ 	            method: 'POST',
+ 	            body: formData
+ 	        });
+
+ 	        const result = await response.json();
+ 	        if (response.ok) {
+ 	            document.getElementById('result').innerText = 'Messaggio inviato con successo!';
+ 	            caricaMessaggio(viaggioId);
+ 	        } else {
+ 	            document.getElementById('result').innerText = 'Errore: ' + result.error;
+ 	        }
+ 	    } catch (error) {
+ 	        document.getElementById('result').innerText = 'Errore nella richiesta: ' + error;
+ 	    }
+ 	});
+ 	
+ 	document.getElementById('recensioneForm').addEventListener('submit', function(event) {
+ 	    event.preventDefault(); // Impedisce il comportamento predefinito del form
+
+ 	    const testo = document.getElementById('testoRecensione').value;
+ 	    const rating = document.querySelector('input[name="rating"]:checked').value;
+
+ 	    // Crea l'oggetto recensioneDTO che verrà inviato al controller
+ 	    const recensioneDTO = {
+ 	        testo: testo,
+ 	        rating: rating,
+ 	        viaggioId: viaggioId
+ 	    };
+
+ 	    // Invia i dati via AJAX con l'intestazione 'application/json'
+ 	    fetch('/recensione/crea', {
+ 	        method: 'POST',
+ 	        headers: {
+ 	            'Content-Type': 'application/json'
+ 	        },
+ 	        body: JSON.stringify(recensioneDTO) // Serializza l'oggetto recensioneDTO in JSON
+ 	    })
+ 	    .then(response => response.json())
+ 	    .then(data => {
+ 	        console.log(data); // Visualizza la risposta del server
+ 	        alert('Recensione inviata con successo!');
+ 	        caricaRecensioni(viaggioId);
+ 	    })
+ 	    .catch(error => console.error('Errore:', error));
+ 	});
+ 	
+ 	document.getElementById('mostraRecensioni').addEventListener('click', function() {
+ 		
+ 	    fetch(`/recensione/viaggio/${viaggioId}`)
+ 	    .then(response => response.json())
+ 	    .then(data => {
+ 	        const recensioniContainer = document.getElementById('recensioniContainer');
+ 	        recensioniContainer.innerHTML = '';
+
+ 	        if (data.length === 0) {
+ 	            recensioniContainer.innerHTML = '<p>Non ci sono recensioni per questo viaggio.</p>';
+ 	        } else {
+ 	        // Usa for...of per iterare sugli oggetti asincroni
+ 	           for (let messaggio of messaggi) {
+ 	               const messaggioCard = createMessaggioCard(messaggio);  // Attendi che la card venga creata
+ 	               container.innerHTML += messaggioCard;  // Aggiungi la card al container
+ 	           }
+ 	        }
+ 	    })
+ 	    .catch(error => console.error('Errore nel recuperare le recensioni:', error));
+ 	});
+ 	
+ 	document.getElementById('mostraRecensioni').addEventListener('click', function() {
+ 		console.log(viaggioId)
+ 	    // Chiama la funzione per caricare le recensioni, passando il viaggioId
+ 	    caricaRecensioni(viaggioId);
+ 	});
+ 	
+ 	async function caricaRecensioni(viaggioId) {
+ 	    try {
+ 	        const response = await fetch(`/recensione/viaggio/${viaggioId}`);
+ 	        const recensioni = await response.json();
+ 	        const recensioniContainer = document.getElementById('recensioneContainer');
+ 	        recensioniContainer.innerHTML = '';  // Pulisce il contenitore precedente
+
+ 	        if (recensioni.length === 0) {
+ 	            recensioniContainer.innerHTML = '<p>Non ci sono recensioni per questo viaggio.</p>';
+ 	        } else {
+ 	            for (let recensione of recensioni) {
+ 	                const cardHTML = await creaCardRecensione(recensione);
+ 	                recensioniContainer.innerHTML += cardHTML;  // Inserisce ogni card nel contenitore
+ 	            }
+ 	        }
+ 	    } catch (error) {
+ 	        console.error("Errore nel caricamento delle recensioni", error);
+ 	    }
+ 	}
+ 	
+ 	async function creaCardRecensione(recensione) {
+ 		
+ 		const dataInvio = new Date(recensione.data).toLocaleString('it-IT', {
+    		day: '2-digit',
+    		month: '2-digit',
+    		year: 'numeric'
+		});
+ 		
+ 		if (recensione.utenteId) {
+            try {
+                // Correggi l'interpolazione dell'URL con i backtick
+                const response = await fetch(`/api/utente/nome/${recensione.utenteId}`);
+                const utente = await response.json();
+                utenteNome = utente.nome ? utente.nome : 'Anonimo';  // Verifica se l'utente ha un nome
+                utenteCognome = utente.cognome ? utente.cognome : '';  // Verifica se l'utente ha un cognome
+            } catch (error) {
+                console.error('Errore nel recupero dei dati dell\'utente', error);
+            }
+        }
+ 		
+ 	    return `
+ 	        <div class="col-md-4">
+ 	            <div class="card mb-4">
+ 	                <img src="/api/immagini/utente/profilo/${recensione.utenteId}" class="card-img-top" alt="Immagine profilo utente">
+ 	                <div class="card-body">
+ 	                    <h5 class="card-title">${utenteNome} ${utenteCognome}</h5>
+ 	                    <p class="card-text">
+ 	                        ${recensione.testo} <br>
+ 	                        Rating: ${recensione.rating} <br>
+ 	                        <small class="text-muted">Data: ${dataInvio}</small>
+ 	                    </p>
+ 	                </div>
+ 	            </div>
+ 	        </div>
+ 	    `;
+ 	}
+
+</script>
+
+</body>
+</html>
