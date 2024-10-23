@@ -37,5 +37,11 @@ public class Notifica {
 	public void setData(Date data) {
 		this.data = data;
 	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 }

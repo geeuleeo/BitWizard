@@ -1,5 +1,7 @@
 package com.wizard.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,11 +18,20 @@ public class ViaggioTag {
 
     @ManyToOne
     @JoinColumn(name = "viaggio_id", nullable = false)
+    @JsonIgnore
     private Viaggio viaggio;
 
     @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false)
+    @JsonIgnore
     private Tag tag;
+    
+    public ViaggioTag() {}
+
+    public ViaggioTag(Viaggio viaggio, Tag tag) {
+        this.viaggio = viaggio;
+        this.tag = tag;
+    }
 
 	public Long getId() {
 		return id;

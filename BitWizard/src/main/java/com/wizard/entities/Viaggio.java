@@ -1,6 +1,5 @@
 package com.wizard.entities;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -99,7 +98,7 @@ public class Viaggio {
 	
     @OneToMany(mappedBy = "viaggio", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
     @JsonIgnore
-    private List<ViaggioTag> viaggioTags = new ArrayList<>();
+    private Set<ViaggioTag> viaggioTags = new HashSet<>();
 	
 	public Set<PartecipantiViaggio> getPartecipanti() {
 		return partecipanti;
@@ -215,11 +214,11 @@ public class Viaggio {
 	public void setImmagineCopertina(Immagine immagineCopertina) {
 		this.immagineCopertina = immagineCopertina;
 	}
-	public List<ViaggioTag> getViaggioTags() {
+	public Set<ViaggioTag> getViaggioTags() {
 		return viaggioTags;
 	}
-	public void setViaggioTags(List<ViaggioTag> viaggioTags) {
-		this.viaggioTags = viaggioTags;
+	public void setViaggioTags(Set<ViaggioTag> nuoviTags) {
+		this.viaggioTags = nuoviTags;
 	}
 	
 	public void addPartecipante(PartecipantiViaggio partecipante) {

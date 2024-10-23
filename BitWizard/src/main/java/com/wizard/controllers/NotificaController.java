@@ -51,13 +51,19 @@ public class NotificaController {
 	}
 	
 	@GetMapping("/notifica/cerca")
-	public List<Notifica> getNotifiche(HttpSession session) {
+	public List<NotificaDTO> getNotifiche(HttpSession session) {
 		
 		Utente utente = (Utente) session.getAttribute("utenteLoggato");
 		
 		List<Notifica> notifiche = notificaDAO.findNotificaByUtenteId(utente.getUtenteId());
 		
-		return notifiche;
+		List<NotificaDTO> notificheDTO = new ArrayList<NotificaDTO>();
+		
+		for (Notifica notifica : notifiche) {
+			notificheDTO.add(createDTOFromNotifica(notifica));
+		}
+		
+		return notificheDTO;
 	}
 	
     private Notifica createNotificaFromDTO(NotificaDTO notificaDTO) {
@@ -69,12 +75,13 @@ public class NotificaController {
         return notifica;
     }
     
-    private List<NotificaDTO> createDTOFromNotifica(List<Notifica> notifica){
-    	List<NotificaDTO> notificaDTO = new ArrayList<NotificaDTO>();
+    private NotificaDTO createDTOFromNotifica(Notifica notifica){
+    	NotificaDTO notificaDTO = new NotificaDTO();
     	
-    	for (NotificaDTO notificaDTO2 : notificaDTO) {
-			notificaDTO2.setNotificaId(notifica.get);
-		}
+		notificaDTO.setNotificaId(notifica.getId());
+		notificaDTO.setTesto(notifica.getTesto());
+		notificaDTO.setData(notifica.getData());
+		notifica.setUtenteId(notifica.getUtenteId());
     	
     	return notificaDTO;
     }

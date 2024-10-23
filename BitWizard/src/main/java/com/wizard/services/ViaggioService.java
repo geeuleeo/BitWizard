@@ -32,5 +32,7 @@ public interface ViaggioService {
 	List<ViaggioDTO> findViaggiByCreatore(Long creatoreId);
 
 	List<ViaggioDTO> getAllViaggi();
+
+	Viaggio salvaEaggiornaViaggio(Viaggio viaggio, List<TagDTO> tagDTOs);
 	
 }

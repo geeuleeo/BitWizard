@@ -355,37 +355,21 @@
     }
     
     async function modificaViaggio(viaggioId) {
-        setFormAction(viaggioId);
-        console.log('Id viaggio inviato per l annullamento: ' + viaggioId);
-        try {
-            const response = await fetch(`/api/viaggi/modifica/${viaggioId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-            	aggiornaPartecipanti(viaggioId);
-                alert('Annullamento avvenuta con successo!');     
-            } else {
-                alert('Errore durante l\'annullamento');
-            }
-        } catch (error) {
-            console.error('Errore durante la richiesta:', error);
-            alert('Si è verificato un errore');
-        }
+        // Reindirizza l'utente alla pagina di modifica del viaggio
+        window.location.href = `/ModificaViaggio?viaggioId=${viaggioId}`;
     }
-    
-        // Aggiungi l'evento per il pulsante di modifica
-        document.getElementById('modificaBtn').addEventListener('click', function(event) {
-            event.preventDefault(); // Evita il comportamento predefinito del form
-            if (viaggioId) {
-                modificaViaggio(viaggioId); // Funzione per modificare il viaggio
-            } else {
-                console.error('Errore: Viaggio ID non disponibile per la modifica.');
-            }
-        });
+
+    document.getElementById('modificaBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Evita il comportamento predefinito del form
+        
+        console.log("id del viaggio da modificare: " + viaggioId)
+
+        if (viaggioId) {
+            modificaViaggio(viaggioId); // Funzione per reindirizzare l'utente alla pagina di modifica
+        } else {
+            console.error('Errore: Viaggio ID non disponibile per la modifica.');
+        }
+    });
 
         // Aggiungi l'evento per il pulsante di annullamento
         document.getElementById('annullaBtn').addEventListener('click', function(event) {
