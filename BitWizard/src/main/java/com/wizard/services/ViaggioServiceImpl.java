@@ -109,19 +109,20 @@ public class ViaggioServiceImpl implements ViaggioService {
 	            viaggioTagDAO.save(viaggioTag);
 	        }
 	    }
-
+	    
 	    Optional<Utente> creatoreOptional = utenteDAO.findById(viaggio.getCreatoreId());
 	    if (creatoreOptional.isPresent()) {
-	        Utente creatore = creatoreOptional.get();
+	    	if (viaggio.getPartecipanti() == null || viaggio.getPartecipanti().isEmpty()) {
+	    		Utente creatore = creatoreOptional.get();
 
-	        // Crea o recupera il partecipante
-	        PartecipantiViaggio partecipante = addPartecipanteViaggio(creatore, viaggioSalvato);
+	    		// Crea o recupera il partecipante
+	    		PartecipantiViaggio partecipante = addPartecipanteViaggio(creatore, viaggioSalvato);
 
-	        // Aggiorna la lista dei partecipanti nel viaggio
-	        Set<PartecipantiViaggio> partecipanti = new HashSet<>(viaggioSalvato.getPartecipanti());
-	        partecipanti.add(partecipante);
-	        viaggioSalvato.setPartecipanti(partecipanti);
-	        
+	    		// Aggiorna la lista dei partecipanti nel viaggio
+	    		Set<PartecipantiViaggio> partecipanti = new HashSet<>(viaggioSalvato.getPartecipanti());
+	    		partecipanti.add(partecipante);
+	    		viaggioSalvato.setPartecipanti(partecipanti);
+	    	}
 	        // Aggiorna il viaggio
 	        Viaggio risultatoFinale = dao.save(viaggioSalvato);
 
@@ -129,6 +130,51 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    } else {
 	        throw new IllegalArgumentException("Creatore con ID " + viaggio.getCreatoreId() + " non trovato.");
 	    }
+	}
+	
+	@Transactional
+	public Viaggio aggiornaViaggioTags(Long viaggioId, List<TagDTO> nuoviTagDTOs) {
+	    // Trova il viaggio esistente
+	    Viaggio viaggio = dao.findById(viaggioId)
+	        .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
+
+	    // Ottieni la collezione attuale di viaggioTags
+	    Set<ViaggioTag> viaggioTagsEsistenti = viaggio.getViaggioTags();
+
+	    // Rimuovi i tag non più presenti
+	    viaggioTagsEsistenti.removeIf(vt -> 
+	        nuoviTagDTOs.stream().noneMatch(tagDTO -> tagDTO.getTagId().equals(vt.getTag().getTagId()))
+	    );
+
+	    // Aggiungi i nuovi tag che non sono già presenti
+	    for (TagDTO tagDTO : nuoviTagDTOs) {
+	        boolean tagPresente = viaggioTagsEsistenti.stream()
+	            .anyMatch(vt -> vt.getTag().getTagId().equals(tagDTO.getTagId()));
+
+	        if (!tagPresente) {
+	            Tag tag = tagDAO.findById(tagDTO.getTagId())
+	                .orElseThrow(() -> new IllegalArgumentException("Tag non trovato"));
+	            ViaggioTag nuovoViaggioTag = new ViaggioTag(viaggio, tag);
+	            viaggioTagsEsistenti.add(nuovoViaggioTag);
+	        }
+	    }
+
+	    // Non sostituire l'intera collezione, Hibernate gestirà gli orfani correttamente
+	    viaggio.setViaggioTags(viaggioTagsEsistenti);
+
+	    // Salva il viaggio con i tag aggiornati
+	    return dao.save(viaggio);
+	}
+	
+	@Transactional
+	public Viaggio salvaEaggiornaViaggio(Viaggio viaggio, List<TagDTO> tagDTOs) {
+	    // Salva il viaggio (senza tag)
+	    Viaggio viaggioSalvato = salvaViaggio(viaggio, null);
+	    
+	    // Aggiorna i tag del viaggio
+	    aggiornaViaggioTags(viaggioSalvato.getViaggioId(), tagDTOs);
+	    
+	    return viaggioSalvato;
 	}
 	
 	@Override

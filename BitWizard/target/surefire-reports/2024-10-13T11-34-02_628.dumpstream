@@ -1,5 +1,0 @@
-# Created at 2024-10-13T11:34:03.132
-Boot Manifest-JAR contains absolute paths in classpath 'Z:\BitWizard\BitWizard\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' has different root
-

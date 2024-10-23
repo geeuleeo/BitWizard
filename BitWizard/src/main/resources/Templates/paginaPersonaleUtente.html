@@ -131,7 +131,7 @@
             notifiche.forEach(notifica => {
                 const cardHtml = createNotificaCard(notifica);
                 container.insertAdjacentHTML('beforeend', cardHtml);
-                console.log(parseInt(notifica.id));
+                console.log(parseInt(notifica.notificaId));
             });
         }
 
@@ -180,7 +180,7 @@
                                 ${notifica.testo} <br>
                                 Data: ${dataInvio}
                             </p>
-                            <button data-id="${notifica.id}" class="btn btn-primary cancella-notifica">Segna come letto</button>
+                            <button data-id="${notifica.notificaId}" class="btn btn-primary cancella-notifica">Segna come letto</button>
                         </div>
                     </div>
                 </div>

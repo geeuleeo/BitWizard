@@ -107,6 +107,11 @@ public class HomeController {
         return "CreaViaggio";
     }
     
+    @GetMapping("/ModificaViaggio")
+    public String showModificaViaggioPage() {
+        return "ModificaViaggio";
+    }
+    
     @GetMapping("/registrazione")
     public String showSignupPage() {
         return "registrazione";

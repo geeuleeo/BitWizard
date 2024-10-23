@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifica Viaggio</title>
+        <style>
+        #availableTags, #selectedTags {
+            width: 45%;
+            float: left;
+            border: 1px solid black;
+            min-height: 100px;
+            padding: 10px;
+            margin: 10px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            background-color: lightblue;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .img-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="formTitle">Modifica il tuo viaggio</h1>
+    <form id="creaViaggioForm" enctype="multipart/form-data" onsubmit="event.preventDefault(); inviaForm();">
+        <input type="hidden" id="viaggioId" name="viaggioId"> <!-- Campo nascosto per ID del viaggio in caso di modifica -->
+
+        <label for="nome">Nome del Viaggio:</label>
+        <input type="text" id="nome" name="nome" required><br><br>
+
+        <label for="luogoPartenza">Luogo di Partenza:</label>
+        <input type="text" id="luogoPartenza" name="luogoPartenza" required><br><br>
+
+        <label for="luogoArrivo">Luogo di Arrivo:</label>
+        <input type="text" id="luogoArrivo" name="luogoArrivo" required><br><br>
+
+        <label for="dataPartenza">Data di Partenza:</label>
+        <input type="date" id="dataPartenza" name="dataPartenza" required><br><br>
+
+        <label for="dataRitorno">Data di Ritorno:</label>
+        <input type="date" id="dataRitorno" name="dataRitorno" required><br><br>
+
+        <label for="dataScadenza">Data di Scadenza Iscrizione:</label>
+        <input type="date" id="dataScadenza" name="dataScadenza" required><br><br>
+
+        <label for="numPartMin">Numero di Partecipanti Minimo:</label>
+        <input type="number" id="numPartMin" name="numPartMin" required><br><br>
+
+        <label for="numPartMax">Numero di Partecipanti Massimo:</label>
+        <input type="number" id="numPartMax" name="numPartMax" required><br><br>
+
+        <label for="prezzo">Prezzo (€):</label>
+        <input type="number" step="0.01" id="prezzo" name="prezzo" required><br><br>
+
+        <label for="etaMin">Età Minima:</label>
+        <input type="number" id="etaMin" name="etaMin" required><br><br>
+
+        <label for="etaMax">Età Massima:</label>
+        <input type="number" id="etaMax" name="etaMax" required><br><br>
+
+        <h3>Seleziona i tuoi tag</h3>
+        <div id="availableTags">
+            <h4>Tag disponibili</h4>
+        </div>
+        <div id="selectedTags">
+            <h4>Tag selezionati</h4>
+        </div>
+
+        <label for="immagineCopertina">Immagine Copertina del Viaggio:</label>
+        <input type="file" id="immagineCopertina" name="immagineCopertina" accept="image/*"><br><br>
+        <div id="copertinaPreview"></div>
+
+        <label for="immagini">Immagini del Viaggio:</label>
+        <input type="file" id="immagini" name="immagini" accept="image/*" onchange="handleImages()"><br><br>
+        <div id="copertinaPreview"></div>
+
+        <div id="previewContainer"></div>
+
+        <input type="submit" id="submitButton" value="Crea Viaggio">
+    </form>
+    
+    <button id="pulsantePaginaPersonale" onclick="location.href='/paginaPersonale'">Vai alla tua area Personale</button>
+    
+    <div id="feedbackMessage" style="display: none; color: green;"></div>
+
+<script>
+
+	const urlParams = new URLSearchParams(window.location.search);
+	const viaggioId = urlParams.get('viaggioId');
+	console.log(viaggioId);
+
+    document.addEventListener("DOMContentLoaded", function() {
+        if (!window.viaggioDatiCaricati) {
+            window.viaggioDatiCaricati = true; // Flag per segnare che i dati sono già stati caricati
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const viaggioId = urlParams.get('viaggioId');
+            caricaDatiViaggio(viaggioId);
+        }
+    });
+
+    // Funzione per caricare i dati del viaggio da modificare
+    function caricaDatiViaggio(viaggioId) {
+        fetch(`/viaggio/${viaggioId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Popola i campi del form
+                document.getElementById("viaggioId").value = viaggioId;
+                document.getElementById("nome").value = data.nome;
+                document.getElementById("luogoPartenza").value = data.luogoPartenza;
+                document.getElementById("luogoArrivo").value = data.luogoArrivo;
+                document.getElementById("dataPartenza").value = data.dataPartenza;
+                document.getElementById("dataRitorno").value = data.dataRitorno;
+                document.getElementById("dataScadenza").value = data.dataScadenza;
+                document.getElementById("numPartMin").value = data.numPartMin;
+                document.getElementById("numPartMax").value = data.numPartMax;
+                document.getElementById("prezzo").value = data.prezzo;
+                document.getElementById("etaMin").value = data.etaMin;
+                document.getElementById("etaMax").value = data.etaMax;
+
+                // Recupera i tag del viaggio
+                const viaggiotags = data.tagDTOs;
+                console.log("Tag associati al viaggio:", viaggiotags);
+
+                // Carica i tag disponibili e poi visualizzali
+                getTags().then(tags => displayTags(tags, viaggiotags));
+            })
+            .catch(error => console.error('Errore nel caricamento dei dati del viaggio:', error));
+    }
+
+    // Funzione per recuperare tutti i tag disponibili
+    async function getTags() {
+        const response = await fetch('/api/tags/cerca');
+        const tags = await response.json();
+        console.log("Tag ricevuti dal backend:", tags);
+        return tags;
+    }
+
+    // Funzione per visualizzare i tag nelle sezioni corrette
+    function displayTags(tags, viaggiotags) {
+        const availableTagsDiv = document.getElementById('availableTags');
+        const selectedTagsDiv = document.getElementById('selectedTags');
+
+        // Svuota i contenitori prima di popolarli
+        availableTagsDiv.innerHTML = '';
+        selectedTagsDiv.innerHTML = '';
+
+        const selectedTagIds = new Set(viaggiotags.map(tag => tag.tagId));
+
+        // Visualizza i tag selezionati
+        viaggiotags.forEach(tag => {
+            const tagElement = document.createElement('div');
+            tagElement.textContent = tag.tipoTag;
+            tagElement.className = 'tag';
+            tagElement.setAttribute('data-tag-id', tag.tagId);
+            tagElement.onclick = () => deselectTag(tagElement);
+            selectedTagsDiv.appendChild(tagElement);
+        });
+
+        // Visualizza solo i tag disponibili non già selezionati
+        tags.forEach(tag => {
+            if (!selectedTagIds.has(tag.tagId)) {
+                const tagElement = document.createElement('div');
+                tagElement.textContent = tag.tipoTag;
+                tagElement.className = 'tag';
+                tagElement.setAttribute('data-tag-id', tag.tagId);
+                tagElement.onclick = () => selectTag(tagElement);
+                availableTagsDiv.appendChild(tagElement);
+            }
+        });
+    }
+
+    // Funzione per selezionare un tag (spostarlo da availableTags a selectedTags)
+    function selectTag(tagElement) {
+        const selectedTagsDiv = document.getElementById('selectedTags');
+        tagElement.remove();
+        const clonedTag = tagElement.cloneNode(true);
+        clonedTag.onclick = () => deselectTag(clonedTag);
+        selectedTagsDiv.appendChild(clonedTag);
+    }
+
+    // Funzione per deselezionare un tag (spostarlo da selectedTags a availableTags)
+    function deselectTag(tagElement) {
+        const availableTagsDiv = document.getElementById('availableTags');
+        tagElement.remove();
+        const clonedTag = tagElement.cloneNode(true);
+        clonedTag.onclick = () => selectTag(clonedTag);
+        availableTagsDiv.appendChild(clonedTag);
+    }
+
+    // Aggiungi i tag selezionati al FormData
+    function appendTagsToFormData(formData) {
+        const selectedTagsDiv = document.getElementById('selectedTags');
+        const tagElements = selectedTagsDiv.getElementsByClassName('tag');
+        for (let i = 0; i < tagElements.length; i++) {
+            const tagElement = tagElements[i];
+            const tagId = tagElement.getAttribute('data-tag-id');
+            const tagName = tagElement.textContent;
+            if (tagId && tagName) {
+                formData.append(`tags[${i}][tagId]`, tagId);
+                formData.append(`tags[${i}][tipoTag]`, tagName);
+            }
+        }
+    }
+
+    function getSelectedTags() {
+        const selectedTagsDiv = document.getElementById('selectedTags');
+        const tagElements = selectedTagsDiv.getElementsByClassName('tag');
+        const selectedTags = [];
+        for (let tagElement of tagElements) {
+            const tagId = tagElement.getAttribute('data-tag-id');
+            const tipoTag = tagElement.textContent;
+            if (tagId && tipoTag) {
+                selectedTags.push({ tagId: tagId, tipoTag: tipoTag });
+            }
+        }
+        console.log("Tag selezionati:", selectedTags);
+        return selectedTags;
+    }
+
+    function inviaForm() {
+        const form = document.getElementById('creaViaggioForm');
+        let formData = new FormData(form);
+        const viaggioDTO = {
+            nome: document.getElementById('nome').value,
+            luogoPartenza: document.getElementById('luogoPartenza').value,
+            luogoArrivo: document.getElementById('luogoArrivo').value,
+            dataPartenza: document.getElementById('dataPartenza').value,
+            dataRitorno: document.getElementById('dataRitorno').value,
+            dataScadenza: document.getElementById('dataScadenza').value,
+            numPartMin: document.getElementById('numPartMin').value,
+            numPartMax: document.getElementById('numPartMax').value,
+            prezzo: document.getElementById('prezzo').value,
+            etaMin: document.getElementById('etaMin').value,
+            etaMax: document.getElementById('etaMax').value,
+            tags: getSelectedTags()
+        };
+
+        // Aggiungi il viaggioDTO al formData come JSON
+        formData.append('viaggioDTO', new Blob([JSON.stringify(viaggioDTO)], { type: 'application/json' }));
+
+        // Aggiungi l'immagine di copertina, se presente
+        const immagineCopertina = document.getElementById('immagineCopertina').files[0];
+        if (immagineCopertina) {
+            formData.append('immagineCopertina', immagineCopertina);
+        }
+
+        // Aggiungi le immagini selezionate, se presenti
+        const selectedImages = document.getElementById('immagini').files;
+        if (selectedImages.length > 0) {
+            for (let file of selectedImages) {
+                formData.append('immagini', file);
+            }
+        }
+
+        // Log FormData entries
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+        }
+
+        // Invia i dati
+        inviaDati(formData);
+    }
+
+    function inviaDati(formData) {
+        fetch(`/api/viaggi/modifica/${viaggioId}`, {
+            method: 'PUT',
+            body: formData
+        })
+        .then(response => {
+            const feedbackMessage = document.getElementById('feedbackMessage');
+            if (response.ok) {
+                return response.json().then(data => {
+                    feedbackMessage.textContent = 'Viaggio modificato con successo!';
+                    feedbackMessage.style.color = 'green';
+                    feedbackMessage.style.display = 'block';
+                    return data;
+                });
+            } else {
+                return response.text().then(errorText => {
+                    feedbackMessage.textContent = 'Errore durante la modifica del viaggio: ' + errorText;
+                    feedbackMessage.style.color = 'red';
+                    feedbackMessage.style.display = 'block';
+                    throw new Error(errorText);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Errore:', error.message);
+            const feedbackMessage = document.getElementById('feedbackMessage');
+            feedbackMessage.textContent = 'Si è verificato un errore. Riprova più tardi.';
+            feedbackMessage.style.color = 'red';
+            feedbackMessage.style.display = 'block';
+        });
+    }
+</script>
+
+</body>
