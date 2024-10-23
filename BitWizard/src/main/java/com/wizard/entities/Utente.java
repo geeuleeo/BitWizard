@@ -1,8 +1,9 @@
 package com.wizard.entities;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -46,9 +47,9 @@ public class Utente {
     @JoinColumn(name = "immagine_id")
     private Immagine immagine;
     
-    @OneToMany(mappedBy = "utente", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
     @JsonIgnore
-    private List<UtenteTag> utenteTags = new ArrayList<>();
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UtenteTag> utenteTags = new HashSet<>();
 	
 	@ManyToOne
     @JoinColumn(name = "ruolo_id", nullable = false)
@@ -169,10 +170,10 @@ public class Utente {
 	public void setImmagine(Immagine immagine) {
 		this.immagine = immagine;
 	}
-	public List<UtenteTag> getUtenteTags() {
+	public Set<UtenteTag> getUtenteTags() {
 		return utenteTags;
 	}
-	public void setUtenteTags(List<UtenteTag> utenteTags) {
+	public void setUtenteTags(Set<UtenteTag> utenteTags) {
 		this.utenteTags = utenteTags;
 	}
 	

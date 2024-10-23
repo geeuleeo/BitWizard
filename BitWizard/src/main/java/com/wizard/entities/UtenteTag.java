@@ -1,5 +1,7 @@
 package com.wizard.entities;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +26,27 @@ public class UtenteTag {
     @ManyToOne(optional = false)
     @JoinColumn(name = "tag_id", nullable = false)
     private Tag tag;
+    
+    public UtenteTag() {}
+
+    public UtenteTag(Utente utente, Tag tag) {
+        this.utente = utente;
+        this.tag = tag;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UtenteTag that = (UtenteTag) o;
+        return Objects.equals(utente.getUtenteId(), that.utente.getUtenteId()) &&
+               Objects.equals(tag.getTagId(), that.tag.getTagId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(utente.getUtenteId(), tag.getTagId());
+    }
 
 	public Long getId() {
 		return id;

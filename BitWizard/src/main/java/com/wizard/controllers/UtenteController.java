@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +32,6 @@ import com.wizard.exceptions.EmailAlreadyExistsException;
 import com.wizard.exceptions.RuoloNotFoundException;
 import com.wizard.repos.ImmagineDAO;
 import com.wizard.repos.PartecipantiViaggioDAO;
-import com.wizard.repos.RecensioneDTO;
 import com.wizard.repos.RuoloDAO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.UtenteDTO;
@@ -95,6 +94,39 @@ public class UtenteController {
             
             Utente utenteSalvato = utenteService.salvaUtente(nuovoUtente, tagDTOs);
             return new ResponseEntity<>(utenteSalvato, HttpStatus.CREATED);
+
+        } catch (EmailAlreadyExistsException | RuoloNotFoundException e) {
+            // Restituisci un oggetto JSON di errore
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            // Restituisci un oggetto JSON di errore generico
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Errore nella creazione dell'utente");
+            errorResponse.put("message", e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PutMapping(value = "/modifica", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Transactional
+    public ResponseEntity<?> modificaUtente(
+            @RequestPart("utenteDTO") @Valid UtenteDTO utenteDTO,
+            @RequestPart(value = "imgProfilo", required = false) MultipartFile imgProfilo,
+            HttpSession session) {
+    	
+    	System.out.println(utenteDTO.getTags());
+
+        try {
+        	
+        	List<TagDTO> tagDTOs = utenteDTO.getTags();
+        	
+        	Utente utente = (Utente) session.getAttribute("utenteLoggato");
+
+        	UtenteDTO updatedUtente = utenteService.modificaUtente(utente.getUtenteId(), utenteDTO, tagDTOs);
+        	
+            return ResponseEntity.ok(updatedUtente);
 
         } catch (EmailAlreadyExistsException | RuoloNotFoundException e) {
             // Restituisci un oggetto JSON di errore
@@ -208,17 +240,8 @@ public class UtenteController {
     	
         Utente utente = utenteService.getUtente(session);
 
-        // Converte l'utente in un DTO
-        UtenteDTO utenteDTO = new UtenteDTO();
-        utenteDTO.setDataNascita(utente.getDataNascita());
-        utenteDTO.setNumeroTelefono(utente.getNumeroTelefono());
-        utenteDTO.setUtenteId(utente.getUtenteId());
-        utenteDTO.setNome(utente.getNome());
-        utenteDTO.setCognome(utente.getCognome());
-        utenteDTO.setEmail(utente.getEmail());
-        utenteDTO.setDescrizione(utente.getDescrizione());
-        utenteDTO.setImgProfilo(utente.getImmagine().getImg());
-
+        UtenteDTO utenteDTO = utenteService.getUtenteDTO(utente.getUtenteId());
+        
         return ResponseEntity.ok(utenteDTO);
     }
     

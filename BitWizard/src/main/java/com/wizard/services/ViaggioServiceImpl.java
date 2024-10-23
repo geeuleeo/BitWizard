@@ -187,24 +187,26 @@ public class ViaggioServiceImpl implements ViaggioService {
 
 	@Transactional
 	public Viaggio aggiornaViaggioTags(Long viaggioId, List<TagDTO> nuoviTagDTOs) {
-	    // Trova il viaggio esistente
+		
 	    Viaggio viaggio = dao.findById(viaggioId)
 	        .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
 
-	    // Ottieni la collezione attuale di viaggioTags
 	    Set<ViaggioTag> viaggioTagsEsistenti = viaggio.getViaggioTags();
 
-	    // Rimuovi i tag non più presenti
-	    viaggioTagsEsistenti.removeIf(vt -> 
-	        nuoviTagDTOs.stream().noneMatch(tagDTO -> tagDTO.getTagId().equals(vt.getTag().getTagId()))
-	    );
+	    // Identify tags to remove
+	    Set<ViaggioTag> tagsToRemove = viaggioTagsEsistenti.stream()
+	        .filter(vt -> nuoviTagDTOs.stream().noneMatch(tagDTO -> tagDTO.getTagId().equals(vt.getTag().getTagId())))
+	        .collect(Collectors.toSet());
 
-	    // Aggiungi i nuovi tag che non sono già presenti
+	    viaggioTagsEsistenti.removeAll(tagsToRemove);
+
+	    // Identify tags to add
+	    Set<Long> existingTagIds = viaggioTagsEsistenti.stream()
+	        .map(vt -> vt.getTag().getTagId())
+	        .collect(Collectors.toSet());
+
 	    for (TagDTO tagDTO : nuoviTagDTOs) {
-	        boolean tagPresente = viaggioTagsEsistenti.stream()
-	            .anyMatch(vt -> vt.getTag().getTagId().equals(tagDTO.getTagId()));
-
-	        if (!tagPresente) {
+	        if (!existingTagIds.contains(tagDTO.getTagId())) {
 	            Tag tag = tagDAO.findById(tagDTO.getTagId())
 	                .orElseThrow(() -> new IllegalArgumentException("Tag non trovato"));
 	            ViaggioTag nuovoViaggioTag = new ViaggioTag(viaggio, tag);
@@ -212,10 +214,7 @@ public class ViaggioServiceImpl implements ViaggioService {
 	        }
 	    }
 
-	    // Non sostituire l'intera collezione, Hibernate gestirà gli orfani correttamente
-	    viaggio.setViaggioTags(viaggioTagsEsistenti);
-
-	    // Salva il viaggio con i tag aggiornati
+	    // No need to set the collection again
 	    return dao.save(viaggio);
 	}
 	

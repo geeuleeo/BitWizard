@@ -1,5 +1,7 @@
 package com.wizard.entities;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -31,6 +33,20 @@ public class ViaggioTag {
     public ViaggioTag(Viaggio viaggio, Tag tag) {
         this.viaggio = viaggio;
         this.tag = tag;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ViaggioTag that = (ViaggioTag) o;
+        return Objects.equals(viaggio.getViaggioId(), that.viaggio.getViaggioId()) &&
+               Objects.equals(tag.getTagId(), that.tag.getTagId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(viaggio.getViaggioId(), tag.getTagId());
     }
 
 	public Long getId() {
