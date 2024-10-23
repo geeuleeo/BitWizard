@@ -4,15 +4,52 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="Push Agenzia">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/ViaggioController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/services/ViaggioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/services/ViaggioService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/services/ViaggioServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/services/ViaggioServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/Viaggio.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/Viaggio.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/Viaggio.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/Templates/Viaggio.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/ViaggioServiceImpl.class" afterDir="false" />
+    <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="Creazione viaggio agenzia (da fixare il caricamento dettagli pagina dei viaggi creati da agenzia)">
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ChiaveMessaggio.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ChiavePartecipantiViaggio.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ImmagineController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/MessaggioDAO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/MessaggioDTO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/MessaggioServiceImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/Notifica.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/NotificaController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/NotificaDAO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/NotificaDTO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/NotificaServiceImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ViaggioController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ViaggioController1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ChiaveMessaggio.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ChiavePartecipantiViaggio.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/HomeController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ImmagineController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/Messaggio.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioDAO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioDAO1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioDTO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioServiceImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioServiceImpl1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/PaginaViaggioController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/PartecipantiViaggio.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/PartecipantiViaggioDAO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/Recensione.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/RecensioneController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/RecensioneServiceImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/Viaggio.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioDAO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioImmagini.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioImmaginiDAO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioTag.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioTagDAO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/creaViaggioAgenzia.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BitWizard/target/classes/Templates/creaViaggioAgenzia.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/ViaggioDTO.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +247,8 @@
     <MESSAGE value="Registrazione agenzia" />
     <MESSAGE value="Registrazione e login fixato  agenzia" />
     <MESSAGE value="Push Agenzia" />
-    <option name="LAST_COMMIT_MESSAGE" value="Push Agenzia" />
+    <MESSAGE value="Creazione viaggio agenzia (da fixare il caricamento dettagli pagina dei viaggi creati da agenzia)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Creazione viaggio agenzia (da fixare il caricamento dettagli pagina dei viaggi creati da agenzia)" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

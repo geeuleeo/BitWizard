@@ -1,0 +1,127 @@
+<changelist name="Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]" date="1729714791066" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 23/10/2024 22:19 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/services/MessaggioService.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/services/MessaggioService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/services/ViaggioService.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/services/ViaggioService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/repos/ViaggioImmaginiDAO.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/repos/ViaggioImmaginiDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioImmaginiDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/PaginaViaggioController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/services/MessaggioServiceImpl.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/services/MessaggioServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioServiceImpl.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/ImmagineController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ImmagineController.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/MessaggioServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioServiceImpl1.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/MessaggioController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/MessaggioController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/entities/ViaggioImmagini.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/entities/ViaggioImmagini.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioImmagini.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/ChiaveMessaggio.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ChiaveMessaggio.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/repos/MessaggioDAO.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/repos/MessaggioDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/HomeController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/HomeController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/HomeController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/entities/PartecipantiViaggio.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/entities/PartecipantiViaggio.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/PartecipantiViaggio.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/ViaggioController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioController.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/MessaggioDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioDAO1.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/RecensioneController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/RecensioneController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/RecensioneController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/repos/ViaggioTagDAO.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/repos/ViaggioTagDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioTagDAO.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/MessaggioDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/MessaggioDTO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/services/RecensioneServiceImpl.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/services/RecensioneServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/RecensioneServiceImpl.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/entities/ViaggioTag.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/entities/ViaggioTag.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioTag.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/ChiavePartecipantiViaggio.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ChiavePartecipantiViaggio.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/repos/ViaggioDAO.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/repos/ViaggioDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/ViaggioDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/entities/Recensione.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/entities/Recensione.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/Recensione.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/entities/Viaggio.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/entities/Viaggio.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/Viaggio.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/entities/Messaggio.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/entities/Messaggio.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/Messaggio.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/repos/PartecipantiViaggioDAO.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/repos/PartecipantiViaggioDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_22_19_[Changes]/PartecipantiViaggioDAO.class" />
+  </binary>
+</changelist>

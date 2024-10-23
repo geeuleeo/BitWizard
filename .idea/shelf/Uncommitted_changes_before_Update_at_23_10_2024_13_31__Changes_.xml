@@ -1,0 +1,62 @@
+<changelist name="Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]" date="1729683084992" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 23/10/2024 13:31 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/NotificaController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/NotificaController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/NotificaController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/entities/Notifica.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/entities/Notifica.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/Notifica.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/ViaggioController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ViaggioController.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/MessaggioDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/MessaggioDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/repos/NotificaDAO.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/repos/NotificaDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/NotificaDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/DTO/NotificaDTO.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/DTO/NotificaDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/NotificaDTO.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/MessaggioDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/MessaggioDTO.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/ImmagineController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ImmagineController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ViaggioController1.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/MessaggioServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/MessaggioServiceImpl.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/ChiavePartecipantiViaggio.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ChiavePartecipantiViaggio.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value=".idea/shelf/Uncommitted_changes_before_Update_at_22_10_2024_20_38_[Changes]/ChiaveMessaggio.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/ChiaveMessaggio.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="BitWizard/target/classes/com/wizard/services/NotificaServiceImpl.class" />
+    <option name="AFTER_PATH" value="BitWizard/target/classes/com/wizard/services/NotificaServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_10_2024_13_31_[Changes]/NotificaServiceImpl.class" />
+  </binary>
+</changelist>
