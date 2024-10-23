@@ -1,1 +1,18 @@
-@charset "ISO-8859-1";
+#availableTags, #selectedTags {
+	width: 45%;
+	float: left;
+	border: 1px solid black;
+	min-height: 100px;
+	padding: 10px;
+	margin: 10px;
+}
+
+.tag {
+	display: inline-block;
+	padding: 10px;
+	margin: 5px;
+	background-color: lightblue;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+}
