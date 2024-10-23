@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wizard.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wizard.DTO.TagDTO;
 import com.wizard.DTO.ViaggioCreazioneDTO;
-import com.wizard.entities.Immagine;
-import com.wizard.entities.PartecipantiViaggio;
-import com.wizard.entities.Utente;
-import com.wizard.entities.Viaggio;
-import com.wizard.entities.ViaggioImmagini;
 import com.wizard.repos.ImmagineDAO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.ViaggioDAO;
@@ -75,48 +71,82 @@ public class ViaggioController {
         try {
             // Recupera il creatore dalla sessione
             Utente creatore = (Utente) session.getAttribute("utenteLoggato");
+            Agenzia agenzia = (Agenzia) session.getAttribute("agenziaLoggata");
             if (creatore == null) {
-                throw new IllegalArgumentException("Creatore non trovato nella sessione.");
+                if (agenzia == null) {
+                    throw new IllegalArgumentException("Agenzia o Utente  non presenti nella sessione");
+                }
             }
+
 
             // Ottieni la lista di tag dal DTO
             List<TagDTO> tagDTOs = viaggioDTO.getTags();
 
             // Creazione del viaggio dall'oggetto DTO
             Viaggio nuovoViaggio = createViaggioFromDTO(viaggioDTO);
+
+            if (creatore == null) {
+                nuovoViaggio.setAgenziaId(agenzia.getAziendaId());
+            }else {
+                nuovoViaggio.setCreatoreId(creatore.getUtenteId());
+            }
             
-            nuovoViaggio.setCreatoreId(creatore.getUtenteId());
+
             
             // Gestione dell'immagine di copertina, se presente
             if (immagineCopertina != null && !immagineCopertina.isEmpty()) {
                 handleProfileImage(nuovoViaggio, immagineCopertina);
             }
-
             // Salva il viaggio con i tag associati
-            Viaggio viaggioSalvato = viaggioService.salvaViaggio(nuovoViaggio, tagDTOs);
-            
-         // Gestione delle altre immagini, se presenti
-            if (immagini != null && !immagini.isEmpty()) {
-                for (MultipartFile immagine : immagini) {
-                    if (!immagine.isEmpty()) {
-                        // Crea l'entità Immagine e la salva
-                        Immagine immagineEntity = new Immagine();
-                        immagineEntity.setImg(immagine.getBytes());
-                        immagineDAO.save(immagineEntity);
+            //Controllo se nella session c'è un'azienda o un utente
 
-                        // Crea l'entità ViaggioImmagini per l'associazione
-                        ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
-                        viaggioImmagine.setViaggio(viaggioSalvato);
-                        viaggioImmagine.setImmagine(immagineEntity);
+            if(agenzia==null){
+                Viaggio viaggioSalvato = viaggioService.salvaViaggio(nuovoViaggio, tagDTOs);
+                // Gestione delle altre immagini, se presenti
+                if (immagini != null && !immagini.isEmpty()) {
+                    for (MultipartFile immagine : immagini) {
+                        if (!immagine.isEmpty()) {
+                            // Crea l'entità Immagine e la salva
+                            Immagine immagineEntity = new Immagine();
+                            immagineEntity.setImg(immagine.getBytes());
+                            immagineDAO.save(immagineEntity);
 
-                        // Salva l'associazione nel repository
-                        viaggioImmaginiDAO.save(viaggioImmagine);
+                            // Crea l'entità ViaggioImmagini per l'associazione
+                            ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
+                            viaggioImmagine.setViaggio(viaggioSalvato);
+                            viaggioImmagine.setImmagine(immagineEntity);
+
+                            // Salva l'associazione nel repository
+                            viaggioImmaginiDAO.save(viaggioImmagine);
+                        }
                     }
                 }
+                return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
+
+            }else {
+                Viaggio viaggioSalvato= viaggioService.salvaViaggioAgenzia(nuovoViaggio, tagDTOs);
+                // Gestione delle altre immagini, se presenti
+                if (immagini != null && !immagini.isEmpty()) {
+                    for (MultipartFile immagine : immagini) {
+                        if (!immagine.isEmpty()) {
+                            // Crea l'entità Immagine e la salva
+                            Immagine immagineEntity = new Immagine();
+                            immagineEntity.setImg(immagine.getBytes());
+                            immagineDAO.save(immagineEntity);
+
+                            // Crea l'entità ViaggioImmagini per l'associazione
+                            ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
+                            viaggioImmagine.setViaggio(viaggioSalvato);
+                            viaggioImmagine.setImmagine(immagineEntity);
+
+                            // Salva l'associazione nel repository
+                            viaggioImmaginiDAO.save(viaggioImmagine);
+                        }
+                    }
+                }
+
+                return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
             }
-
-            return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
-
         } catch (IllegalArgumentException e) {
             // Restituisce una risposta di errore specifico
             Map<String, String> errorResponse = new HashMap<>();
@@ -130,7 +160,8 @@ public class ViaggioController {
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+
     private Viaggio createViaggioFromDTO(ViaggioCreazioneDTO viaggioDTO) {
         Viaggio viaggio = new Viaggio();
         viaggio.setNome(viaggioDTO.getNome());

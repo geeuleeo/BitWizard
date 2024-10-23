@@ -7,28 +7,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.wizard.entities.*;
+import com.wizard.repos.*;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wizard.DTO.TagDTO;
-import com.wizard.entities.ChiavePartecipantiViaggio;
-import com.wizard.entities.PartecipantiViaggio;
-import com.wizard.entities.Stato;
-import com.wizard.entities.Tag;
-import com.wizard.entities.Utente;
-import com.wizard.entities.Viaggio;
-import com.wizard.entities.ViaggioImmagini;
-import com.wizard.entities.ViaggioTag;
-import com.wizard.repos.ImmagineDAO;
-import com.wizard.repos.PartecipantiViaggioDAO;
-import com.wizard.repos.StatoDAO;
-import com.wizard.repos.TagDAO;
-import com.wizard.repos.UtenteDAO;
-import com.wizard.repos.ViaggioDAO;
-import com.wizard.repos.ViaggioDTO;
-import com.wizard.repos.ViaggioImmaginiDAO;
-import com.wizard.repos.ViaggioTagDAO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -62,7 +47,9 @@ public class ViaggioServiceImpl implements ViaggioService {
 	
 	@Autowired
     private EntityManager entityManager;
-	
+    @Autowired
+    private AgenziaDAO agenziaDAO;
+
 	public void abilitaFiltroViaggiNonCancellati() {
         // Ottieni la sessione Hibernate e abilita il filtro
         Session session = entityManager.unwrap(Session.class);
@@ -88,6 +75,12 @@ public class ViaggioServiceImpl implements ViaggioService {
 	    try {
 	        viaggioSalvato = dao.save(viaggio);
 	        System.out.println("Viaggio salvato con ID: " + viaggioSalvato.getViaggioId());
+			if (viaggioSalvato.getAgenziaId()!=null) {
+				System.out.println("agenzia id : " + viaggioSalvato.getAgenziaId());
+			}else{
+				System.out.println("creatore id :" + viaggioSalvato.getCreatoreId());
+			}
+
 	    } catch (Exception e) {
 	        System.out.println("Errore durante il salvataggio del viaggio: " + e.getMessage());
 	        throw e;
@@ -95,23 +88,29 @@ public class ViaggioServiceImpl implements ViaggioService {
 
 	    // Gestisci i tag
 	    if (tagDTOs != null && !tagDTOs.isEmpty()) {
+			System.out.println("Siamo nel controllo tag");
 	        for (TagDTO tagDTO : tagDTOs) {
+				System.out.println("Siamo nel controllo tag 2");
 	            Tag tag = tagDAO.findById(tagDTO.getTagId())
 	                .orElseGet(() -> {
+						System.out.println("Siamo nel controllo tag 3");
 	                    Tag newTag = new Tag();
 	                    newTag.setTipoTag(tagDTO.getTipoTag());
 	                    return tagDAO.save(newTag);
 	                });
-
+				System.out.println("Siamo nel controllo tag 4");
 	            ViaggioTag viaggioTag = new ViaggioTag();
 	            viaggioTag.setViaggio(viaggioSalvato);
 	            viaggioTag.setTag(tag);
 	            viaggioTagDAO.save(viaggioTag);
+				System.out.println("Siamo nel controllo tag 5");
 	        }
 	    }
 	    
 	    Optional<Utente> creatoreOptional = utenteDAO.findById(viaggio.getCreatoreId());
+		Optional<Agenzia> agenziaOptional = agenziaDAO.findById(viaggioSalvato.getAgenziaId());
 	    if (creatoreOptional.isPresent()) {
+			System.out.println("siamo in creatoreOptional");
 	    	if (viaggio.getPartecipanti() == null || viaggio.getPartecipanti().isEmpty()) {
 	    		Utente creatore = creatoreOptional.get();
 
@@ -127,11 +126,65 @@ public class ViaggioServiceImpl implements ViaggioService {
 	        Viaggio risultatoFinale = dao.save(viaggioSalvato);
 
 	        return risultatoFinale;
-	    } else {
+	    }else if (agenziaOptional.isPresent()) {
+			Set<PartecipantiViaggio> partecipanti = new HashSet<>(viaggioSalvato.getPartecipanti());
+			viaggioSalvato.setPartecipanti(partecipanti);
+			System.out.println("siamo in agenzia.ispresent");
+			Viaggio risultatoFinale = dao.save(viaggioSalvato);
+			return risultatoFinale;
+		}
+		else {
 	        throw new IllegalArgumentException("Creatore con ID " + viaggio.getCreatoreId() + " non trovato.");
 	    }
 	}
-	
+
+	public Viaggio salvaViaggioAgenzia(Viaggio viaggio, List<TagDTO> tagDTOs) {
+
+		Stato stato = statoDAO.findById(1)
+				.orElseThrow(() -> new RuntimeException("Stato non trovato"));
+		viaggio.setStato(stato);
+
+		if (viaggio.getImmagineCopertina() != null) {
+			immagineDAO.save(viaggio.getImmagineCopertina());
+		}
+
+		Viaggio viaggioSalvato;
+		try {
+			viaggioSalvato = dao.save(viaggio);
+			System.out.println("Viaggio salvato con ID: " + viaggioSalvato.getViaggioId());
+			if (viaggioSalvato.getAgenziaId()!=null) {
+				System.out.println("agenzia id : " + viaggioSalvato.getAgenziaId());
+			}else{
+				System.out.println("creatore id :" + viaggioSalvato.getCreatoreId());
+			}
+
+		} catch (Exception e) {
+			System.out.println("Errore durante il salvataggio del viaggio: " + e.getMessage());
+			throw e;
+		}
+
+		// Gestisci i tag
+		if (tagDTOs != null && !tagDTOs.isEmpty()) {
+			for (TagDTO tagDTO : tagDTOs) {
+				Tag tag = tagDAO.findById(tagDTO.getTagId())
+						.orElseGet(() -> {
+							Tag newTag = new Tag();
+							newTag.setTipoTag(tagDTO.getTipoTag());
+							return tagDAO.save(newTag);
+						});
+
+				ViaggioTag viaggioTag = new ViaggioTag();
+				viaggioTag.setViaggio(viaggioSalvato);
+				viaggioTag.setTag(tag);
+				viaggioTagDAO.save(viaggioTag);
+
+			}
+		}
+		return viaggioSalvato;
+	}
+
+
+
 	@Transactional
 	public Viaggio aggiornaViaggioTags(Long viaggioId, List<TagDTO> nuoviTagDTOs) {
 	    // Trova il viaggio esistente

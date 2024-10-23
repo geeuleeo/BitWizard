@@ -14,6 +14,8 @@ import com.wizard.repos.ViaggioDTO;
 public interface ViaggioService {
 
 	Viaggio salvaViaggio(Viaggio nuovoViaggio, List<TagDTO> tagDTOs);
+
+	Viaggio salvaViaggioAgenzia(Viaggio viaggio, List<TagDTO> tagDTOs);
 	
 	PartecipantiViaggio addPartecipanteViaggio(Utente partecipante, Viaggio viaggio);
 	

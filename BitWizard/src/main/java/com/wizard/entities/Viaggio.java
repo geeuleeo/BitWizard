@@ -65,8 +65,13 @@ public class Viaggio {
 
     private double prezzo;
 
-    @Column(name = "creatore_id", nullable = false)
+
+	@Column(name = "creatore_id")
     private Long creatoreId;
+
+
+	@Column(name = "agenzia_id")
+	private Long agenziaId;
 
     @Column(name = "eta_min")
     private int etaMin;
@@ -219,6 +224,13 @@ public class Viaggio {
 	}
 	public void setViaggioTags(Set<ViaggioTag> nuoviTags) {
 		this.viaggioTags = nuoviTags;
+	}
+	public Long getAgenziaId() {
+		return agenziaId;
+	}
+
+	public void setAgenziaId(Long agenziaId) {
+		this.agenziaId = agenziaId;
 	}
 	
 	public void addPartecipante(PartecipantiViaggio partecipante) {
