@@ -13,7 +13,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #001f54;
+    background-color: #000035;
     padding: 1rem 3rem;
     position: sticky;
     top: 0;
@@ -21,7 +21,9 @@ nav {
 }
 
 nav .logo img {
-    height: 50px;
+    width: 150px;
+    height: auto;
+    margin-top:30px;
 }
 
 nav ul {
@@ -73,7 +75,7 @@ nav ul li a:hover {
 .profile-info h2 {
     margin: 0;
     font-size: 1.5rem;
-    color: #001f54;
+    color: #000035;
 }
 
 .profile-info p {
@@ -86,7 +88,7 @@ nav ul li a:hover {
 }
 
 .upper-section {
-    background-color: #001f54;
+    background-color: #000035;
     color: white;
     display: flex;
     align-items: center;
@@ -142,13 +144,27 @@ nav ul li a:hover {
     margin-bottom: 20px;
 }
 
-.footer {
-    background-color: #001f54;
+/* Footer Styles */
+
+footer {
+
+    background-color: #000035;
     color: white;
     padding: 20px;
     text-align: center;
+    position: relative;
+    bottom: 0;
 }
-
+.footer-content {
+	margin-bottom: 10px;
+}
+.footer-content h2 {
+	margin: 0;
+}
+.footer-bottom {
+	border-top: 1px solid #fff;
+	padding-top: 10px;
+	}
 .btn-primary {
     background-color: #001f54;
     border-color: #001f54;
