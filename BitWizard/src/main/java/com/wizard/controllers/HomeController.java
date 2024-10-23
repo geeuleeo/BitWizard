@@ -100,7 +100,7 @@ public class HomeController {
            // model.addAttribute("idUtente", utente.getUtenteId());
             model.addAttribute("messaggioBenvenuto", "Benvenuto, " + utente.getNome() + "!");
         }
-        return "Pagina Iniziale/home";
+        return "home";
     }
     
     @GetMapping("/CreaViaggio")
