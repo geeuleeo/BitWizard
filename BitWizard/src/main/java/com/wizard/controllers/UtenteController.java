@@ -35,6 +35,7 @@ import com.wizard.repos.PartecipantiViaggioDAO;
 import com.wizard.repos.RuoloDAO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.UtenteDTO;
+import com.wizard.services.NotificaService;
 import com.wizard.services.RecensioneService;
 import com.wizard.services.UtenteService;
 
@@ -68,6 +69,9 @@ public class UtenteController {
     @Autowired
     private PartecipantiViaggioDAO partecipantiDAO;
     
+    @Autowired
+    private NotificaService notificaService;
+    
     @PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
     public ResponseEntity<?> signUp(
@@ -93,6 +97,13 @@ public class UtenteController {
             List<TagDTO> tagDTOs = utenteDTO.getTags();
             
             Utente utenteSalvato = utenteService.salvaUtente(nuovoUtente, tagDTOs);
+            
+            try {
+	            notificaService.creaNotificaBenvenuto(nuovoUtente);
+	        } catch (Exception e) {
+	            System.err.println("Errore durante la creazione delle notifiche per il l'utente con id " + nuovoUtente.getUtenteId());
+	        }
+            
             return new ResponseEntity<>(utenteSalvato, HttpStatus.CREATED);
 
         } catch (EmailAlreadyExistsException | RuoloNotFoundException e) {

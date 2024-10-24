@@ -33,7 +33,7 @@
 </head>
 <body>
     <h1 id="formTitle">Modifica il tuo viaggio</h1>
-    <form id="creaViaggioForm" enctype="multipart/form-data" onsubmit="event.preventDefault(); inviaForm();">
+    <form id="creaViaggioForm" onsubmit="event.preventDefault(); inviaForm();">
         <input type="hidden" id="viaggioId" name="viaggioId"> <!-- Campo nascosto per ID del viaggio in caso di modifica -->
 
         <label for="nome">Nome del Viaggio:</label>
@@ -76,16 +76,6 @@
         <div id="selectedTags">
             <h4>Tag selezionati</h4>
         </div>
-
-        <label for="immagineCopertina">Immagine Copertina del Viaggio:</label>
-        <input type="file" id="immagineCopertina" name="immagineCopertina" accept="image/*"><br><br>
-        <div id="copertinaPreview"></div>
-
-        <label for="immagini">Immagini del Viaggio:</label>
-        <input type="file" id="immagini" name="immagini" accept="image/*" onchange="handleImages()"><br><br>
-        <div id="copertinaPreview"></div>
-
-        <div id="previewContainer"></div>
 
         <input type="submit" id="submitButton" value="Modifica Viaggio">
     </form>
@@ -130,7 +120,7 @@
                 document.getElementById("etaMax").value = data.etaMax;
 
                 // Recupera i tag del viaggio
-                const viaggiotags = data.tags;
+                const viaggiotags = data.tagDTOs;
                 console.log("Tag associati al viaggio:", viaggiotags);
 
                 // Carica i tag disponibili e poi visualizzali
@@ -230,8 +220,7 @@
     }
 
     function inviaForm() {
-        const form = document.getElementById('creaViaggioForm');
-        let formData = new FormData(form);
+        // Construct the viaggioDTO object from the form inputs
         const viaggioDTO = {
             nome: document.getElementById('nome').value,
             luogoPartenza: document.getElementById('luogoPartenza').value,
@@ -247,36 +236,13 @@
             tags: getSelectedTags()
         };
 
-        // Aggiungi il viaggioDTO al formData come JSON
-        formData.append('viaggioDTO', new Blob([JSON.stringify(viaggioDTO)], { type: 'application/json' }));
-
-        // Aggiungi l'immagine di copertina, se presente
-        const immagineCopertina = document.getElementById('immagineCopertina').files[0];
-        if (immagineCopertina) {
-            formData.append('immagineCopertina', immagineCopertina);
-        }
-
-        // Aggiungi le immagini selezionate, se presenti
-        const selectedImages = document.getElementById('immagini').files;
-        if (selectedImages.length > 0) {
-            for (let file of selectedImages) {
-                formData.append('immagini', file);
-            }
-        }
-
-        // Log FormData entries
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
-        }
-
-        // Invia i dati
-        inviaDati(formData);
-    }
-
-    function inviaDati(formData) {
+        // Send the JSON data using fetch
         fetch(`/api/viaggi/modifica/${viaggioId}`, {
             method: 'PUT',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(viaggioDTO)
         })
         .then(response => {
             const feedbackMessage = document.getElementById('feedbackMessage');
@@ -285,7 +251,6 @@
                     feedbackMessage.textContent = 'Viaggio modificato con successo!';
                     feedbackMessage.style.color = 'green';
                     feedbackMessage.style.display = 'block';
-                    return data;
                 });
             } else {
                 return response.text().then(errorText => {
@@ -294,7 +259,16 @@
                     feedbackMessage.style.display = 'block';
                     throw new Error(errorText);
                 });
-            }
+            }        
+            successo.innerText=("Modifica avvenuta con successo! Verrai reindirizzato alla tua pagina personale in 3 secondi .");
+
+
+            //const bottoneLogin = document.getElementById("pulsanteLogin");
+            setTimeout(() => {
+                window.location.assign("paginaPersonaleUtente");
+                //bottoneLogin.click();
+            }, 3000);
+            
         })
         .catch(error => {
             console.error('Errore:', error.message);
@@ -304,6 +278,7 @@
             feedbackMessage.style.display = 'block';
         });
     }
+
 </script>
 
 </body>

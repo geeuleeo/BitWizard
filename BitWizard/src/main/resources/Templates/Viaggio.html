@@ -88,7 +88,7 @@
         
         <form id="iscrivitiForm" method="POST">
     		<button id="iscrivitiBtn" type="submit" class="btn btn-primary" style="display: none;">Iscriviti al viaggio</button>
-    		<button id="annullaIscrizioneBtn" type="button" class="btn btn-secondary" style="display: none;">Annulla Iscrizione</button>
+    		<button id="annullaIscrizioneBtn" type="submit" class="btn btn-secondary" style="display: none;">Annulla Iscrizione</button>
 		</form>
 		
 		<form id="creatoreForm" method="POST" >
@@ -321,8 +321,39 @@
         }
     }
 
-    // Aggiungi l'evento al form solo dopo che il viaggioId è stato recuperato
-    document.getElementById('iscrivitiForm').addEventListener('submit', function(event) {
+    async function annullaIscrivitiAlViaggio(viaggioId) {
+        console.log('Id viaggio inviato per l\'annullamento iscrizione: ' + viaggioId);
+        try {
+            const response = await fetch(`/api/viaggi/iscriviti/rimuovi/${viaggioId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                aggiornaPartecipanti(viaggioId);
+                alert('Annullamento Iscrizione avvenuto con successo!');     
+            } else {
+                alert('Errore durante l\'annullamento dell\'iscrizione');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+            alert('Si è verificato un errore');
+        }
+    }
+
+    // Aggiungi l'evento click per il pulsante di annullamento iscrizione
+    document.getElementById('annullaIscrizioneBtn').addEventListener('click', function(event) {
+        event.preventDefault();
+        if (viaggioId) {
+            annullaIscrivitiAlViaggio(viaggioId);
+        } else {
+            console.error('Errore: Viaggio ID non disponibile.');
+        }
+    });
+
+    document.getElementById('iscrivitiBtn').addEventListener('click', function(event) {
         event.preventDefault();  // Evita il submit del form nativo
         if (viaggioId) {
             iscrivitiAlViaggio(viaggioId);

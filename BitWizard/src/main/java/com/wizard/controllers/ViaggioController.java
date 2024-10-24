@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.wizard.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +34,7 @@ import com.wizard.repos.ViaggioDAO;
 import com.wizard.repos.ViaggioDTO;
 import com.wizard.repos.ViaggioImmaginiDAO;
 import com.wizard.repos.ViaggioTagDAO;
+import com.wizard.services.NotificaService;
 import com.wizard.services.ViaggioService;
 
 import jakarta.servlet.http.HttpSession;
@@ -59,6 +63,9 @@ public class ViaggioController {
     
     @Autowired
     private ViaggioTagDAO viaggioTagDAO;
+    
+    @Autowired
+    private NotificaService notificaService;
 
     @PostMapping(value = "/crea", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
@@ -78,7 +85,6 @@ public class ViaggioController {
                 }
             }
 
-
             // Ottieni la lista di tag dal DTO
             List<TagDTO> tagDTOs = viaggioDTO.getTags();
 
@@ -90,9 +96,7 @@ public class ViaggioController {
             }else {
                 nuovoViaggio.setCreatoreId(creatore.getUtenteId());
             }
-            
 
-            
             // Gestione dell'immagine di copertina, se presente
             if (immagineCopertina != null && !immagineCopertina.isEmpty()) {
                 handleProfileImage(nuovoViaggio, immagineCopertina);
@@ -180,88 +184,12 @@ public class ViaggioController {
     }
     
     @PutMapping("/modifica/{viaggioId}")
-    public ResponseEntity<?> modificaViaggio(@RequestPart("viaggioDTO") @Valid ViaggioCreazioneDTO viaggioDTO,
-            @RequestPart(value = "immagineCopertina", required = false) MultipartFile immagineCopertina,
-            @RequestPart(value = "immagini", required = false) List<MultipartFile> immagini,
+    public ResponseEntity<ViaggioDTO> modificaViaggio(
             @PathVariable Long viaggioId,
-            HttpSession session) {
-        
-        System.out.println("Inizio modifica per il viaggio con ID: " + viaggioId);
-        try {
-            // Recupera il viaggio
-            System.out.println("Tentativo di recuperare il viaggio con ID: " + viaggioId);
-            Viaggio viaggio = viaggioDAO.findById(viaggioId)
-                .orElseThrow(() -> {
-                    System.out.println("Viaggio con ID " + viaggioId + " non trovato.");
-                    return new IllegalArgumentException("Viaggio non trovato");
-                });
-            
-            Utente creatore = (Utente) session.getAttribute("utenteLoggato");
-            if (creatore == null) {
-                throw new IllegalArgumentException("Creatore non trovato nella sessione.");
-            }
-
-            if (viaggio.getCreatoreId() == creatore.getUtenteId()) {
-            	System.out.println("Viaggio trovato: " + viaggio.getNome());
-            
-            	aggiornaViaggioDaDTO(viaggio, viaggioDTO);
-            
-            	// Gestione dell'immagine di copertina, se presente
-            	if (immagineCopertina != null && !immagineCopertina.isEmpty()) {
-            		handleProfileImage(viaggio, immagineCopertina);
-            	}
-            
-            	// Ottieni la lista di tag dal DTO
-            	List<TagDTO> tagDTOs = viaggioDTO.getTags();
-            
-            	// Salva il viaggio con i tag associati
-            	Viaggio viaggioSalvato = viaggioService.salvaEaggiornaViaggio(viaggio, tagDTOs);
-            
-            	// Gestione delle altre immagini, se presenti
-            	if (immagini != null && !immagini.isEmpty()) {
-            		for (MultipartFile immagine : immagini) {
-            			if (!immagine.isEmpty()) {
-            				// Crea l'entità Immagine e la salva
-            				Immagine immagineEntity = new Immagine();
-            				immagineEntity.setImg(immagine.getBytes());
-            				immagineDAO.save(immagineEntity);
-
-            				// Crea l'entità ViaggioImmagini per l'associazione
-            				ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
-            				viaggioImmagine.setViaggio(viaggioSalvato);
-            				viaggioImmagine.setImmagine(immagineEntity);
-
-            				// Salva l'associazione nel repository
-            				viaggioImmaginiDAO.save(viaggioImmagine);
-            			}
-            		}
-            	}
-
-            	return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
-            	
-            } System.out.println("Non hai i permessi per modificare il viaggio");
-              return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante la modifica del viaggio");
-        } catch (IllegalArgumentException e) {
-            	System.out.println("Errore: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Errore generico durante la modifica del viaggio: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante la modifica del viaggio");
-        }
-    }
-    
-    private void aggiornaViaggioDaDTO(Viaggio viaggio, ViaggioCreazioneDTO viaggioDTO) {
-        viaggio.setNome(viaggioDTO.getNome());
-        viaggio.setLuogoPartenza(viaggioDTO.getLuogoPartenza());
-        viaggio.setLuogoArrivo(viaggioDTO.getLuogoArrivo());
-        viaggio.setDataPartenza(viaggioDTO.getDataPartenza());
-        viaggio.setDataRitorno(viaggioDTO.getDataRitorno());
-        viaggio.setDataScadenza(viaggioDTO.getDataScadenza());
-        viaggio.setNumPartMin(viaggioDTO.getNumPartMin());
-        viaggio.setNumPartMax(viaggioDTO.getNumPartMax());
-        viaggio.setEtaMin(viaggioDTO.getEtaMin());
-        viaggio.setEtaMax(viaggioDTO.getEtaMax());
-        viaggio.setPrezzo(viaggioDTO.getPrezzo());
+            @RequestBody ViaggioCreazioneDTO viaggioDTO) {
+        List<TagDTO> tagDTOs = viaggioDTO.getTags();
+        ViaggioDTO updatedViaggio = viaggioService.modificaViaggio(viaggioId, viaggioDTO, tagDTOs);
+        return ResponseEntity.ok(updatedViaggio);
     }
     
     @GetMapping("/{viaggioId}/immagine")
@@ -319,7 +247,7 @@ public class ViaggioController {
             System.out.println("Tentativo di iscrivere l'utente al viaggio...");
             PartecipantiViaggio utenteIscritto = viaggioService.addPartecipanteViaggio(partecipante, viaggio);
             System.out.println("Utente iscritto al viaggio con successo!");
-
+            
             // Restituisci la risposta con i dettagli dell'iscrizione
             return ResponseEntity.ok(utenteIscritto);
 
@@ -329,6 +257,40 @@ public class ViaggioController {
         } catch (Exception e) {
             System.out.println("Errore generico durante l'iscrizione al viaggio: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante l'iscrizione al viaggio");
+        }
+    }
+    
+    @DeleteMapping("/iscriviti/rimuovi/{viaggioId}")
+    public ResponseEntity<?> rimuoviPartecipante(@PathVariable Long viaggioId, HttpSession session) {
+    	
+    	 try {
+             // Recupera l'id dell'utente dalla session
+         	Utente utente = (Utente) session.getAttribute("utenteLoggato");
+         	Long utenteId = utente.getUtenteId();
+             if (utenteId == null) {
+                 System.out.println("Utente non autenticato. Nessun utenteId trovato nella sessione.");
+                 throw new IllegalStateException("Utente non autenticato");
+             } else {
+                 System.out.println("Utente autenticato con ID: " + utenteId);
+             }
+             
+            viaggioService.removePartecipanteViaggio(utenteId, viaggioId);
+            
+            Viaggio viaggio = viaggioDAO.findById(viaggioId)
+                    .orElseThrow(() -> {
+                        System.out.println("Viaggio con ID " + viaggioId + " non trovato.");
+                        return new IllegalArgumentException("Viaggio non trovato");
+                    });
+            
+            try {
+	            notificaService.creaNotifichePerAnnullamentoIscrizioneViaggio(viaggio, utente);
+	        } catch (Exception e) {
+	            System.err.println("Errore durante la creazione delle notifiche per il viaggio con id " + viaggioId);
+	        }
+            
+            return ResponseEntity.ok("Partecipante rimosso con successo");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
     
@@ -350,6 +312,12 @@ public class ViaggioController {
             // Imposta il flag di cancellazione e salva le modifiche
             viaggio.setDeleted(true);
             viaggioDAO.save(viaggio);  // Salva la modifica nel database
+            
+            try {
+	            notificaService.creaNotifichePerPartecipantiAnnullaViaggio(viaggio);
+	        } catch (Exception e) {
+	            System.err.println("Errore durante la creazione delle notifiche per il viaggio con id " + viaggioId);
+	        }
 
             System.out.println("Viaggio con ID " + viaggioId + " annullato con successo.");
             return ResponseEntity.ok("Viaggio annullato con successo");

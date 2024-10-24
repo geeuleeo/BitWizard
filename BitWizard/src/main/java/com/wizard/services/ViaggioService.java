@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.wizard.DTO.TagDTO;
+import com.wizard.DTO.ViaggioCreazioneDTO;
 import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.repos.ViaggioDTO;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public interface ViaggioService {
@@ -18,6 +21,8 @@ public interface ViaggioService {
 	Viaggio salvaViaggioAgenzia(Viaggio viaggio, List<TagDTO> tagDTOs);
 	
 	PartecipantiViaggio addPartecipanteViaggio(Utente partecipante, Viaggio viaggio);
+	
+	void removePartecipanteViaggio(Long utenteId, Long viaggioId);
 	
 	List<ViaggioDTO> getViaggiByTag (Integer tagId);
 	
@@ -35,6 +40,6 @@ public interface ViaggioService {
 
 	List<ViaggioDTO> getAllViaggi();
 
-	Viaggio salvaEaggiornaViaggio(Viaggio viaggio, List<TagDTO> tagDTOs);
+	ViaggioDTO modificaViaggio(Long viaggioId, ViaggioCreazioneDTO viaggioDTO, List<TagDTO> tagDTOs);
 	
 }
