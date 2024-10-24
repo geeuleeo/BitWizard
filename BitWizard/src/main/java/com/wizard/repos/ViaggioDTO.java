@@ -33,8 +33,27 @@ public class ViaggioDTO {
     private String cognomeCreatore;
     private Long idCreatore;
     private byte[] immagineProfiloCreatore;
-    
-    
+
+	private Long agenziaId;
+	private String nomeAgenzia;
+
+
+	public Long getAgenziaId() {
+		return agenziaId;
+	}
+
+	public void setAgenziaId(Long agenziaId) {
+		this.agenziaId = agenziaId;
+	}
+
+	public String getNomeAgenzia() {
+		return nomeAgenzia;
+	}
+
+	public void setNomeAgenzia(String nomeAgenzia) {
+		this.nomeAgenzia = nomeAgenzia;
+	}
+
 	public String getNomeCreatore() {
 		return nomeCreatore;
 	}

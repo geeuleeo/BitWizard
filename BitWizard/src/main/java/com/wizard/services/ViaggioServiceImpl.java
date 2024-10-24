@@ -303,50 +303,50 @@ public class ViaggioServiceImpl implements ViaggioService {
 
 	        return viaggioDTO;
 	    }
-	    
-	    @Transactional
-	    public PartecipantiViaggio addPartecipanteViaggio(Utente partecipante, Viaggio viaggio) {
 
-	        // Verifica se il partecipante esiste già per questo viaggio
-	        ChiavePartecipantiViaggio chiavePartecipantiViaggio = new ChiavePartecipantiViaggio();
-	        chiavePartecipantiViaggio.setViaggioId(viaggio.getViaggioId());
-	        chiavePartecipantiViaggio.setUtenteId(partecipante.getUtenteId());
+	@Transactional
+	public PartecipantiViaggio addPartecipanteViaggio(Utente partecipante, Viaggio viaggio) {
 
-	        // Cerca l'esistenza del record nella tabella partecipanti_viaggio
-	        Optional<PartecipantiViaggio> partecipanteEsistente = partecipantiViaggioDAO.findById(chiavePartecipantiViaggio);
-	        
-	        if (partecipanteEsistente.isPresent()) {
-	            // Se esiste già, ritorna il partecipante esistente
-	            return partecipanteEsistente.get();
-	        } else {
-	            // Crea un nuovo record per la tabella partecipanti_viaggio
-	            PartecipantiViaggio partecipanteViaggio = new PartecipantiViaggio();
-	            partecipanteViaggio.setId(chiavePartecipantiViaggio);  // Imposta la chiave composta
-	            partecipanteViaggio.setViaggio(viaggio);  // Associa il viaggio
-	            partecipanteViaggio.setUtente(partecipante);  // Associa l'utente
-	            partecipanteViaggio.setDataIscrizione(new Date());  // Imposta la data di iscrizione
+		// Verifica se il partecipante esiste già per questo viaggio
+		ChiavePartecipantiViaggio chiavePartecipantiViaggio = new ChiavePartecipantiViaggio();
+		chiavePartecipantiViaggio.setViaggioId(viaggio.getViaggioId());
+		chiavePartecipantiViaggio.setUtenteId(partecipante.getUtenteId());
 
-	            // Recupera lo stato di partecipazione predefinito
-	            Stato statoPredefinito = statoDAO.findById(1)
-	                .orElseThrow(() -> new IllegalArgumentException("Stato di partecipazione predefinito non trovato"));
-	            partecipanteViaggio.setStatoPartecipazione(statoPredefinito);
+		// Cerca l'esistenza del record nella tabella partecipanti_viaggio
+		Optional<PartecipantiViaggio> partecipanteEsistente = partecipantiViaggioDAO.findById(chiavePartecipantiViaggio);
 
-	            // Salva il partecipante nella tabella partecipanti_viaggio
-	            partecipantiViaggioDAO.save(partecipanteViaggio);
+		if (partecipanteEsistente.isPresent()) {
+			// Se esiste già, ritorna il partecipante esistente
+			return partecipanteEsistente.get();
+		} else {
+			// Crea un nuovo record per la tabella partecipanti_viaggio
+			PartecipantiViaggio partecipanteViaggio = new PartecipantiViaggio();
+			partecipanteViaggio.setId(chiavePartecipantiViaggio);  // Imposta la chiave composta
+			partecipanteViaggio.setViaggio(viaggio);  // Associa il viaggio
+			partecipanteViaggio.setUtente(partecipante);  // Associa l'utente
+			partecipanteViaggio.setDataIscrizione(new Date());  // Imposta la data di iscrizione
 
-	            // Aggiungi il partecipante alla lista dei partecipanti del viaggio
-	            viaggio.addPartecipante(partecipanteViaggio);
-	            
-	            try {
-		            notificaService.creaNotifichePerIscrizioneViaggio(viaggio, partecipante);
-		        } catch (Exception e) {
-		            System.err.println("Errore durante la creazione delle notifiche per il viaggio con id " + viaggio.getViaggioId());
-		            e.printStackTrace();
-		        }
+			// Recupera lo stato di partecipazione predefinito
+			Stato statoPredefinito = statoDAO.findById(1)
+					.orElseThrow(() -> new IllegalArgumentException("Stato di partecipazione predefinito non trovato"));
+			partecipanteViaggio.setStatoPartecipazione(statoPredefinito);
 
-	            return partecipanteViaggio;
-	        }
-	    }
+			entityManager.merge(partecipante);
+
+
+			// Aggiungi il partecipante alla lista dei partecipanti del viaggio
+			viaggio.addPartecipante(partecipanteViaggio);
+
+			try {
+				notificaService.creaNotifichePerIscrizioneViaggio(viaggio, partecipante);
+			} catch (Exception e) {
+				System.err.println("Errore durante la creazione delle notifiche per il viaggio con id " + viaggio.getViaggioId());
+				e.printStackTrace();
+			}
+
+			return partecipanteViaggio;
+		}
+	}
 	
 	@Override
 	public void removePartecipanteViaggio(Long utenteId, Long viaggioId) {

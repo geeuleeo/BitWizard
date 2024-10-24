@@ -263,7 +263,7 @@ public class ViaggioController {
             System.out.println("Errore: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println("Errore generico durante l'iscrizione al viaggio: " + e.getMessage());
+            System.out.println("Errore generico durante l'iscrizione al viaggio: " + e.getMessage() + e.getCause() + e.getStackTrace());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante l'iscrizione al viaggio");
         }
     }

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.wizard.entities.Agenzia;
+import com.wizard.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +22,6 @@ import com.wizard.DTO.TagDTO;
 import com.wizard.entities.Recensione;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
-import com.wizard.repos.PartecipantiViaggioDTO;
-import com.wizard.repos.RecensioneDTO;
-import com.wizard.repos.UtenteDAO;
-import com.wizard.repos.ViaggioDAO;
-import com.wizard.repos.ViaggioDTO;
 import com.wizard.services.RecensioneService;
 
 import jakarta.servlet.http.HttpSession;
@@ -40,6 +37,9 @@ public class PaginaViaggioController {
 	
 	@Autowired
 	private RecensioneService recensioneService;
+
+    @Autowired
+    private AgenziaDAO agenziaDAO;
 	
 	/*
 	@GetMapping("/api/session/viaggio")
@@ -51,19 +51,18 @@ public class PaginaViaggioController {
 	    return ResponseEntity.ok(viaggioId);
 	}
 	*/
-	
+
     @GetMapping("/viaggio/{id}")
-	public ViaggioDTO caricaPaginaViaggio(@PathVariable Long id, HttpSession session) {
-    	
-    	System.out.println("Caricamento dettagli per il viaggio con ID: " + id);
-    	
-    	if (id == null) {
+    public ViaggioDTO caricaPaginaViaggio(@PathVariable Long id, HttpSession session) {
+        System.out.println("Caricamento dettagli per il viaggio con ID: " + id);
+
+        if (id == null) {
             throw new IllegalArgumentException("ID del viaggio non può essere nullo");
         }
-    	
+
         // Recupera le informazioni del viaggio
         Viaggio viaggio = viaggioDAO.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
+                .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
 
         // Salva l'id del viaggio nella sessione
         session.setAttribute("viaggioId", id);
@@ -71,7 +70,6 @@ public class PaginaViaggioController {
         // Crea un DTO per il viaggio
         ViaggioDTO viaggioDTO = new ViaggioDTO();
         viaggioDTO.setViaggioId(viaggio.getViaggioId());
-        viaggioDTO.setCreatoreId(viaggio.getCreatoreId());
         viaggioDTO.setDataPartenza(viaggio.getDataPartenza());
         viaggioDTO.setDataRitorno(viaggio.getDataRitorno());
         viaggioDTO.setDataScadenza(viaggio.getDataScadenza());
@@ -83,69 +81,50 @@ public class PaginaViaggioController {
         viaggioDTO.setNumPartMax(viaggio.getNumPartMax());
         viaggioDTO.setNumPartMin(viaggio.getNumPartMin());
         viaggioDTO.setPrezzo(viaggio.getPrezzo());
-        viaggioDTO.setCreatoreId(viaggio.getCreatoreId());
-        
-        Optional<Utente> creatore = utenteDAO.findById(viaggio.getCreatoreId());
-        if (creatore.isPresent()) {
-            Utente creatoreInfo = creatore.get();
-            viaggioDTO.setNomeCreatore(creatoreInfo.getNome());
-            viaggioDTO.setCognomeCreatore(creatoreInfo.getCognome());
-            if (creatoreInfo.getImmagine() != null) {
-                viaggioDTO.setImmagineProfiloCreatore(creatoreInfo.getImmagine().getImg());
+
+        // Controlla se esiste un creatoreId o un agenziaId
+        if (viaggio.getCreatoreId() != null) {
+            Optional<Utente> creatore = utenteDAO.findById(viaggio.getCreatoreId());
+            if (creatore.isPresent()) {
+                Utente creatoreInfo = creatore.get();
+                viaggioDTO.setNomeCreatore(creatoreInfo.getNome());
+                viaggioDTO.setCognomeCreatore(creatoreInfo.getCognome());
+                if (creatoreInfo.getImmagine() != null) {
+                    viaggioDTO.setImmagineProfiloCreatore(creatoreInfo.getImmagine().getImg());
+                }
             }
+            viaggioDTO.setCreatoreId(viaggio.getCreatoreId()); // Imposta creatoreId
+        } else if (viaggio.getAgenziaId() != null) {
+            Optional<Agenzia> agenzia = agenziaDAO.findById(viaggio.getAgenziaId());
+            if (agenzia.isPresent()) {
+                Agenzia agenziaInfo = agenzia.get();
+                viaggioDTO.setNomeAgenzia(agenziaInfo.getNome()); // Aggiungi nome agenzia al DTO
+                // Aggiungi altri dettagli dell'agenzia se necessario
+            }
+            viaggioDTO.setAgenziaId(viaggio.getAgenziaId()); // Imposta agenziaId
         }
 
-        // Immagine copertina
+        // Immagine copertina e altre logiche rimangono invariate
         if (viaggio.getImmagineCopertina() != null) {
             viaggioDTO.setImmagineCopertina(viaggio.getImmagineCopertina().getImg());
         }
 
-     // Mappiamo le immagini del viaggio in byte[], verificando se la lista non è nulla o vuota
-        List<byte[]> immaginiViaggio = (viaggio.getImmaginiViaggio() != null && !viaggio.getImmaginiViaggio().isEmpty()) 
-            ? viaggio.getImmaginiViaggio().stream()
+        // Mappiamo le immagini del viaggio in byte[], verificando se la lista non è nulla o vuota
+        List<byte[]> immaginiViaggio = (viaggio.getImmaginiViaggio() != null && !viaggio.getImmaginiViaggio().isEmpty())
+                ? viaggio.getImmaginiViaggio().stream()
                 .map(viaggioImmagine -> viaggioImmagine.getImmagine().getImg())
                 .collect(Collectors.toList())
-            : new ArrayList<>();  // Ritorna una lista vuota se nessuna immagine è presente
-        
+                : new ArrayList<>();  // Ritorna una lista vuota se nessuna immagine è presente
+
         viaggioDTO.setImmagini(immaginiViaggio);
 
         // Mappiamo i tag del viaggio, verificando se la lista non è nulla o vuota
-        List<TagDTO> tagDTOs = (viaggio.getViaggioTags() != null && !viaggio.getViaggioTags().isEmpty()) 
-            ? viaggio.getViaggioTags().stream()
+        List<TagDTO> tagDTOs = (viaggio.getViaggioTags() != null && !viaggio.getViaggioTags().isEmpty())
+                ? viaggio.getViaggioTags().stream()
                 .map(viaggioTag -> new TagDTO(viaggioTag.getTag().getTagId(), viaggioTag.getTag().getTipoTag()))
                 .collect(Collectors.toList())
-            : new ArrayList<>();  // Ritorna una lista vuota se nessun tag è presente
+                : new ArrayList<>();  // Ritorna una lista vuota se nessun tag è presente
         viaggioDTO.setTagDTOs(tagDTOs);
-        
-     // Controlliamo e logghiamo la lista di immagini
-        if (viaggio.getImmaginiViaggio() != null && !viaggio.getImmaginiViaggio().isEmpty()) {
-            System.out.println("Trovate " + viaggio.getImmaginiViaggio().size() + " immagini per il viaggio con ID: " + viaggio.getViaggioId());
-            for (int i = 0; i < viaggio.getImmaginiViaggio().size(); i++) {
-                byte[] imgData = viaggio.getImmaginiViaggio().get(i).getImmagine().getImg();
-                System.out.println("Immagine " + (i+1) + ": lunghezza dati = " + (imgData != null ? imgData.length : 0) + " bytes");
-            }
-        } else {
-            System.out.println("Nessuna immagine trovata per il viaggio con ID: " + viaggio.getViaggioId());
-        }
-
-        // Controlliamo e logghiamo la lista di tag
-        if (viaggio.getViaggioTags() == null || viaggio.getViaggioTags().isEmpty()) {
-            System.out.println("Nessun tag trovato per il viaggio con ID: " + viaggio.getViaggioId());
-        } else {
-            System.out.println("Trovati " + viaggio.getViaggioTags().size() + " tag per il viaggio con ID: " + viaggio.getViaggioId());
-        }
-        
-        // Mappiamo i partecipanti del viaggio in PartecipantiViaggioDTO
-        List<PartecipantiViaggioDTO> partecipantiDTOs = viaggio.getPartecipanti().stream()
-            .map(partecipante -> {
-                PartecipantiViaggioDTO partecipanteDTO = new PartecipantiViaggioDTO();
-                partecipanteDTO.setNome(partecipante.getUtente().getNome());
-                partecipanteDTO.setCognome(partecipante.getUtente().getCognome());
-                // Aggiungi altri campi necessari per il partecipante
-                return partecipanteDTO;
-            })
-            .collect(Collectors.toList());
-        viaggioDTO.setPartecipanti(partecipantiDTOs);
 
         // Restituisce le informazioni del viaggio
         return viaggioDTO;
