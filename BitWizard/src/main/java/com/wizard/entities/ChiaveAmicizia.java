@@ -9,13 +9,18 @@ public class ChiaveAmicizia implements java.io.Serializable {
 
     @Column(name = "utente_1")
     private Long utenteId1;
+    
     @Column(name = "utente_2")
     private Long utenteId2;
+    
+    public ChiaveAmicizia() {}
 
-    public ChiaveAmicizia() {
+    public ChiaveAmicizia(Long utente1, Long utente2) {
+    	this.utenteId1 = utente1;
+    	this.utenteId2 = utente2;
     }
-
-    public Long getUtenteId1() {
+    
+	public Long getUtenteId1() {
         return utenteId1;
     }
 

@@ -2,6 +2,7 @@ package com.wizard.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -243,5 +244,14 @@ public class UtenteServiceImpl implements UtenteService {
             utenteTagRepository.delete(utenteTag);
         }
     }
+
+	@Override
+	public Utente findById(Long utente_id2) {
+		Optional<Utente> utenteOptional = dao.findById(utente_id2);
+		
+		Utente utente = utenteOptional.get();
+		
+		return utente;
+	}
 
 }

@@ -41,5 +41,9 @@ public interface ViaggioService {
 	List<ViaggioDTO> getAllViaggi();
 
 	ViaggioDTO modificaViaggio(Long viaggioId, ViaggioCreazioneDTO viaggioDTO, List<TagDTO> tagDTOs);
+
+	List<Viaggio> trovaViaggiPerUtente(Long utenteId);
+	
+	ViaggioDTO toDTO(Viaggio viaggio);
 	
 }

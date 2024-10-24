@@ -41,7 +41,6 @@ public class ImmagineController {
     @Autowired
     private UtenteDAO utenteDAO;
 
-    // API per salvare un'immagine
     @PostMapping("/upload")
     public ResponseEntity<?> uploadImmagine(@RequestParam("file") MultipartFile file) {
         try {

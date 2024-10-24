@@ -20,6 +20,6 @@ public interface NotificaService {
 
 	void creaNotifichePerCreazioneViaggio(Viaggio viaggio);
 
-	void creaNotifichePerAggiuntoAmicizia(Viaggio viaggio);
+	void creaNotifichePerRichiestaAmicizia(Utente riceveRichiesta, Utente inviaRichiesta);
 
 }

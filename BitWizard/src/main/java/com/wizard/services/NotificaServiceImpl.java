@@ -68,8 +68,18 @@ public class NotificaServiceImpl implements NotificaService {
                           "' con partenza da " + viaggio.getLuogoPartenza() + " il " + viaggio.getDataPartenza() + 
                           ". Preparati per una fantastica avventura!");
         notifica.setData(new Date());
+        
+        System.out.println("Utente ID: " + utente.getUtenteId());
+        System.out.println("Testo notifica: " + notifica.getTesto());
+        System.out.println("Data notifica: " + notifica.getData());
 
-        notificaDAO.save(notifica);
+        try {
+            notificaDAO.save(notifica);
+            System.out.println("Notifica creata per l'utente con ID " + utente.getUtenteId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Errore durante la creazione della notifica", e);
+        }
     }
     
     @Override
@@ -128,22 +138,16 @@ public class NotificaServiceImpl implements NotificaService {
     
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void creaNotifichePerAggiuntoAmicizia(Viaggio viaggio) {
-    	
-        Set<PartecipantiViaggio> partecipanti = viaggio.getPartecipanti();
+    public void creaNotifichePerRichiestaAmicizia(Utente riceveRichiesta, Utente inviaRichiesta) {
+        Notifica notifica = new Notifica();
+        notifica.setUtenteId(riceveRichiesta.getUtenteId());
+        notifica.setTesto("Ciao " + riceveRichiesta.getNome() + ", hai ricevuto una richiesta d'amicizia da " 
+                          + inviaRichiesta.getNome() + ". "
+                          + "<button onclick=\"gestisciRichiestaAmicizia(" + inviaRichiesta.getUtenteId() + ", true)\">Accetta</button>"
+                          + "<button onclick=\"gestisciRichiestaAmicizia(" + inviaRichiesta.getUtenteId() + ", false)\">Rifiuta</button>");
+        notifica.setData(new Date());
 
-        if (partecipanti != null && !partecipanti.isEmpty()) {
-            for (PartecipantiViaggio partecipante : partecipanti) {
-                Utente utente = partecipante.getUtente();
-
-                Notifica notifica = new Notifica();
-                notifica.setUtenteId(utente.getUtenteId());
-                notifica.setTesto("Il viaggio '" + viaggio.getNome() + "' è stato ANNULLATO.");
-                notifica.setData(new Date());
-
-                notificaDAO.save(notifica);
-            }
-        }
+        notificaDAO.save(notifica);
     }
 
 }

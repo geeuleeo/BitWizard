@@ -171,5 +171,25 @@ public class PaginaViaggioController {
 
         return ResponseEntity.ok(partecipantiDTOs);
     }
+    
+    @GetMapping("/viaggio/completo/{id}")
+    public ResponseEntity<Boolean> controlloDisponibilitaViaggio(@PathVariable Long id) {
+        
+        System.out.println("Caricamento dettagli per il viaggio con ID: " + id);
+        
+        if (id == null) {
+            throw new IllegalArgumentException("ID del viaggio non può essere nullo");
+        }
+        
+        // Recupera le informazioni del viaggio
+        Viaggio viaggio = viaggioDAO.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
+        
+        // Verifica se il viaggio ha raggiunto il numero massimo di partecipanti
+        boolean completo = viaggio.getPartecipanti().size() >= viaggio.getNumPartMax();
+        
+        // Restituisci lo stato di disponibilità
+        return ResponseEntity.ok(completo);
+    }
 	
 }

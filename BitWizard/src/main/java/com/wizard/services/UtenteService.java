@@ -31,4 +31,6 @@ public interface UtenteService {
 
 	UtenteDTO modificaUtente(Long utenteId, UtenteDTO utenteDTO, List<TagDTO> tagDTOs);
 
+	Utente findById(Long utente_id2);
+
 }

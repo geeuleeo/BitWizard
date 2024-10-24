@@ -90,6 +90,7 @@
     		<button id="iscrivitiBtn" type="submit" class="btn btn-primary" style="display: none;">Iscriviti al viaggio</button>
     		<button id="annullaIscrizioneBtn" type="submit" class="btn btn-secondary" style="display: none;">Annulla Iscrizione</button>
 		</form>
+		<p id="messaggioCompleto" style="display: none; color: red;">Il viaggio è al completo</p>
 		
 		<form id="creatoreForm" method="POST" >
 		<!-- Pulsanti specifici per il creatore (inizialmente nascosti) -->
@@ -463,6 +464,20 @@
     
     async function verificaIscrizioneUtente(viaggioId, utenteLoggato) {
         try {
+            // Controlla se il viaggio è al completo
+            const viaggioCompletoResponse = await fetch(`/viaggio/completo/${viaggioId}`);
+            const isViaggioCompleto = await viaggioCompletoResponse.json();
+
+            if (isViaggioCompleto) {
+                console.log('Viaggio completo, nascondo il pulsante di iscrizione');
+                document.getElementById('iscrivitiBtn').style.display = 'none';
+                document.getElementById('messaggioCompleto').style.display = 'block'; // Mostra un messaggio "Il viaggio è completo"
+                return; // Esci dalla funzione se il viaggio è completo
+            } else {
+                document.getElementById('messaggioCompleto').style.display = 'none'; // Nascondi il messaggio
+            }
+
+            // Se il viaggio non è completo, controlla se l'utente è già iscritto
             const response = await fetch(`/viaggio/${viaggioId}/partecipanti`, {
                 method: 'GET',
                 headers: {
@@ -472,12 +487,11 @@
 
             if (response.ok) {
                 const partecipanti = await response.json();
-                
-                // Aggiungi un log per vedere i dati dei partecipanti
+
                 console.log('Partecipanti ricevuti:', partecipanti);
                 console.log('Utente loggato:', utenteLoggato);
 
-                // Confronta gli ID convertendoli in numeri
+                // Controlla se l'utente è già iscritto
                 const isUtenteIscritto = partecipanti.some(partecipante => parseInt(partecipante.utenteId) === parseInt(utenteLoggato));
 
                 if (isUtenteIscritto) {

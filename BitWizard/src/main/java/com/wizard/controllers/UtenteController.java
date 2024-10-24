@@ -92,6 +92,15 @@ public class UtenteController {
 
             if (imgProfilo != null && !imgProfilo.isEmpty()) {
                 handleProfileImage(nuovoUtente, imgProfilo);
+            } else {
+                Optional<Immagine> optionalImg = immagineDAO.findById(114);
+                if (optionalImg.isPresent()) {
+                    Immagine immagine = optionalImg.get();
+                    nuovoUtente.setImmagine(immagine);
+                } else {
+                    // Gestisci il caso in cui l'immagine predefinita non è presente nel database
+                    throw new IllegalArgumentException("Immagine predefinita non trovata nel database.");
+                }
             }
             
             List<TagDTO> tagDTOs = utenteDTO.getTags();

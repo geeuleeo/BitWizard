@@ -6,33 +6,37 @@ import java.util.Date;
 
 @Entity
 public class Amicizia {
+	
+	public enum StatoAmicizia {
+	    IN_ATTESA,
+	    ACCETTATO,
+	    RIFIUTATO
+	}
 
     @EmbeddedId
     private ChiaveAmicizia chiave;
 
-
-
-
     @JoinColumn(name = "utente_id1")
     private Long utente_id1;
-
 
     @JoinColumn(name = "utente_id2")
     private Long utente_id2;
 
-
-
     @Temporal(TemporalType.DATE)
     private Date dataAmicizia;
+    
+    @Enumerated(EnumType.STRING)
+    private StatoAmicizia stato;
 
     public Amicizia() {
     }
 
-    public Amicizia(ChiaveAmicizia chiave, Long utente_id1, Long utente_id2, Date dataAmicizia) {
+    public Amicizia(ChiaveAmicizia chiave, Long utente_id1, Long utente_id2, Date dataAmicizia, StatoAmicizia stato) {
         this.chiave = chiave;
         this.utente_id1 = utente_id1;
         this.utente_id2 = utente_id2;
         this.dataAmicizia = dataAmicizia;
+        this.stato = stato;
     }
 
     public ChiaveAmicizia getChiave() {
@@ -66,4 +70,13 @@ public class Amicizia {
     public void setDataAmicizia(Date dataAmicizia) {
         this.dataAmicizia = dataAmicizia;
     }
+
+	public StatoAmicizia getStato() {
+		return stato;
+	}
+
+	public void setStato(StatoAmicizia stato) {
+		this.stato = stato;
+	}
+    
 }

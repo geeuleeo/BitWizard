@@ -5,15 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-import com.wizard.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wizard.DTO.TagDTO;
 import com.wizard.DTO.ViaggioCreazioneDTO;
+import com.wizard.entities.Agenzia;
+import com.wizard.entities.Immagine;
+import com.wizard.entities.PartecipantiViaggio;
+import com.wizard.entities.Utente;
+import com.wizard.entities.Viaggio;
+import com.wizard.entities.ViaggioImmagini;
 import com.wizard.repos.ImmagineDAO;
+import com.wizard.repos.PartecipantiViaggioDAO;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.ViaggioDAO;
 import com.wizard.repos.ViaggioDTO;
@@ -63,6 +68,9 @@ public class ViaggioController {
     
     @Autowired
     private ViaggioTagDAO viaggioTagDAO;
+    
+    @Autowired
+    private PartecipantiViaggioDAO partecipantiViaggioDAO;
     
     @Autowired
     private NotificaService notificaService;
@@ -342,9 +350,54 @@ public class ViaggioController {
         List<ViaggioDTO> viaggi = viaggioService.findViaggiByUtenteId(utente.getUtenteId());
         return ResponseEntity.ok(viaggi);
     }
+    
+    @GetMapping("/utente/finito")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiUtenteFiniti(HttpSession session) {
+        Utente utente = (Utente) session.getAttribute("utenteLoggato");
+
+        if (utente == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // Ottieni la data corrente
+        Date dataCorrente = new Date();
+
+        // Recupera i viaggi dell'utente e filtra quelli finiti (data di ritorno passata)
+        List<ViaggioDTO> viaggiFiniti = viaggioService.findViaggiByUtenteId(utente.getUtenteId()).stream()
+            .filter(viaggio -> viaggio.getDataRitorno().before(dataCorrente)) // Filtra i viaggi la cui data di ritorno è passata
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(viaggiFiniti);
+    }
+    
+    @GetMapping("/utente/iscritto")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiUtenteIscritto(HttpSession session) {
+        Utente utente = (Utente) session.getAttribute("utenteLoggato");
+
+        if (utente == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        
+        List<Viaggio> viaggi = viaggioService.trovaViaggiPerUtente(utente.getUtenteId());
+
+     // Mappa i viaggi in ViaggioDTO
+        List<ViaggioDTO> viaggiDTO = viaggi.stream()
+                                           .map(viaggioService::toDTO)
+                                           .collect(Collectors.toList());
+        
+        return ResponseEntity.ok(viaggiDTO);
+    }
 
     @GetMapping("/creatore")
-    public ResponseEntity<List<ViaggioDTO>> getViaggiByCreatoreId(@RequestParam Long creatoreId){
+    public ResponseEntity<List<ViaggioDTO>> getViaggiByCreatoreId(HttpSession session){
+    	
+    	Utente utente = (Utente) session.getAttribute("utenteLoggato");
+
+        if (utente == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        
+        Long creatoreId = utente.getUtenteId();
 
         Utente creatore = utenteDAO.findById(creatoreId).orElse(null);
         if (creatore == null) {

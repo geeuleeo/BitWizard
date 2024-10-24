@@ -54,6 +54,11 @@
                 <h2 id="nomeCognome">Nome Cognome</h2>
                 <p id="email">email@example.com</p>
                 <p id="descrizione">Descrizione utente...</p>
+                <button id="aggiungiAmicoBtn" class="btn btn-primary" style="display: none;" onclick="inviaRichiestaAmicizia()">Invia richiesta amicizia</button>
+				<button id="amiciBtn" class="btn btn-primary" style="display: block;" onclick="mostraListaAmici()">Amici</button>
+            	<div id="listaAmiciContainer">
+    				<!-- La lista degli amici verrà visualizzata qui -->
+				</div>
             </div>
         </div>
         
@@ -63,8 +68,18 @@
             <button id="modificaBtn" class="btn btn-warning">Modifica Profilo</button>
         </div>
 
-        <h2>I tuoi viaggi</h2>
-        <div id="cardContainer" class="row">
+        <h2>I viaggi a cui sei iscritto</h2>
+        <div id="viaggiIscrittoContainer" class="row">
+            <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+        </div>
+        
+        <h2>I viaggi che hai creato</h2>
+        <div id="viaggiCreatiContainer" class="row">
+            <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+        </div>
+        
+        <h2>I viaggi a cui hai partecipato</h2>
+        <div id="viaggiFinitiContainer" class="row">
             <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
         </div>
         
@@ -83,10 +98,31 @@
         }
 
         // Funzione per caricare i viaggi dell'utente
-        async function caricaViaggiUtente() {
-            const response = await fetch('/api/viaggi/utente'); // Endpoint che restituisce i viaggi dell'utente
+        async function caricaViaggiFinitiUtente() {
+            const response = await fetch('/api/viaggi/utente/finito'); // Endpoint che restituisce i viaggi dell'utente
             const viaggi = await response.json();
-            const container = document.getElementById('cardContainer');
+            const container = document.getElementById('viaggiFinitiContainer');
+
+            viaggi.forEach(viaggio => {
+                container.innerHTML += createViaggioCard(viaggio);
+            });
+        }
+        
+     // Funzione per caricare i viaggi dell'utente
+        async function caricaViaggiCreatiUtente() {
+            const response = await fetch('/api/viaggi/creatore');
+            const viaggi = await response.json();
+            const container = document.getElementById('viaggiCreatiContainer');
+
+            viaggi.forEach(viaggio => {
+                container.innerHTML += createViaggioCard(viaggio);
+            });
+        }
+     
+        async function caricaViaggiIscrittiUtente() {
+            const response = await fetch('/api/viaggi/utente/iscritto');
+            const viaggi = await response.json();
+            const container = document.getElementById('viaggiIscrittoContainer');
 
             viaggi.forEach(viaggio => {
                 container.innerHTML += createViaggioCard(viaggio);
@@ -189,6 +225,65 @@
             return cardHtml;
         }
         
+        function mostraListaAmici() {
+            fetch(`/api/amicizia/trovaAmici`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(amici => {
+                console.log('Lista amici:', amici);
+                let listaAmiciHtml = '<ul>';
+                amici.forEach(amico => {
+                    const base64Image = amico.immagine ? `data:image/jpeg;base64,${amico.immagine}` : '/path/to/default/image.png'; // Aggiungi un'immagine di default se non esiste
+
+                    listaAmiciHtml += `
+                        <li>
+                            <button onclick="vaiAlProfilo(${amico.utenteId})" style="border: none; background: none;">
+                                <img src="${base64Image}" alt="Immagine profilo di ${amico.nome}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                ${amico.nome} ${amico.cognome}
+                            </button>
+                        </li>`;
+                });
+                listaAmiciHtml += '</ul>';
+                document.getElementById('listaAmiciContainer').innerHTML = listaAmiciHtml;
+            })
+            .catch(error => {
+                console.error('Errore durante il caricamento degli amici:', error);
+            });
+        }
+
+        // Funzione per reindirizzare al profilo dell'amico
+        function vaiAlProfilo(utenteId) {
+            window.location.href = `/profiloUtente/${utenteId}`;
+        }
+        
+        function gestisciRichiestaAmicizia(utenteId, accetta) {
+            const action = accetta ? 'accetta' : 'rifiuta';
+
+            fetch(`/api/amicizia/${action}/${utenteId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert(`Richiesta d'amicizia ${accetta ? 'accettata' : 'rifiutata'}`);
+                    // Rimuovi la notifica o aggiorna la UI
+                } else {
+                    alert('Errore nella gestione della richiesta');
+                }
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+                alert('Errore durante la gestione della richiesta');
+            });
+        }
+
+        
         async function modificaUtente() {
             // Reindirizza l'utente alla pagina di modifica del viaggio
             window.location.href = `/ModificaProfilo`;
@@ -202,7 +297,9 @@
 
         // Chiamate per caricare i dati all'avvio
         caricaDatiUtente();
-        caricaViaggiUtente();
+        caricaViaggiFinitiUtente();
+        caricaViaggiCreatiUtente();
+        caricaViaggiIscrittiUtente();
         caricaNotificheUtente();
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

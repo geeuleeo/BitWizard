@@ -23,4 +23,6 @@ public interface PartecipantiViaggioDAO extends JpaRepository<PartecipantiViaggi
     @Query("DELETE FROM PartecipantiViaggio pv WHERE pv.id.viaggioId = :viaggioId AND pv.id.utenteId = :utenteId")
     int deleteByViaggioIdAndUtenteId(@Param("viaggioId") Long viaggioId, @Param("utenteId") Long utenteId);
     
+    List<PartecipantiViaggio> findByUtente_UtenteId(Long utenteId);
+    
 }
