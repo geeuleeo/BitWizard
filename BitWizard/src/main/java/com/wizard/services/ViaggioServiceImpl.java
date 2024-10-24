@@ -132,43 +132,7 @@ public class ViaggioServiceImpl implements ViaggioService {
 			}
 	        }
 	    }
-	    
-	    Optional<Utente> creatoreOptional = utenteDAO.findById(viaggio.getCreatoreId());
-		Optional<Agenzia> agenziaOptional = agenziaDAO.findById(viaggioSalvato.getAgenziaId());
-	    if (creatoreOptional.isPresent()) {
-			System.out.println("siamo in creatoreOptional");
-	    	if (viaggio.getPartecipanti() == null || viaggio.getPartecipanti().isEmpty()) {
-	    		Utente creatore = creatoreOptional.get();
-
-	    		// Crea o recupera il partecipante
-	    		PartecipantiViaggio partecipante = addPartecipanteViaggio(creatore, viaggioSalvato);
-
-	    		// Aggiorna la lista dei partecipanti nel viaggio
-	    		Set<PartecipantiViaggio> partecipanti = new HashSet<>(viaggioSalvato.getPartecipanti());
-	    		partecipanti.add(partecipante);
-	    		viaggioSalvato.setPartecipanti(partecipanti);
-	    	}
-	        // Aggiorna il viaggio
-	        Viaggio risultatoFinale = dao.save(viaggioSalvato);
-	    
-	        try {
-	            notificaService.creaNotifichePerCreazioneViaggio(viaggio);
-	        } catch (Exception e) {
-	            System.err.println("Errore durante la creazione delle notifiche per il viaggio con id " + risultatoFinale.getViaggioId());
-	        }
-
-	        return risultatoFinale;
-	    }else if (agenziaOptional.isPresent()) {
-			Set<PartecipantiViaggio> partecipanti = new HashSet<>(viaggioSalvato.getPartecipanti());
-			viaggioSalvato.setPartecipanti(partecipanti);
-			System.out.println("siamo in agenzia.ispresent");
-			Viaggio risultatoFinale = dao.save(viaggioSalvato);
-			return risultatoFinale;
-		}
-		else {
-	        throw new IllegalArgumentException("Creatore con ID " + viaggio.getCreatoreId() + " non trovato.");
-	    }
-
+		return viaggioSalvato;
 	}
 
 	public Viaggio salvaViaggioAgenzia(Viaggio viaggio, List<TagDTO> tagDTOs) {
