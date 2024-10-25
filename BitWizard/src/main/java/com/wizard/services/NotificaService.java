@@ -21,5 +21,9 @@ public interface NotificaService {
 	void creaNotifichePerCreazioneViaggio(Viaggio viaggio);
 
 	void creaNotifichePerRichiestaAmicizia(Long idUtente1, Long idUtente2);
+	
+	void creaNotifichePerRifiutoAmicizia(Long riceveRichiestaId, Long inviaRichiestaId);
+	
+	void creaNotifichePerAccettazioneAmicizia(Long riceveRichiestaId, Long inviaRichiestaId);
 
 }

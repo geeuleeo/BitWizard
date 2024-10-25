@@ -138,6 +138,82 @@ public class NotificaServiceImpl implements NotificaService {
     
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void creaNotifichePerRifiutoAmicizia(Long riceveRichiestaId, Long inviaRichiestaId) {
+
+        System.out.println(inviaRichiestaId + " id inviaRichiesta");
+        System.out.println(riceveRichiestaId + " id riceveRichiesta");
+        
+        // Carlo sta inviando la richiesta, quindi trova Carlo (inviaRichiestaId)
+        Utente utenteRichiedente = utenteDAO.findById(inviaRichiestaId)
+                .orElseThrow(() -> {
+                    System.out.println("Utente con ID " + inviaRichiestaId + " non trovato.");
+                    return new IllegalArgumentException("Utente non trovato");
+                });
+                
+        System.out.println("Utente che invia la richiesta: " + utenteRichiedente.getNome());
+
+        // Mauro sta ricevendo la richiesta, quindi trova Mauro (riceveRichiestaId)
+        Utente utenteRicevente = utenteDAO.findById(riceveRichiestaId)
+                .orElseThrow(() -> {
+                    System.out.println("Utente con ID " + riceveRichiestaId + " non trovato.");
+                    return new IllegalArgumentException("Utente non trovato");
+                });
+                
+        System.out.println("Utente che riceve la richiesta: " + utenteRicevente.getNome());
+
+        // Creazione della notifica
+        Notifica notifica = new Notifica();
+        
+        // La notifica va inviata al ricevente, cioè Mauro (utenteRicevente)
+        notifica.setUtenteId(utenteRicevente.getUtenteId());
+        
+        notifica.setTesto("Ciao " + utenteRicevente.getNome() + ", " + utenteRichiedente.getNome() + "  ha rifiutato la tua richiesta di amicizia.");
+        
+        notifica.setData(new Date());
+
+        notificaDAO.save(notifica);
+    }
+    
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void creaNotifichePerAccettazioneAmicizia(Long riceveRichiestaId, Long inviaRichiestaId) {
+
+        System.out.println(inviaRichiestaId + " id inviaRichiesta");
+        System.out.println(riceveRichiestaId + " id riceveRichiesta");
+        
+        // Carlo sta inviando la richiesta, quindi trova Carlo (inviaRichiestaId)
+        Utente utenteRichiedente = utenteDAO.findById(inviaRichiestaId)
+                .orElseThrow(() -> {
+                    System.out.println("Utente con ID " + inviaRichiestaId + " non trovato.");
+                    return new IllegalArgumentException("Utente non trovato");
+                });
+                
+        System.out.println("Utente che invia la richiesta: " + utenteRichiedente.getNome());
+
+        // Mauro sta ricevendo la richiesta, quindi trova Mauro (riceveRichiestaId)
+        Utente utenteRicevente = utenteDAO.findById(riceveRichiestaId)
+                .orElseThrow(() -> {
+                    System.out.println("Utente con ID " + riceveRichiestaId + " non trovato.");
+                    return new IllegalArgumentException("Utente non trovato");
+                });
+                
+        System.out.println("Utente che riceve la richiesta: " + utenteRicevente.getNome());
+
+        // Creazione della notifica
+        Notifica notifica = new Notifica();
+        
+        // La notifica va inviata al ricevente, cioè Mauro (utenteRicevente)
+        notifica.setUtenteId(utenteRicevente.getUtenteId());
+        
+        notifica.setTesto("Ciao " + utenteRicevente.getNome() + ", " + utenteRichiedente.getNome() + "  ha accettato la tua richiesta di amicizia!");
+        
+        notifica.setData(new Date());
+
+        notificaDAO.save(notifica);
+    }
+    
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void creaNotifichePerRichiestaAmicizia(Long riceveRichiestaId, Long inviaRichiestaId) {
         
         // id inviaRichiesta = 49 (Carlo)
