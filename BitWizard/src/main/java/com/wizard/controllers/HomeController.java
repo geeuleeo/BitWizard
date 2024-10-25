@@ -34,7 +34,7 @@ public class HomeController {
     // Metodo per servire la pagina di login
     @GetMapping("/login")
     public String showLoginPage() {
-        return "Login/login";
+        return "login";
     }
 
     @PostMapping("/login")
