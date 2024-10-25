@@ -103,6 +103,13 @@ public class AmiciziaServiceImpl implements AmiciziaService {
 	    	System.err.println("Notifica non trovata");
 	    }
 	    notificaDAO.delete(notificaOpt.get());
+	    
+	    try {
+            notificaService.creaNotifichePerAccettazioneAmicizia(utenteId, utenteLoggatoId);
+        } catch (Exception e) {
+            System.err.println("Errore  ");
+            e.printStackTrace();
+        }
     }
 
     public void rifiutaRichiesta(Long utenteLoggatoId, Long utenteId, Long notificaId) {
@@ -122,6 +129,13 @@ public class AmiciziaServiceImpl implements AmiciziaService {
 	    	System.err.println("Notifica non trovata");
 	    }
 	    notificaDAO.delete(notificaOpt.get());
+	    
+	    try {
+            notificaService.creaNotifichePerRifiutoAmicizia(utenteId, utenteLoggatoId);
+        } catch (Exception e) {
+            System.err.println("Errore  ");
+            e.printStackTrace();
+        }
     }
 
     @Override

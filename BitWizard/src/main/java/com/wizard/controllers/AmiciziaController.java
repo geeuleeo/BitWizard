@@ -82,7 +82,7 @@ public class AmiciziaController {
         return ResponseEntity.ok("Richiesta d'amicizia accettata");
     }
 
-    @PostMapping("/rifiuta/{utenteId}")
+    @PostMapping("/rifiuta/{utenteId}/{notificaId}")
     public ResponseEntity<String> rifiutaRichiestaAmicizia(@PathVariable Long utenteId, @PathVariable Long notificaId, HttpSession session) {
     	
         Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");

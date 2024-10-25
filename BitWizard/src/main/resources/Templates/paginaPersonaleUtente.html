@@ -278,6 +278,7 @@
                 if (response.ok) {
                     alert(`Richiesta d'amicizia ${accetta ? 'accettata' : 'rifiutata'}`);
                     // Rimuovi la notifica o aggiorna la UI
+                    caricaNotificheUtente();
                 } else {
                     alert('Errore nella gestione della richiesta');
                 }
