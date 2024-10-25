@@ -1,402 +1,167 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f4f4;
-        }
-        .container {
-            margin-top: 30px;
-        }
-        h1 {
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .btn-primary {
-            margin-top: 10px;
-        }
-    </style>
+    <title>Viaggio da Solo</title>
+    <link rel="stylesheet" href="/Pagina-Iniziale/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-
-    <div id="utenteId" th:text="${idUtente} "></div>
-    <div id="tagUtente" th:text="${tagsUtente}"></div>
-
-
-<div class="container">
-
-    <h1 class="text-center display-4">Benvenuto, <span th:text="${nomeUtente}">Utente</span>!</h1>
-
-    <p class="text-center">
-        <button id="pulsanteLogin" class="btn btn-outline-secondary" onclick="location.href='/login'">Vai al Login</button>
-        <button id="pulsanteAreaPersonale" class="btn btn-outline-primary" onclick="location.href='/paginaPersonale'">Vai Alla tua pagina personale</button>
-        <button id="pulsanteLogout" class="btn btn-outline-danger" onclick="effettuaLogout()">Logout</button>
-    </p>
-
-  <h1 class="text-center display-4">Filtra i tuoi Viaggi</h1>
-
-  <div class="card p-4">
-    <form id="filterByTag" class="form-group">
-      <h3>Filtra per Tag</h3>
-      <div class="row">
-        <div class="col-md-8">
-          <input type="number" class="form-control" id="tagId" placeholder="Inserisci ID del Tag" required>
+<body>
+    <!-- Nav-bar -->
+    <nav>
+        <div class="logo">
+            <a href="home.html"><img src="../assets/img/viaggiodasolo.svg" alt="Logo"></a>
         </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
+        <ul>
+            <li><a href="listaViaggi">Viaggia con noi</a></li>
+            <li><a href="CreaViaggio">Crea il tuo viaggio</a></li>
+            <li><a href="">Offerte limitate</a></li>
+            <li><a href="#">Diventa un partner</a></li>
+            <li class="login-container">
+                <a href="" class="login">
+                    <img src="../assets/icon/icon-login.svg" class="icona-logo"> Login/Registrati
+                </a>
+                <!-- Menu a tendina -->
+                <div class="dropdown-menu">
+                    <h3>Login</h3>
+                    <form action="#">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Inserisci il tuo username">
+                        
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Inserisci la tua password">
+                        
+                        <div class="buttons">
+                            <button type="submit" class="login-btn" onclick="window.location.href='paginaPersonaleUtente'">Accedi</button>
+                            <button type="button" class="register-btn" onclick="window.location.href='registrazione'">Registrati</button>
+                        </div>
+                    </form>
+                </div>
+            </li>
+            
+        </ul>
+    </nav>
 
-    <form id="filterByAge" class="form-group">
-      <h3>Filtra per Età</h3>
-      <div class="row">
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="minAge" placeholder="Età Minima" required>
-        </div>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="maxAge" placeholder="Età Massima" required>
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
+    <!-- Image content with search box -->
+    <div class="image-content">
+        <img src="../assets/img/giappone-ok.jpg" alt="Giappone">
 
-    <form id="filterByDestination" class="form-group">
-      <h3>Filtra per Destinazione</h3>
-      <div class="row">
-        <div class="col-md-8">
-          <input type="text" class="form-control" id="destinazione" placeholder="Inserisci Destinazione" required>
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
-
-    <form id="filterByPartenza" class="form-group">
-      <h3>Filtra per Partenza</h3>
-      <div class="row">
-        <div class="col-md-8">
-          <input type="text" class="form-control" id="partenza" placeholder="Inserisci Partenza" required>
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
-
-    <form id="filterByPrezzo" class="form-group">
-      <h3>Filtra per Prezzo</h3>
-      <div class="row">
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="minPrezzo" placeholder="Prezzo Minimo" required>
-        </div>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="maxPrezzo" placeholder="Prezzo Massimo" required>
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
-
-    <div id="cardContainer" class="row">
-	<!-- Le card dei viaggi verranno inserite qui dinamicamente -->
-	</div>
-	
-	<!-- Consigliati -->
-        <div class="mt-4" id="consigliati">
-            <!-- Sezione consigliati dinamica -->
-        </div>
-
-        <!-- Azioni -->
-        <div class="text-center mt-4">
-            <p class="text-center mt-4"><a href="/lista" class="btn btn-outline-secondary">Vai alla Lista di Viaggi</a></p>
-            <button class="btn btn-outline-primary" id="pulsanteCreaViaggio" onclick="location.href='/CreaViaggio'">Crea il tuo Viaggio</button>
+        <!-- Search Box -->
+        <div class="search-box">
+            <input type="text" placeholder="Dove vorresti andare?" class="search-input">
+            <div class="separator"></div>
+            
+            <!-- Campo input con l'icona del calendario -->
+            <div class="date-input">
+                <input type="date" class="search-date" id="date-input"> <!-- Input di tipo date -->
+            </div>
+            
+            <button type="submit" class="search-btn">
+                <img href="" src="../assets/icon/search icon.png" alt="Cerca">
+            </button>
         </div>
     </div>
-</div>
 
-<!-- Container per le card dinamiche -->
-<div id="cardContainer" class="row mt-4">
-    <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
-</div>
-
-    <script>
-
-    async function fetchData(url) {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(errorText);
-    }
-
-    return await response.json();
-    }
-
-    function createViaggioCard(viaggio) {
-	    const dataPartenza = new Date(viaggio.dataPartenza).toLocaleDateString();
-	    const dataRitorno = new Date(viaggio.dataRitorno).toLocaleDateString();
-
-	    return `
-	      <div class="col-md-4">
-	        <div class="card mb-4">
-	          <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
-	          <div class="card-body">
-	            <h5 class="card-title">${viaggio.nome}</h5>
-	            <p class="card-text">
-	              Luogo di Partenza: ${viaggio.luogoPartenza} <br>
-	              Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
-	              Data di Partenza: ${dataPartenza} <br>
-	              Data di Ritorno: ${dataRitorno} <br>
-	              Prezzo: €${viaggio.prezzo.toFixed(2)}
-	            </p>
-	            <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="btn btn-primary">Dettagli del viaggio</a>
-	          </div>
-	        </div>
-	      </div>
-	    `;
-	  }
-
-	  function displayResults(results) {
-	    const resultsContainer = document.getElementById('results');
-	    resultsContainer.innerHTML = results.map(createViaggioCard).join('');
-	  }
-
-	  document.getElementById('filterByTag').addEventListener('submit', async (e) => {
-		    e.preventDefault();
-
-		    const tagId = document.getElementById('tagId').value;
-		    const container = document.getElementById('cardContainer');
-		    container.innerHTML = "";
-
-		    try {
-		        const result = await fetchData(`api/viaggi/filtra/tag?tagId=${tagId}`);
-		        result.forEach(viaggio => {
-		            container.innerHTML += createViaggioCard(viaggio);
-		        });
-		    } catch (error) {
-		        container.innerText = error.message;
-		    }
-		});
-
-
-  document.getElementById('filterByAge').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const minAge = document.getElementById('minAge').value;
-    const maxAge = document.getElementById('maxAge').value;
-    const container = document.getElementById('cardContainer');
+    <!-- Offerte Section -->
+    <section class="offerte">
+        <h2>Le nostre migliori offerte!!!</h2>
+        <div class="card-container">
+            <div class="cards-wrapper">
+            <button class="nav-btn left-btn"><img src="../assets/icon/freccia-sinistra.svg" alt="Indietro"></button>
+                <div class="cards">
+                    <div class="card">
+                        <img src="../assets/img/giappone-ok.jpg" alt="Giappone">
+                        <p>GIAPPONE <br>A partire da € 1.500</p>
+                    </div>
+                    <div class="card">
+                        <img src="../assets/img/finlandia.jpg" alt="Finlandia">
+                        <p>FINLANDIA <br>A partire da € 1.250</p>
+                    </div>
+                    <div class="card">
+                        <img src="../assets/img/new-york.jpg" alt="New York">
+                        <p>NEW YORK <br>A partire da € 950</p>
+                    </div>
+                    <div class="card">
+                        <img src="../assets/img/italia.png" alt="Italia">
+                        <p>ITALIA <br>A partire da € 700</p>
+                    </div>
+                </div>
+            <button class="nav-btn right-btn"><img src="../assets/icon/freccia-destra.svg" alt="Avanti"></button>
+            </div>
+        </div>
+    </section>
     
-    container.innerHTML = "";
-
-    try {
-      const result = await fetchData(`api/viaggi/filtra/eta?min=${minAge}&max=${maxAge}`);
-      result.forEach(viaggio => {
-          container.innerHTML += createViaggioCard(viaggio);
-      });
-  } catch (error) {
-      container.innerText = error.message;
-  }
-  });
-
-  document.getElementById('filterByDestination').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const destinazione = document.getElementById('destinazione').value;
-    const container = document.getElementById('cardContainer');
     
-    container.innerHTML = "";
 
-    try {
-      const result = await fetchData(`api/viaggi/filtra/destinazione?destinazione=${destinazione}`);
-      result.forEach(viaggio => {
-          container.innerHTML += createViaggioCard(viaggio);
-      });
-  } catch (error) {
-      container.innerText = error.message;
-  }
-  });
-
-  document.getElementById('filterByPartenza').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const partenza = document.getElementById('partenza').value;
-    const container = document.getElementById('cardContainer');
+    <!-- Recensioni Section -->
+    <section class="recensioni">
+        <h2>Le nostre mete più recensite!!!</h2>
+        <div class="card-container">
+            <button class="nav-btn left-btn"><img src="../assets/icon/freccia-sinistra.svg" alt="Indietro"></button>
+            
+            <div class="cards-wrapper">
+                <div class="cards">
+                    <div class="card">
+                        <img src="../assets/img/giappone-ok.jpg" alt="Giappone">
+                        <p>GIAPPONE <br>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span> 4</span></p>
+                    </div>
+                    <div class="card">
+                        <img src="../assets/img/finlandia.jpg" alt="Finlandia">
+                        <p>FINLANDIA <br>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span> 5</span></p>
+                    </div>
+                    <div class="card">
+                        <img src="../assets/img/new-york.jpg" alt="New York">
+                        <p>NEW YORK <br>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star-half checked"></span>
+                            <span> 4.5</span></p>
+                    </div>
+                    <div class="card">
+                        <img src="../assets/img/italia.png" alt="Italia">
+                        <p>ITALIA <br>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="rating">4</span></p>
+                    </div>
+                </div>
+            </div>
     
-    container.innerHTML = "";
-
-    try {
-      const result = await fetchData(`api/viaggi/filtra/partenza?partenza=${partenza}`);
-      result.forEach(viaggio => {
-          container.innerHTML += createViaggioCard(viaggio);
-      });
-  } catch (error) {
-      container.innerText = error.message;
-  }
-  });
-
-  document.getElementById('filterByPrezzo').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const minPrezzo = document.getElementById('minPrezzo').value;
-    const maxPrezzo = document.getElementById('maxPrezzo').value;
-    const container = document.getElementById('cardContainer');
+            <button class="nav-btn right-btn"><img src="../assets/icon/freccia-destra.svg" alt="Avanti"></button>
+        </div>
+    </section>
     
-    container.innerHTML = "";
 
-    try {
-      const result = await fetchData(`api/viaggi/filtra/prezzo?min=${minPrezzo}&max=${maxPrezzo}`);
-      result.forEach(viaggio => {
-          container.innerHTML += createViaggioCard(viaggio);
-      });
-  } catch (error) {
-      container.innerText = error.message;
-  }
-  });
-
-    async function getTags() {
-        try {
-            const response = await fetch('/api/tags/get', {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            // Controlla se la risposta è ok
-            if (response.ok) {
-                const tags = await response.json(); N
-
-
-                if (tags.length > 0) {
-
-                    const tagIds = tags.map(tag => tag.tagId);
-
-                    const randomId = tagIds[Math.floor(Math.random() * tagIds.length)];
-
-
-                    const viaggiResponse = await fetch(`/api/viaggi/filtra/tag?tagId=${randomId}`, {
-                        method: 'GET',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (viaggiResponse.ok) {
-                        const viaggi = await viaggiResponse.json();
-
-
-                        const consigliatiDiv = document.getElementById('consigliati');
-                        consigliatiDiv.innerHTML = '';
-
-
-                        const risultatiDaMostrare = viaggi.slice(0, 3);
-                        risultatiDaMostrare.forEach(viaggio => {
-                            const viaggioElement = document.createElement('div');
-                            viaggioElement.textContent = viaggio.nome + "// luogo partenza = "+viaggio.luogoPartenza+"//luogo arrivo = "+ viaggio.luogoArrivo;
-                            consigliatiDiv.appendChild(viaggioElement);
-                        });
-                    } else {
-                        console.error('Errore durante il recupero dei viaggi:', viaggiResponse.status);
-                    }
-                } else {
-                    console.error('Nessun tag trovato');
-                }
-            }
-        } catch (error) {
-            console.error('Errore durante la fetch:', error);
-        }
-    }
-    
-    async function bottoneLogin() {
-        try {
-            // Effettua la richiesta al server per ottenere l'ID dell'utente loggato
-            const response = await fetch(`/api/utente/session`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                const utenteLoggato = await response.json(); // Ottieni l'ID dell'utente loggato dal server
-
-                console.log('ID utente loggato:', utenteLoggato);
-
-                if (utenteLoggato) {
-                    // Nascondi il pulsante di login
-                    document.getElementById('pulsanteLogin').style.display = 'none';
-	
-                    document.getElementById('pulsanteAreaPersonale').style.display = 'block';
-                    
-                    // Mostra il pulsante di logout
-                    document.getElementById('pulsanteLogout').style.display = 'block';
-                    
-                    document.getElementById('pulsanteCreaViaggio').style.display = 'block';
-                } else {
-                    // Mostra il pulsante di login
-                    document.getElementById('pulsanteLogin').style.display = 'block';
-	
-                    document.getElementById('pulsanteAreaPersonale').style.display = 'none';
-                    // Nascondi il pulsante di logout
-                    document.getElementById('pulsanteLogout').style.display = 'none';
-                    
-                    document.getElementById('pulsanteCreaViaggio').style.display = 'none';
-                }
-            } else {
-                console.error('Errore nel recupero della sessione utente');
-             // Mostra il pulsante di login
-                document.getElementById('pulsanteLogin').style.display = 'block';
-				
-                document.getElementById('pulsanteAreaPersonale').style.display = 'none';
-                // Nascondi il pulsante di logout
-                document.getElementById('pulsanteLogout').style.display = 'none';
-                
-                document.getElementById('pulsanteCreaViaggio').style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Errore durante la richiesta:', error);
-        }
-    }
-    
-    async function effettuaLogout() {
-        try {
-            const response = await fetch('/logout', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                const message = await response.text(); // Ottieni il messaggio di risposta dal server
-                alert(message); // Mostra il messaggio di logout effettuato con successo
-                window.location.href = '/';
-            } else {
-                alert('Errore durante il logout. Riprova.');
-            }
-        } catch (error) {
-            console.error('Errore durante la richiesta di logout:', error);
-        }
-    }
-
-	bottoneLogin();
-
-    getTags();
-    
-    </script>
-
+    <!-- Footer -->
+    <footer class="custom-container">
+        <div class="footer-content">
+            <p>VIAGGIO DA SOLO S.p.A.</p>
+            <p>Email: viaggiodasolospa@gmail.com</p>
+            <p>Tel: 011 456789</p>
+            <p>P. Iva: IT 01 456789101</p>
+            <p>Indirizzo: Via Jacopo Durandi, 10</p>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Viaggio da solo S.p.A.</p>
+        </div>
+    </footer>
 </body>
 </html>

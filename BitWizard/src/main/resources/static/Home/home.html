@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+
+<div id="utenteId" th:text="${idUtente} "></div>
+<div id="tagUtente" th:text="${tagsUtente}"></div>
+
+
+<div class="container">
+
+	<h1 class="text-center display-4">
+		Benvenuto, <span th:text="${nomeUtente}">Utente</span>!
+	</h1>
+
+	<p class="text-center">
+		<button id="pulsanteLogin" class="btn btn-outline-secondary"
+			onclick="location.href='/login'">Vai al Login</button>
+		<button id="pulsanteAreaPersonale" class="btn btn-outline-primary"
+			onclick="location.href='/paginaPersonale'">Vai Alla tua
+			pagina personale</button>
+		<button id="pulsanteLogout" class="btn btn-outline-danger"
+			onclick="effettuaLogout()">Logout</button>
+	</p>
+
+	<h1 class="text-center display-4">Filtra i tuoi Viaggi</h1>
+
+	<div class="card p-4">
+		<form id="filterByTag" class="form-group">
+			<h3>Filtra per Tag</h3>
+			<div class="row">
+				<div class="col-md-8">
+					<input type="number" class="form-control" id="tagId"
+						placeholder="Inserisci ID del Tag" required>
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-primary w-100">Cerca</button>
+				</div>
+			</div>
+		</form>
+
+		<form id="filterByAge" class="form-group">
+			<h3>Filtra per Età</h3>
+			<div class="row">
+				<div class="col-md-4">
+					<input type="number" class="form-control" id="minAge"
+						placeholder="Età Minima" required>
+				</div>
+				<div class="col-md-4">
+					<input type="number" class="form-control" id="maxAge"
+						placeholder="Età Massima" required>
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-primary w-100">Cerca</button>
+				</div>
+			</div>
+		</form>
+
+		<form id="filterByDestination" class="form-group">
+			<h3>Filtra per Destinazione</h3>
+			<div class="row">
+				<div class="col-md-8">
+					<input type="text" class="form-control" id="destinazione"
+						placeholder="Inserisci Destinazione" required>
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-primary w-100">Cerca</button>
+				</div>
+			</div>
+		</form>
+
+		<form id="filterByPartenza" class="form-group">
+			<h3>Filtra per Partenza</h3>
+			<div class="row">
+				<div class="col-md-8">
+					<input type="text" class="form-control" id="partenza"
+						placeholder="Inserisci Partenza" required>
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-primary w-100">Cerca</button>
+				</div>
+			</div>
+		</form>
+
+		<form id="filterByPrezzo" class="form-group">
+			<h3>Filtra per Prezzo</h3>
+			<div class="row">
+				<div class="col-md-4">
+					<input type="number" class="form-control" id="minPrezzo"
+						placeholder="Prezzo Minimo" required>
+				</div>
+				<div class="col-md-4">
+					<input type="number" class="form-control" id="maxPrezzo"
+						placeholder="Prezzo Massimo" required>
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-primary w-100">Cerca</button>
+				</div>
+			</div>
+		</form>
+
+		<div id="cardContainer" class="row">
+			<!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+		</div>
+
+		<!-- Consigliati -->
+		<div class="mt-4" id="consigliati">
+			<!-- Sezione consigliati dinamica -->
+		</div>
+
+		<!-- Azioni -->
+		<div class="text-center mt-4">
+			<p class="text-center mt-4">
+				<a href="/lista" class="btn btn-outline-secondary">Vai alla
+					Lista di Viaggi</a>
+			</p>
+			<button class="btn btn-outline-primary" id="pulsanteCreaViaggio"
+				onclick="location.href='/CreaViaggio'">Crea il tuo Viaggio</button>
+		</div>
+	</div>
+</div>
+
+<!-- Container per le card dinamiche -->
+<div id="cardContainer" class="row mt-4">
+	<!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+</div>
+</body>
+</html>

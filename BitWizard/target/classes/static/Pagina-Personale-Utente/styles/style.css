@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'ADLaM Display', sans-serif;
+    background-color: #f5f5f5;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #001f54;
+    padding: 1rem 3rem;
+    position: sticky;
+    top: 0;
+    width: 100%;
+}
+
+nav .logo img {
+    height: 50px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    color: #ff6347;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.profile-header img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.profile-info {
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+.profile-info h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #001f54;
+}
+
+.profile-info p {
+    color: #555;
+}
+
+.split-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.upper-section {
+    background-color: #001f54;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.upper-section h1 {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 2rem;
+}
+
+.lower-section {
+    display: flex;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.viaggi-container {
+    flex: 3;
+    padding-right: 10px;
+}
+
+.galleria-container {
+    flex: 1;
+}
+
+.viaggio {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.viaggio h5 {
+    color: #001f54;
+}
+
+.dropdown select {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-family: 'ADLaM Display', sans-serif;
+    margin-bottom: 20px;
+}
+
+.footer {
+    background-color: #001f54;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #001f54;
+    border-color: #001f54;
+}
+
+.btn-primary:hover {
+    background-color: #ff6347;
+    border-color: #ff6347;
+}

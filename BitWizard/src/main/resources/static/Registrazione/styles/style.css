@@ -1,0 +1,149 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('/assets/img/background-registrazione.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'ADLaM Display', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Aggiunto padding per evitare che gli elementi tocchino i bordi */
+}
+
+.form-container {
+    background-color: rgba(255, 255, 255, 0.9); /* Colore bianco trasparente */
+    padding: 20px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bottom shadow */
+    width: 90%; /* Utilizza una percentuale per adattarsi a schermi piccoli */
+    max-width: 400px; /* Massima larghezza per schermi più grandi */
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+form label, form input, form textarea, form button {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+input, textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#availableTags, #selectedTags {
+    width: 100%;
+    margin: 0;
+    padding: 8px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+/* Stile per i tag come bottoni */
+.tag {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+}
+
+.tag:hover {
+    background-color: #0056b3;
+}
+
+.tag .close-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 0 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.tag .close-btn:hover {
+    background-color: #ff1a1a;
+}
+
+/* Stile per il contenitore dei tag */
+#availableTags, #selectedTags {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#availableTags .tag, #selectedTags .tag {
+    margin: 5px;
+}
+
+
+/* MEDIA QUERIES */
+
+/* Schermi più piccoli di 768px (tablet e smartphone) */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 15px; /* Riduci leggermente il padding */
+        width: 95%; /* Adatta il form a schermi più piccoli */
+    }
+    
+    button {
+        padding: 8px; /* Riduci l'imbottitura dei pulsanti */
+    }
+}
+
+/* Schermi più piccoli di 480px (smartphone) */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 10px;
+        width: 100%; /* Assicura che il form riempia tutto lo schermo */
+    }
+
+    h2 {
+        font-size: 18px; /* Riduci la dimensione del titolo per schermi più piccoli */
+    }
+
+    input, textarea {
+        padding: 6px; /* Riduci l'imbottitura degli input */
+    }
+
+    button {
+        padding: 6px;
+        font-size: 12px; /* Riduci la dimensione del testo del pulsante */
+    }
+}

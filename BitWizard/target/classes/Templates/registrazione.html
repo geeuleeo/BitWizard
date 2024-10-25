@@ -4,230 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrazione Utente</title>
-    <script>
- // Funzione per ottenere i tag dal backend
-async function getTags() {
-    const response = await fetch('/api/tags/cerca');  // Modifica con l'endpoint corretto
-    const tags = await response.json();
-    console.log("Tag ricevuti dal backend:", tags);  // Controlla i dati ricevuti
-    return tags;
-}
-
-
-function displayTags(tags) {
-    const availableTagsDiv = document.getElementById('availableTags');
-
-    tags.forEach(tag => {
-        // Verifica che il campo dell'ID esista nel tag
-        console.log("Tag caricato:", tag);  // Verifica se l'ID è corretto
-
-        const tagElement = document.createElement('div');
-        tagElement.textContent = tag.tipoTag;  // Supponendo che il campo "tipoTag" esista
-        tagElement.className = 'tag';
-        tagElement.setAttribute('data-tag-id', tag.tagId);  // Usa il campo "tagId" o quello corretto
-
-        // Aggiungi evento per selezionare il tag
-        tagElement.onclick = () => selectTag(tagElement);
-
-        availableTagsDiv.appendChild(tagElement);
-    });
-}
-
-    function selectTag(tagElement) {
-        console.log("Tag selezionato:", tagElement);  // Log del tag selezionato
-        
-        const selectedTagsDiv = document.getElementById('selectedTags');
-        const clonedTag = tagElement.cloneNode(true);
-        clonedTag.onclick = () => removeTag(clonedTag);
-        selectedTagsDiv.appendChild(clonedTag);
-        
-        tagElement.remove();
-    }
-
-    function removeTag(tagElement) {
-        console.log("Tag rimosso:", tagElement);  // Log del tag rimosso
-        
-        const availableTagsDiv = document.getElementById('availableTags');
-        const clonedTag = tagElement.cloneNode(true);
-        clonedTag.onclick = () => selectTag(clonedTag);
-        availableTagsDiv.appendChild(clonedTag);
-        
-        tagElement.remove();
-    }
-
-    // Aggiungi i tag selezionati al FormData
-    function appendTagsToFormData(formData) {
-        const selectedTagsDiv = document.getElementById('selectedTags');
-        const tagElements = selectedTagsDiv.getElementsByClassName('tag');
-
-        for (let i = 0; i < tagElements.length; i++) {
-            const tagElement = tagElements[i];
-            const tagId = tagElement.getAttribute('data-tag-id');
-            const tagName = tagElement.textContent;
-
-            if (tagId && tagName) {
-                formData.append(`tags[${i}][tagId]`, tagId);
-                formData.append(`tags[${i}][tipoTag]`, tagName);
-            }
-        }
-    }
-
- // Funzione per inviare il form
-    function inviaForm() {
-        const form = document.getElementById('signup');
-        
-        // Crea un nuovo oggetto FormData
-        let formData = new FormData(form);  // Assicurati di dichiarare formData qui
-
-        // Aggiungi il DTO come JSON stringificato
-        const utenteDTO = {
-            nome: document.getElementById('nome').value,
-            cognome: document.getElementById('cognome').value,
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
-            numeroTelefono: document.getElementById('numeroTelefono').value,
-            dataNascita: document.getElementById('dataNascita').value,
-            descrizione: document.getElementById('descrizione').value,
-            tags: getSelectedTags()  // Usa la funzione getSelectedTags per raccogliere i tag selezionati
-        };
-
-        // Aggiungi il DTO JSON al FormData
-        formData.append('utenteDTO', new Blob([JSON.stringify(utenteDTO)], {
-            type: 'application/json'
-        }));
-
-        // Invia i dati
-        inviaDati(formData);
-    }
-
-    // Funzione per inviare i dati tramite fetch
-    function inviaDati(formData) {
-        fetch('/api/utente/signup', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                return response.text().then(text => { throw new Error(text) });
-            }
-        })
-        .then(data => {
-            console.log("Utente creato con successo:", data);
-            const successo = document.getElementById("successo");
-
-            successo.innerText=("Registrazione avvenuta con successo! Verrai reindirizzato alla pagina di login in 3 secondi .");
-
-
-            //const bottoneLogin = document.getElementById("pulsanteLogin");
-            setTimeout(() => {
-                window.location.assign("login");
-                //bottoneLogin.click();
-            }, 3000);
-
-        })
-        .catch(error => {
-            console.error('Errore:', error.message);
-            const erroriDiv = document.getElementById("errori");
-            erroriDiv.innerText= error.message;
-
-        });
-    }
-
-    // Funzione per raccogliere i tag selezionati
-function getSelectedTags() {
-    const selectedTagsDiv = document.getElementById('selectedTags');
-    const tagElements = selectedTagsDiv.getElementsByClassName('tag');
-    const selectedTags = [];
-
-    for (let tagElement of tagElements) {
-        const tagId = tagElement.getAttribute('data-tag-id');
-        const tipoTag = tagElement.textContent;
-
-        if (tagId && tipoTag) {
-            selectedTags.push({
-                tagId: tagId,
-                tipoTag: tipoTag
-            });
-        }
-    }
-
-    console.log("Tag selezionati:", selectedTags);  // Verifica che i tag vengano correttamente raccolti
-    return selectedTags;
-}
-
-    // Inizializza la pagina caricando i tag
-    getTags().then(displayTags);
-
-
-    </script>
-    <style>
-        #availableTags, #selectedTags {
-            width: 45%;
-            float: left;
-            border: 1px solid black;
-            min-height: 100px;
-            padding: 10px;
-            margin: 10px;
-        }
-    .tag {
-    	display: inline-block;
-    	padding: 10px;
-    	margin: 5px;
-    	background-color: lightblue;
-    	border-radius: 5px;
-    	font-size: 16px;
-    	cursor: pointer;
-	}
-    </style>
+    <link rel="stylesheet" href="/Registrazione/styles/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    <div class="form-container">
+        <h2>Registrazione Nuovo Utente</h2>
 
-    <h2>Registrazione Nuovo Utente</h2>
+        <form id="signup" action="#" method="POST" enctype="multipart/form-data">
+            
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required><br><br>
 
-    <form id="signup" action="#" method="POST" enctype="multipart/form-data">
-        
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" required><br><br>
+            <label for="cognome">Cognome:</label>
+            <input type="text" id="cognome" name="cognome" required><br><br>
 
-        <label for="cognome">Cognome:</label>
-        <input type="text" id="cognome" name="cognome" required><br><br>
+            <label for="numeroTelefono">Numero di Telefono:</label>
+            <input type="text" id="numeroTelefono" name="numeroTelefono" required><br><br>
 
-        <label for="numeroTelefono">Numero di Telefono:</label>
-        <input type="text" id="numeroTelefono" name="numeroTelefono" required><br><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+            <label for="dataNascita">Data di Nascita:</label>
+            <input type="date" id="dataNascita" name="dataNascita" required><br><br>
 
-        <label for="dataNascita">Data di Nascita:</label>
-        <input type="date" id="dataNascita" name="dataNascita" required><br><br>
+            <label for="descrizione">Descrizione:</label>
+            <textarea id="descrizione" name="descrizione"></textarea><br><br>
+            
+            <!-- Selezione Tag -->
+            <h3>Seleziona i tuoi tag</h3>
+            <div id="availableTags">
+                <h4>Tag disponibili</h4>
+            </div>
+            <div id="selectedTags">
+                <h4>Tag selezionati</h4>
+            </div>
+            
+            <label for="imgProfilo">Immagine Profilo:</label>
+            <input type="file" id="imgProfilo" name="imgProfilo"><br><br>
 
-        <label for="descrizione">Descrizione:</label>
-        <textarea id="descrizione" name="descrizione"></textarea><br><br>
-        
-        <!-- Selezione Tag -->
-        <h3>Seleziona i tuoi tag</h3>
-        <div id="availableTags">
-            <h4>Tag disponibili</h4>
-        </div>
-        <div id="selectedTags">
-            <h4>Tag selezionati</h4>
-        </div>
-		
-        <label for="imgProfilo">Immagine Profilo:</label>
-        <input type="file" id="imgProfilo" name="imgProfilo"><br><br>
+            <div id="errori"></div>
+            <div id="successo"></div>
 
-        <div id = "errori"></div>
-        <div id = "successo"></div>
-
-        <button type="button" onclick="inviaForm()">Crea Utente</button>
-        
-        <button id="pulsanteLogin" class="btn btn-outline-secondary" onclick="location.href='/login'">Vai al Login</button>
-    </form>
-
+            <button type="button" onclick="inviaForm()">Crea Utente</button>
+            
+            <button id="pulsanteLogin" class="btn btn-outline-secondary" onclick="location.href='/login'">Vai al Login</button>
+        </form>
+    </div>
+    <script src="/Registrazione/scripts/main.js"></script>
 </body>
 </html>
