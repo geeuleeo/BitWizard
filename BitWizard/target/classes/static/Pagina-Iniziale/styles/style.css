@@ -270,30 +270,26 @@ h2 {
 }
 
 /* Cards Section */
-.cards {
+.card {
+    width: 300px;  /* Larghezza delle card */
+    height: 450px; /* Altezza delle card */
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    padding: 15px;
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 30px auto;
-    flex-wrap: wrap;
-}
-.card-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.cards-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    position: relative;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    margin: 0 10px; /* Spaziatura tra le card */
 }
 
-.cards {
-    display: flex;
-    transition: transform 0.3s ease-in-out; /* Aggiungi una transizione per il movimento fluido */
-    gap: 20px;
+.card img {
+    width: 100%; /* L'immagine riempirà tutta la larghezza della card */
+    height: 150px; /* Altezza fissa per l'immagine */
+    border-radius: 10px;
 }
 
 

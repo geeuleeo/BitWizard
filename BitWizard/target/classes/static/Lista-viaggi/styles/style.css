@@ -8,6 +8,7 @@
 
 body {
 	font-family: 'ADLaM Display', sans-serif;
+	background-color: beige;
 }
 
 .navbar-custom {
@@ -70,6 +71,24 @@ body {
     height: 150px; /* Altezza fissa per l'immagine */
     border-radius: 10px;
 }
+
+/* Stile per il bottone "Dettagli del viaggio" */
+.card .btn-primary {
+    background-color: #000035; /* Colore di sfondo del bottone */
+    border-color: #000035;
+    color: #ff6f61
+}
+
+.card .btn-primary:hover {
+    background-color: #ff6f61; /* Colore di sfondo su hover */
+    border-color: #ff6f61;
+    color: #000035;
+}
+
+p {
+	text-align: justify;
+}
+
 
 .nav-btn {
     background: none;
