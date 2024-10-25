@@ -90,7 +90,7 @@ public class ViaggioServiceImpl implements ViaggioService {
 	        .orElseThrow(() -> new RuntimeException("Stato non trovato"));
 	    viaggio.setStato(stato);
 	    
-	    if (viaggio.getImmagineCopertina() != null) {
+	    if (viaggio.getImmagineCopertina()!= null) {
             immagineDAO.save(viaggio.getImmagineCopertina());
         }
 
@@ -334,6 +334,15 @@ public class ViaggioServiceImpl implements ViaggioService {
 	@Override
 	public List<ViaggioDTO> findViaggiByCreatore(Long creatoreId) {
 		List<Viaggio> viaggi = dao.findByCreatoreId(creatoreId);
+
+		return viaggi.stream()
+				.map(this::convertToDTO)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<ViaggioDTO> getViaggiByAgenzia(Long agenziaId) {
+		List<Viaggio> viaggi = dao.findByAgenziaId(agenziaId);
 
 		return viaggi.stream()
 				.map(this::convertToDTO)

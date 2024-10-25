@@ -167,6 +167,11 @@ public class HomeController {
         return "loginAgenzia";
     }
 
+    @GetMapping("/homeAgenzia")
+    public String showHomeAgenzia(){
+        return "homeAgenzia";
+    }
+
    @PostMapping("/loginAgenzia")
    public String loginAgenzia(@RequestParam String partitaIva,
                        @RequestParam String password,
@@ -192,7 +197,7 @@ public class HomeController {
            session.setAttribute("agenziaLoggata", agenzia);
 
 
-           return "redirect:/";
+           return "redirect:/homeAgenzia";
 
        } catch (AuthenticationException e) {
 

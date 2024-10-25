@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.wizard.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,13 +35,6 @@ import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
 import com.wizard.entities.ViaggioImmagini;
-import com.wizard.repos.ImmagineDAO;
-import com.wizard.repos.PartecipantiViaggioDAO;
-import com.wizard.repos.UtenteDAO;
-import com.wizard.repos.ViaggioDAO;
-import com.wizard.repos.ViaggioDTO;
-import com.wizard.repos.ViaggioImmaginiDAO;
-import com.wizard.repos.ViaggioTagDAO;
 import com.wizard.services.NotificaService;
 import com.wizard.services.ViaggioService;
 
@@ -421,6 +415,44 @@ public class ViaggioController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
        return ResponseEntity.ok(viaggi);
+
+    }
+
+    @GetMapping("/azienda/creati")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiByAziendaId(HttpSession session){
+
+        Agenzia agenzia = (Agenzia) session.getAttribute("agenziaLoggata");
+        if(agenzia == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        List<ViaggioDTO> viaggi = viaggioService.getViaggiByAgenzia(agenzia.getAziendaId());
+
+        if (viaggi == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(viaggi);
+
+    }
+    @GetMapping("/azienda/terminati")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiTerminatiByAgenziaId(HttpSession session){
+
+        Agenzia agenzia = (Agenzia) session.getAttribute("agenziaLoggata");
+
+        if (agenzia == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // Ottieni la data corrente
+        Date dataCorrente = new Date();
+
+        // Recupera i viaggi dell'utente e filtra quelli finiti (data di ritorno passata)
+        List<ViaggioDTO> viaggiFiniti = viaggioService.getViaggiByAgenzia(agenzia.getAziendaId()).stream()
+                .filter(viaggio -> viaggio.getDataRitorno().before(dataCorrente)) // Filtra i viaggi la cui data di ritorno è passata
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(viaggiFiniti);
+
+
 
     }
 

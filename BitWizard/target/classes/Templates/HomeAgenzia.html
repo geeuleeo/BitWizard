@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Viaggi</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="text-center">Benvenuto nella Home dei Viaggi</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h2>Viaggi creati terminati</h2>
+            <div id="viaggiTerminati" class="card-columns"></div>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Viaggi creati in corso </h2>
+            <div id="viaggiCreati" class="card-columns"></div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/CreaViaggio" class="btn btn-primary">Crea Nuovo Viaggio</a>
+    </div>
+</div>
+
+<script>
+    // Variabile per memorizzare gli ID dei viaggi terminati
+    let viaggiTerminatiIds = [];
+
+    // Funzione per caricare i viaggi terminati
+    function loadViaggiTerminati() {
+        fetch('api/viaggi/azienda/terminati')
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('viaggiTerminati');
+                container.innerHTML = ''; // Pulisci il contenitore
+                data.forEach(viaggio => {
+                    viaggiTerminatiIds.push(viaggio.viaggioId); // Memorizza l'ID del viaggio terminato
+                    const card = `
+                    <a href="http://localhost:10134/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="card" style="text-decoration: none; color: inherit;">
+                        <div class="card-body">
+                            <h5 class="card-title">${viaggio.titolo}</h5>
+                            <p class="card-text">Data di Ritorno: ${new Date(viaggio.dataRitorno).toLocaleDateString()}</p>
+                        </div>
+                    </a>`;
+                    container.innerHTML += card;
+                });
+                loadViaggiCreati(); // Carica i viaggi creati dopo aver caricato i viaggi terminati
+            })
+            .catch(error => console.error('Error fetching viaggi terminati:', error));
+    }
+
+    // Funzione per caricare i viaggi creati
+    function loadViaggiCreati() {
+        fetch('api/viaggi/azienda/creati')
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('viaggiCreati');
+                container.innerHTML = ''; // Pulisci il contenitore
+                data.forEach(viaggio => {
+                    // Controlla se l'ID del viaggio è già presente nei viaggi terminati
+                    if (!viaggiTerminatiIds.includes(viaggio.viaggioId)) {
+                        const card = `
+                        <a href="http://localhost:10134/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="card" style="text-decoration: none; color: inherit;">
+                            <div class="card-body">
+                                <h5 class="card-title">${viaggio.nome}</h5>
+                                <p class="card-text">Data di Creazione: ${new Date(viaggio.dataRitorno).toLocaleDateString()}</p>
+                            </div>
+                        </a>`;
+                        container.innerHTML += card;
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching viaggi creati:', error));
+    }
+
+    // Carica i dati quando la pagina è pronta
+    document.addEventListener('DOMContentLoaded', function () {
+        loadViaggiTerminati();
+    });
+</script>
+
+</body>
+</html>

@@ -38,6 +38,8 @@ public interface ViaggioService {
 
 	List<ViaggioDTO> findViaggiByCreatore(Long creatoreId);
 
+	List<ViaggioDTO> getViaggiByAgenzia(Long agenziaId);
+
 	List<ViaggioDTO> getAllViaggi();
 
 	ViaggioDTO modificaViaggio(Long viaggioId, ViaggioCreazioneDTO viaggioDTO, List<TagDTO> tagDTOs);

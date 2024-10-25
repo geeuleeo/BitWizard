@@ -29,6 +29,5 @@ public interface ViaggioDAO extends JpaRepository<Viaggio, Long> {
 	@Query("SELECT v FROM Viaggio v JOIN v.partecipanti p WHERE p.utente.id = :utenteId")
 	List<Viaggio> findViaggiByPartecipanteId(Long utenteId);
 
-
-
- }
+    List<Viaggio> findByAgenziaId(Long agenziaId);
+}

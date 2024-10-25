@@ -9,6 +9,4 @@ public interface AgenziaDAO extends JpaRepository<Agenzia, Long> {
 
         Optional<Agenzia> findAgenziaByPartitaIva(String partitaIva);
 
-
-
 }
