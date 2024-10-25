@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="backend compleatato">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/paginaPersonaleUtente.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,6 +146,7 @@
       <workItem from="1729847876403" duration="4269000" />
       <workItem from="1729852217580" duration="838000" />
       <workItem from="1729853064499" duration="46000" />
+      <workItem from="1729853140188" duration="855000" />
     </task>
     <task id="LOCAL-00001" summary="-">
       <option name="closed" value="true" />
@@ -215,7 +220,23 @@
       <option name="project" value="LOCAL" />
       <updated>1729852808308</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="backend compleatato">
+      <option name="closed" value="true" />
+      <created>1729853285896</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1729853285896</updated>
+    </task>
+    <task id="LOCAL-00011" summary="backend compleatato">
+      <option name="closed" value="true" />
+      <created>1729853296803</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1729853296803</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
