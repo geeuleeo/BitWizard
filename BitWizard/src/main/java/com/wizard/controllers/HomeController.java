@@ -30,10 +30,11 @@ public class HomeController {
     @Autowired
     private UtenteTagDAO utenteTagDAO;
 
+      
     // Metodo per servire la pagina di login
     @GetMapping("/login")
     public String showLoginPage() {
-        return "login";
+        return "Login/login";
     }
     
     @GetMapping("/profiloUtente/{utenteId}")
