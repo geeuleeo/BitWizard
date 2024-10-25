@@ -237,7 +237,7 @@
                 console.log('Lista amici:', amici);
                 let listaAmiciHtml = '<ul>';
                 amici.forEach(amico => {
-                    const base64Image = amico.immagine ? `data:image/jpeg;base64,${amico.immagine}` : '/path/to/default/image.png'; // Aggiungi un'immagine di default se non esiste
+                    const base64Image = amico.immagine ? `data:image/jpeg;base64,${amico.immagine}` : '/path/to/default/image.png';
 
                     listaAmiciHtml += `
                         <li>
@@ -260,10 +260,15 @@
             window.location.href = `/profiloUtente/${utenteId}`;
         }
         
-        function gestisciRichiestaAmicizia(utenteId, accetta) {
+        function gestisciRichiestaAmicizia(utenteInvianteId, accetta, buttonElement) {
+        	
+        	const notificaId = buttonElement.closest('div[id^="notifica-"]').id.split('-')[1]; // Estrai il numero dopo "notifica-"
+        	
+        	console.log(notificaId);
+
             const action = accetta ? 'accetta' : 'rifiuta';
 
-            fetch(`/api/amicizia/${action}/${utenteId}`, {
+            fetch(`/api/amicizia/${action}/${utenteInvianteId}/${notificaId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -282,7 +287,6 @@
                 alert('Errore durante la gestione della richiesta');
             });
         }
-
         
         async function modificaUtente() {
             // Reindirizza l'utente alla pagina di modifica del viaggio

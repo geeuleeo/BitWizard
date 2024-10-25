@@ -35,6 +35,11 @@ public class HomeController {
     public String showLoginPage() {
         return "login";
     }
+    
+    @GetMapping("/profiloUtente/{utenteId}")
+    public String showUtentePage() {
+        return "ProfiloUtente";
+    }
 
     @PostMapping("/login")
     public String login(@RequestParam String email,

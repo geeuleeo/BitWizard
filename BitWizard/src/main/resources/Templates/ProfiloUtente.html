@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Personale</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .profile-header img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+        .profile-info {
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+        .profile-info h2 {
+            margin: 0;
+        }
+        .actions {
+            margin-top: 20px;
+        }
+        .actions button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .viaggi-list {
+            margin-top: 30px;
+        }
+        .viaggio {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Benvenuto nella tua pagina personale</h1>
+    <div class="container">
+        <div class="profile-header">
+            <img src="/api/immagini/utente/immagine" alt="Immagine Profilo" id="imgProfilo">
+            <div class="profile-info">
+                <h2 id="nomeCognome">Nome Cognome</h2>
+                <p id="email">email@example.com</p>
+                <p id="descrizione">Descrizione utente...</p>
+                <button id="aggiungiAmicoBtn" class="btn btn-primary" onclick="inviaRichiestaAmicizia()">Invia richiesta amicizia</button>
+				<button id="amiciBtn" class="btn btn-primary" style="display: block;" onclick="mostraListaAmici()">Amici</button>
+            	<div id="listaAmiciContainer">
+    				<!-- La lista degli amici verrà visualizzata qui -->
+				</div>
+            </div>
+        </div>
+
+        <h2>I viaggi a cui sei iscritto</h2>
+        <div id="viaggiIscrittoContainer" class="row">
+            <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+        </div>
+        
+        <h2>I viaggi che hai creato</h2>
+        <div id="viaggiCreatiContainer" class="row">
+            <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+        </div>
+        
+        <h2>I viaggi a cui hai partecipato</h2>
+        <div id="viaggiFinitiContainer" class="row">
+            <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+        </div>
+        
+    </div>
+
+    <script>
+        // Funzione per caricare i dati dell'utente
+        async function caricaDatiUtente() {
+        	
+        	const pathSegments = window.location.pathname.split('/');
+        	const utenteId = pathSegments[pathSegments.length - 1];  // L'ultimo segmento dell'URL è l'ID utente
+
+        	console.log(utenteId);
+        	
+        	document.getElementById('aggiungiAmicoBtn').setAttribute('data-utente-id', utenteId);
+        	
+            const response = await fetch(`/api/utente/profilo/${utenteId}`); // Endpoint che restituisce i dati dell'utente loggato
+            const data = await response.json();
+
+            document.getElementById('nomeCognome').textContent = data.nome + ' ' + data.cognome;
+            document.getElementById('email').textContent = data.email;
+            document.getElementById('descrizione').textContent = data.descrizione;
+        }
+
+        // Funzione per caricare i viaggi dell'utente
+        async function caricaViaggiFinitiUtente() {
+            const response = await fetch('/api/viaggi/utente/finito'); // Endpoint che restituisce i viaggi dell'utente
+            const viaggi = await response.json();
+            const container = document.getElementById('viaggiFinitiContainer');
+
+            viaggi.forEach(viaggio => {
+                container.innerHTML += createViaggioCard(viaggio);
+            });
+        }
+        
+     // Funzione per caricare i viaggi dell'utente
+        async function caricaViaggiCreatiUtente() {
+            const response = await fetch('/api/viaggi/creatore');
+            const viaggi = await response.json();
+            const container = document.getElementById('viaggiCreatiContainer');
+
+            viaggi.forEach(viaggio => {
+                container.innerHTML += createViaggioCard(viaggio);
+            });
+        }
+     
+        async function caricaViaggiIscrittiUtente() {
+            const response = await fetch('/api/viaggi/utente/iscritto');
+            const viaggi = await response.json();
+            const container = document.getElementById('viaggiIscrittoContainer');
+
+            viaggi.forEach(viaggio => {
+                container.innerHTML += createViaggioCard(viaggio);
+            });
+        }
+
+        // Funzione per creare una card di Bootstrap per un viaggio
+        function createViaggioCard(viaggio) {
+            // Formatta le date in maniera più leggibile (es. dd/mm/yyyy)
+            const dataPartenza = new Date(viaggio.dataPartenza).toLocaleDateString();
+            const dataRitorno = new Date(viaggio.dataRitorno).toLocaleDateString();
+
+            // Crea la card HTML per il viaggio
+            return `
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
+                        <div class="card-body">
+                            <h5 class="card-title">${viaggio.nome}</h5>
+                            <p class="card-text">
+                                Luogo di Partenza: ${viaggio.luogoPartenza} <br>
+                                Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
+                                Data di Partenza: ${dataPartenza} <br>
+                                Data di Ritorno: ${dataRitorno} <br>
+                                Prezzo: €${viaggio.prezzo.toFixed(2)}
+                            </p>
+                            <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="btn btn-primary">Dettagli del viaggio</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function mostraListaAmici() {
+            fetch(`/api/amicizia/trovaAmici`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(amici => {
+                console.log('Lista amici:', amici);
+                let listaAmiciHtml = '<ul>';
+                amici.forEach(amico => {
+                    const base64Image = amico.immagine ? `data:image/jpeg;base64,${amico.immagine}` : '/path/to/default/image.png';
+
+                    listaAmiciHtml += `
+                        <li>
+                            <button onclick="vaiAlProfilo(${amico.utenteId})" style="border: none; background: none;">
+                                <img src="${base64Image}" alt="Immagine profilo di ${amico.nome}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                ${amico.nome} ${amico.cognome}
+                            </button>
+                        </li>`;
+                });
+                listaAmiciHtml += '</ul>';
+                document.getElementById('listaAmiciContainer').innerHTML = listaAmiciHtml;
+            })
+            .catch(error => {
+                console.error('Errore durante il caricamento degli amici:', error);
+            });
+        }
+
+        // Funzione per reindirizzare al profilo dell'amico
+        function vaiAlProfilo(utenteId) {
+            window.location.href = `/profiloUtente/${utenteId}`;
+        }
+        
+        function inviaRichiestaAmicizia() {
+        	 const utenteIdTarget = document.getElementById('aggiungiAmicoBtn').getAttribute('data-utente-id');
+                // Effettua una richiesta per inviare la richiesta di amicizia
+                fetch(`/api/amicizia/inviaRichiesta/${utenteIdTarget}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Richiesta di amicizia inviata con successo!');
+                        // Aggiorna lo stato del bottone, ad esempio per nascondere il pulsante di invio
+                        document.getElementById('aggiungiAmicoBtn').style.display = 'none';
+                    } else {
+                        alert('Errore durante l\'invio della richiesta di amicizia.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore durante la richiesta:', error);
+                    alert('Si è verificato un errore. Riprova più tardi.');
+                });
+        }
+
+        // Chiamate per caricare i dati all'avvio
+        caricaDatiUtente();
+        caricaViaggiFinitiUtente();
+        caricaViaggiCreatiUtente();
+        caricaViaggiIscrittiUtente();
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

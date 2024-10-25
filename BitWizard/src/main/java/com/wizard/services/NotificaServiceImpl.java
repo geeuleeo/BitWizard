@@ -138,13 +138,45 @@ public class NotificaServiceImpl implements NotificaService {
     
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void creaNotifichePerRichiestaAmicizia(Utente riceveRichiesta, Utente inviaRichiesta) {
+    public void creaNotifichePerRichiestaAmicizia(Long riceveRichiestaId, Long inviaRichiestaId) {
+        
+        // id inviaRichiesta = 49 (Carlo)
+        // id riceveRichiesta = 32 (Mauro)
+        
+        System.out.println(inviaRichiestaId + " id inviaRichiesta");
+        System.out.println(riceveRichiestaId + " id riceveRichiesta");
+        
+        // Carlo sta inviando la richiesta, quindi trova Carlo (inviaRichiestaId)
+        Utente utenteRichiedente = utenteDAO.findById(inviaRichiestaId)
+                .orElseThrow(() -> {
+                    System.out.println("Utente con ID " + inviaRichiestaId + " non trovato.");
+                    return new IllegalArgumentException("Utente non trovato");
+                });
+                
+        System.out.println("Utente che invia la richiesta: " + utenteRichiedente.getNome());
+
+        // Mauro sta ricevendo la richiesta, quindi trova Mauro (riceveRichiestaId)
+        Utente utenteRicevente = utenteDAO.findById(riceveRichiestaId)
+                .orElseThrow(() -> {
+                    System.out.println("Utente con ID " + riceveRichiestaId + " non trovato.");
+                    return new IllegalArgumentException("Utente non trovato");
+                });
+                
+        System.out.println("Utente che riceve la richiesta: " + utenteRicevente.getNome());
+
+        // Creazione della notifica
         Notifica notifica = new Notifica();
-        notifica.setUtenteId(riceveRichiesta.getUtenteId());
-        notifica.setTesto("Ciao " + riceveRichiesta.getNome() + ", hai ricevuto una richiesta d'amicizia da " 
-                          + inviaRichiesta.getNome() + ". "
-                          + "<button onclick=\"gestisciRichiestaAmicizia(" + inviaRichiesta.getUtenteId() + ", true)\">Accetta</button>"
-                          + "<button onclick=\"gestisciRichiestaAmicizia(" + inviaRichiesta.getUtenteId() + ", false)\">Rifiuta</button>");
+        
+        // La notifica va inviata al ricevente, cioè Mauro (utenteRicevente)
+        notifica.setUtenteId(utenteRicevente.getUtenteId());
+        
+        notifica.setTesto("Ciao " + utenteRicevente.getNome() + ", hai ricevuto una richiesta d'amicizia da " 
+        	    + utenteRichiedente.getNome() + ". "
+        	    + "<button onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", true, this)\">Accetta</button>"
+        	    + "<button onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", false, this)\">Rifiuta</button>");
+        
+        notifica.setData(new Date());
+        
         notifica.setData(new Date());
 
         notificaDAO.save(notifica);

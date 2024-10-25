@@ -1,10 +1,13 @@
 package com.wizard.controllers;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.wizard.entities.Agenzia;
@@ -117,6 +120,19 @@ public class PaginaViaggioController {
                 : new ArrayList<>();  // Ritorna una lista vuota se nessuna immagine è presente
 
         viaggioDTO.setImmagini(immaginiViaggio);
+        
+        List<PartecipantiViaggioDTO> partecipantiViaggioDTOs = (viaggio.getPartecipanti() != null && !viaggio.getPartecipanti().isEmpty())
+        	    ? viaggio.getPartecipanti().stream()
+        	        .map(partecipante -> {
+        	            PartecipantiViaggioDTO partecipanteDTO = new PartecipantiViaggioDTO();
+        	            partecipanteDTO.setNome(partecipante.getUtente().getNome());
+        	            partecipanteDTO.setCognome(partecipante.getUtente().getCognome());
+        	            partecipanteDTO.setUtenteId(partecipante.getUtente().getUtenteId());
+        	            return partecipanteDTO;
+        	        })
+        	        .collect(Collectors.toList())  // Cambiato in toList per restituire una List
+        	    : new ArrayList<>();
+        	viaggioDTO.setPartecipanti(partecipantiViaggioDTOs);
 
         // Mappiamo i tag del viaggio, verificando se la lista non è nulla o vuota
         List<TagDTO> tagDTOs = (viaggio.getViaggioTags() != null && !viaggio.getViaggioTags().isEmpty())

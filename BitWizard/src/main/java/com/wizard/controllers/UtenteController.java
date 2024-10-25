@@ -175,7 +175,23 @@ public class UtenteController {
 	        // Gestisci il caso in cui il viaggio non esista
 	        throw new RuntimeException("Utente non trovato con ID: " + utenteId);
 	    }
+    }
+    
+    @GetMapping("/profilo/{utenteId}")
+    public ResponseEntity<UtenteDTO> caricaDatiUtenteProfilo(@PathVariable Long utenteId) {
 
+        Optional<Utente> optionalUtente = utenteDAO.findById(utenteId) ;
+        
+        // Verifica se il viaggio è presente
+	    if (optionalUtente.isPresent()) {
+	        Utente utente = optionalUtente.get();
+	        UtenteDTO utenteDTO = utenteService.getUtenteDTO(utente.getUtenteId());
+	        return ResponseEntity.ok(utenteDTO);
+	    } else {
+	        // Gestisci il caso in cui il viaggio non esista
+	        throw new RuntimeException("Utente non trovato con ID: " + utenteId);
+	    }
+        
     }
     
     @GetMapping("/session")

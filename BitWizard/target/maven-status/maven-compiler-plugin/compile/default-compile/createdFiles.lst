@@ -63,6 +63,7 @@ com\wizard\controllers\NotificaController.class
 com\wizard\entities\Tag.class
 com\wizard\repos\AgenziaDAO.class
 com\wizard\repos\MessaggioDAO.class
+com\wizard\entities\Amicizia$StatoAmicizia.class
 com\wizard\controllers\ImmagineController.class
 com\wizard\repos\StatoDAO.class
 com\wizard\entities\PartecipantiViaggio.class
@@ -87,6 +88,7 @@ com\wizard\services\ImmagineServiceImpl.class
 com\wizard\entities\ChiaveAmicizia.class
 com\wizard\services\AgenziaService.class
 com\wizard\services\UtenteServiceImpl.class
+com\wizard\DTO\AmicoDTO.class
 com\wizard\repos\RecensioneDAO.class
 com\wizard\config\JacksonConfig.class
 com\wizard\entities\ViaggioImmagini.class

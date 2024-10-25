@@ -1,7 +1,6 @@
 package com.wizard.services;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.wizard.DTO.TagDTO;
 import com.wizard.DTO.ViaggioCreazioneDTO;
-import com.wizard.entities.Agenzia;
 import com.wizard.entities.ChiavePartecipantiViaggio;
 import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Stato;
@@ -35,6 +33,7 @@ import com.wizard.repos.ViaggioTagDAO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -65,6 +64,7 @@ public class ViaggioServiceImpl implements ViaggioService {
 	private StatoDAO statoDAO;
 	
 	@Autowired
+	@PersistenceContext
     private EntityManager entityManager;
 	
     @Autowired
@@ -72,6 +72,7 @@ public class ViaggioServiceImpl implements ViaggioService {
     
     @Autowired
     private NotificaService notificaService;
+
 
 	public void abilitaFiltroViaggiNonCancellati() {
         // Ottieni la sessione Hibernate e abilita il filtro
@@ -267,51 +268,51 @@ public class ViaggioServiceImpl implements ViaggioService {
 
 	        return viaggioDTO;
 	    }
+	    
+	    @Transactional
+	    public PartecipantiViaggio addPartecipanteViaggio(Utente partecipante, Viaggio viaggio) {
 
-	@Transactional
-	public PartecipantiViaggio addPartecipanteViaggio(Utente partecipante, Viaggio viaggio) {
+	        // Verifica se il partecipante esiste già per questo viaggio
+	        ChiavePartecipantiViaggio chiavePartecipantiViaggio = new ChiavePartecipantiViaggio();
+	        chiavePartecipantiViaggio.setViaggioId(viaggio.getViaggioId());
+	        chiavePartecipantiViaggio.setUtenteId(partecipante.getUtenteId());
 
-		// Verifica se il partecipante esiste già per questo viaggio
-		ChiavePartecipantiViaggio chiavePartecipantiViaggio = new ChiavePartecipantiViaggio();
-		chiavePartecipantiViaggio.setViaggioId(viaggio.getViaggioId());
-		chiavePartecipantiViaggio.setUtenteId(partecipante.getUtenteId());
+	        // Cerca l'esistenza del record nella tabella partecipanti_viaggio
+	        Optional<PartecipantiViaggio> partecipanteEsistente = partecipantiViaggioDAO.findById(chiavePartecipantiViaggio);
 
-		// Cerca l'esistenza del record nella tabella partecipanti_viaggio
-		Optional<PartecipantiViaggio> partecipanteEsistente = partecipantiViaggioDAO.findById(chiavePartecipantiViaggio);
+	        if (partecipanteEsistente.isPresent()) {
+	            // Se esiste già, ritorna il partecipante esistente
+	            return partecipanteEsistente.get();
+	        } else {
+	            // Crea un nuovo record per la tabella partecipanti_viaggio
+	            PartecipantiViaggio partecipanteViaggio = new PartecipantiViaggio();
+	            partecipanteViaggio.setId(chiavePartecipantiViaggio);  // Imposta la chiave composta
+	            partecipanteViaggio.setViaggio(viaggio);  // Associa il viaggio
+	            partecipanteViaggio.setUtente(partecipante);  // Associa l'utente
+	            partecipanteViaggio.setDataIscrizione(new Date());  // Imposta la data di iscrizione
 
-		if (partecipanteEsistente.isPresent()) {
-			// Se esiste già, ritorna il partecipante esistente
-			return partecipanteEsistente.get();
-		} else {
-			// Crea un nuovo record per la tabella partecipanti_viaggio
-			PartecipantiViaggio partecipanteViaggio = new PartecipantiViaggio();
-			partecipanteViaggio.setId(chiavePartecipantiViaggio);  // Imposta la chiave composta
-			partecipanteViaggio.setViaggio(viaggio);  // Associa il viaggio
-			partecipanteViaggio.setUtente(partecipante);  // Associa l'utente
-			partecipanteViaggio.setDataIscrizione(new Date());  // Imposta la data di iscrizione
+	            // Recupera lo stato di partecipazione predefinito
+	            Stato statoPredefinito = statoDAO.findById(1)
+	                .orElseThrow(() -> new IllegalArgumentException("Stato di partecipazione predefinito non trovato"));
+	            partecipanteViaggio.setStatoPartecipazione(statoPredefinito);
 
-			// Recupera lo stato di partecipazione predefinito
-			Stato statoPredefinito = statoDAO.findById(1)
-					.orElseThrow(() -> new IllegalArgumentException("Stato di partecipazione predefinito non trovato"));
-			partecipanteViaggio.setStatoPartecipazione(statoPredefinito);
-
-			entityManager.merge(partecipante);
+	            entityManager.merge(partecipante);
 
 
-			// Aggiungi il partecipante alla lista dei partecipanti del viaggio
-			viaggio.addPartecipante(partecipanteViaggio);
+	            // Aggiungi il partecipante alla lista dei partecipanti del viaggio
+	            viaggio.addPartecipante(partecipanteViaggio);
 
-			try {
-				notificaService.creaNotifichePerIscrizioneViaggio(viaggio, partecipante);
-			} catch (Exception e) {
-				System.err.println("Errore durante la creazione delle notifiche per il viaggio con id " + viaggio.getViaggioId());
-				e.printStackTrace();
-			}
+	            try {
+	                notificaService.creaNotifichePerIscrizioneViaggio(viaggio, partecipante);
+	            } catch (Exception e) {
+	                System.err.println("Errore durante la creazione delle notifiche per il viaggio con id " + viaggio.getViaggioId());
+	                e.printStackTrace();
+	            }
 
-			return partecipanteViaggio;
-		}
-	}
-	
+	            return partecipanteViaggio;
+	        }
+	    }
+	    
 	@Override
 	public void removePartecipanteViaggio(Long utenteId, Long viaggioId) {
 		
@@ -321,7 +322,6 @@ public class ViaggioServiceImpl implements ViaggioService {
 	        throw new IllegalArgumentException("Partecipante con utenteId " + utenteId + " e viaggioId " + viaggioId + " non trovato.");
 	    }
 	}
-
 	
     public List<ViaggioDTO> findViaggiByUtenteId(Long utenteId) {
         List<Viaggio> viaggi = dao.findViaggiByPartecipanteId(utenteId);

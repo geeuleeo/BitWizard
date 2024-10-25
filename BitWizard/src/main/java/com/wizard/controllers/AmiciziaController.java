@@ -3,6 +3,7 @@ package com.wizard.controllers;
 
 import com.wizard.DTO.AmicoDTO;
 import com.wizard.entities.Amicizia;
+import com.wizard.entities.Amicizia.StatoAmicizia;
 import com.wizard.entities.Utente;
 import com.wizard.repos.UtenteDAO;
 import com.wizard.repos.ViaggioDTO;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("api/amicizia")
@@ -35,6 +37,7 @@ public class AmiciziaController {
     @Autowired
     UtenteService utenteService;
     
+    /*
     @PostMapping("crea/{utenteId1}/{utenteId2}")
     public ResponseEntity<Amicizia> creaAmicizia(@PathVariable Long utenteId1,@PathVariable Long utenteId2) {
 
@@ -46,22 +49,50 @@ public class AmiciziaController {
 
         return ResponseEntity.ok(amicizia);
     }
-
-    @PostMapping("/amicizia/accetta/{utenteId}")
-    public ResponseEntity<String> accettaRichiestaAmicizia(@PathVariable Long utenteId, HttpSession session) {
+    */
+    
+    @PostMapping("/inviaRichiesta/{utenteTargetId}")
+    public ResponseEntity<String> inviaRichiestaAmicizia(
+            HttpSession session, 
+            @PathVariable Long utenteTargetId) {
+    	
+    	System.out.println(utenteTargetId);
     	
     	Utente utente = (Utente) session.getAttribute("utenteLoggato");
     	
-        amiciziaService.accettaRichiesta(utente.getUtenteId(), utenteId);
+        try {
+            amiciziaService.inviaRichiestaAmicizia(utente.getUtenteId(), utenteTargetId);
+            return ResponseEntity.ok("Richiesta di amicizia inviata con successo");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Errore nell'invio della richiesta di amicizia: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/accetta/{utenteId}/{notificaId}")
+    public ResponseEntity<String> accettaRichiestaAmicizia(@PathVariable Long utenteId, @PathVariable Long notificaId, HttpSession session) {
+        Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+        
+        if (utenteLoggato == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Utente non loggato");
+        }
+
+        amiciziaService.accettaRichiesta(utenteLoggato.getUtenteId(), utenteId, notificaId);
+        
         return ResponseEntity.ok("Richiesta d'amicizia accettata");
     }
 
-    @PostMapping("/amicizia/rifiuta/{utenteId}")
-    public ResponseEntity<String> rifiutaRichiestaAmicizia(@PathVariable Long utenteId, HttpSession session) {
+    @PostMapping("/rifiuta/{utenteId}")
+    public ResponseEntity<String> rifiutaRichiestaAmicizia(@PathVariable Long utenteId, @PathVariable Long notificaId, HttpSession session) {
     	
-    	Utente utente = (Utente) session.getAttribute("utenteLoggato");
-    	
-        amiciziaService.rifiutaRichiesta(utente.getUtenteId(), utenteId);
+        Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+        
+        if (utenteLoggato == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Utente non loggato");
+        }
+
+        amiciziaService.rifiutaRichiesta(utenteLoggato.getUtenteId(), utenteId, notificaId);
+        
         return ResponseEntity.ok("Richiesta d'amicizia rifiutata");
     }
 
@@ -80,18 +111,15 @@ public class AmiciziaController {
             return ResponseEntity.notFound().build();
         }
 
-        List<AmicoDTO> amiciDTO = new ArrayList<>();
-        
-        for (Amicizia amicizia : amici) {
-            // Se utente_id1 è l'utente loggato, prendi l'amico come utente_id2, altrimenti come utente_id1
-            Utente amico = amicizia.getUtente_id1().equals(utente.getUtenteId()) 
-                ? utenteService.findById(amicizia.getUtente_id2())
-                : utenteService.findById(amicizia.getUtente_id1());
-
-            // Converti l'utente amico in DTO
-            AmicoDTO amicoDTO = amiciziaService.toDTO(amico);
-            amiciDTO.add(amicoDTO);
-        }
+        List<AmicoDTO> amiciDTO = amici.stream()
+            .filter(amicizia -> amicizia.getStato() == StatoAmicizia.ACCETTATO)  // Filtra solo le amicizie accettate
+            .map(amicizia -> {
+                Utente amico = amicizia.getUtenteInviante().getUtenteId().equals(utente.getUtenteId()) 
+                    ? amicizia.getUtenteRicevente() 
+                    : amicizia.getUtenteInviante();
+                return amiciziaService.toDTO(amico);  // Converte l'utente in AmicoDTO
+            })
+            .collect(Collectors.toList());
 
         return ResponseEntity.ok(amiciDTO);
     }
@@ -106,7 +134,6 @@ public class AmiciziaController {
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(viaggiAmici);
-
     }
 
 }

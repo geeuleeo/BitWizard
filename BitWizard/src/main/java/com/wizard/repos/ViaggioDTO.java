@@ -37,7 +37,6 @@ public class ViaggioDTO {
 	private Long agenziaId;
 	private String nomeAgenzia;
 
-
 	public Long getAgenziaId() {
 		return agenziaId;
 	}

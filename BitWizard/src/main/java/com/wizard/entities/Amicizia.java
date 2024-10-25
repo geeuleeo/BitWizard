@@ -16,11 +16,15 @@ public class Amicizia {
     @EmbeddedId
     private ChiaveAmicizia chiave;
 
-    @JoinColumn(name = "utente_id1")
-    private Long utente_id1;
+    @MapsId("utenteInviante")
+    @ManyToOne
+    @JoinColumn(name = "utente_inviante")
+    private Utente utenteInviante;
 
-    @JoinColumn(name = "utente_id2")
-    private Long utente_id2;
+    @MapsId("utenteRicevente")
+    @ManyToOne
+    @JoinColumn(name = "utente_ricevente")
+    private Utente utenteRicevente;
 
     @Temporal(TemporalType.DATE)
     private Date dataAmicizia;
@@ -31,10 +35,10 @@ public class Amicizia {
     public Amicizia() {
     }
 
-    public Amicizia(ChiaveAmicizia chiave, Long utente_id1, Long utente_id2, Date dataAmicizia, StatoAmicizia stato) {
+    public Amicizia(ChiaveAmicizia chiave, Utente utenteInviante, Utente utenteRicevente, Date dataAmicizia, StatoAmicizia stato) {
         this.chiave = chiave;
-        this.utente_id1 = utente_id1;
-        this.utente_id2 = utente_id2;
+        this.utenteInviante = utenteInviante;
+        this.utenteRicevente = utenteRicevente;
         this.dataAmicizia = dataAmicizia;
         this.stato = stato;
     }
@@ -47,23 +51,23 @@ public class Amicizia {
         this.chiave = chiave;
     }
 
-    public Long getUtente_id1() {
-        return utente_id1;
-    }
+    public Utente getUtenteInviante() {
+		return utenteInviante;
+	}
 
-    public void setUtente_id1(Long utente_id1) {
-        this.utente_id1 = utente_id1;
-    }
+	public void setUtenteInviante(Utente utenteInviante) {
+		this.utenteInviante = utenteInviante;
+	}
 
-    public Long getUtente_id2() {
-        return utente_id2;
-    }
+	public Utente getUtenteRicevente() {
+		return utenteRicevente;
+	}
 
-    public void setUtente_id2(Long utente_id2) {
-        this.utente_id2 = utente_id2;
-    }
+	public void setUtenteRicevente(Utente utenteRicevente) {
+		this.utenteRicevente = utenteRicevente;
+	}
 
-    public Date getDataAmicizia() {
+	public Date getDataAmicizia() {
         return dataAmicizia;
     }
 

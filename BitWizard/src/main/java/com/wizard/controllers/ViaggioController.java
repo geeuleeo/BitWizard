@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wizard.DTO.TagDTO;
 import com.wizard.DTO.ViaggioCreazioneDTO;
 import com.wizard.entities.Agenzia;
+import com.wizard.entities.ChiavePartecipantiViaggio;
 import com.wizard.entities.Immagine;
 import com.wizard.entities.PartecipantiViaggio;
 import com.wizard.entities.Utente;
@@ -219,13 +221,13 @@ public class ViaggioController {
     
     @PostMapping("/iscriviti/{viaggioId}")
     public ResponseEntity<?> iscriviUtenteAlViaggio(@PathVariable Long viaggioId, HttpSession session) {
-        
+
         System.out.println("Inizio dell'iscrizione per il viaggio con ID: " + viaggioId);
-        
+
         try {
             // Recupera l'id dell'utente dalla session
-        	Utente utente = (Utente) session.getAttribute("utenteLoggato");
-        	Long utenteId = utente.getUtenteId();
+            Utente utente = (Utente) session.getAttribute("utenteLoggato");
+            Long utenteId = utente.getUtenteId();
             if (utenteId == null) {
                 System.out.println("Utente non autenticato. Nessun utenteId trovato nella sessione.");
                 throw new IllegalStateException("Utente non autenticato");
@@ -250,6 +252,15 @@ public class ViaggioController {
                     return new IllegalArgumentException("Utente non trovato");
                 });
             System.out.println("Utente trovato: " + partecipante.getNome() + " " + partecipante.getCognome());
+
+            // Verifica se l'utente è già iscritto a questo viaggio
+            System.out.println("Controllo se l'utente è già iscritto al viaggio...");
+            Optional<PartecipantiViaggio> partecipazioneEsistente = partecipantiViaggioDAO.findById(new ChiavePartecipantiViaggio(viaggioId, utenteId));
+
+            if (partecipazioneEsistente.isPresent()) {
+                System.out.println("L'utente è già iscritto a questo viaggio.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Utente già iscritto al viaggio");
+            }
 
             // Aggiungi il partecipante al viaggio
             System.out.println("Tentativo di iscrivere l'utente al viaggio...");

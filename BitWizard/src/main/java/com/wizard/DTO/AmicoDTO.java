@@ -1,11 +1,18 @@
 package com.wizard.DTO;
 
 public class AmicoDTO {
-
+	
+	private Long utenteId;
     private String nome;
     private String cognome;
     private byte[] immagine;
     
+	public Long getUtenteId() {
+		return utenteId;
+	}
+	public void setUtenteId(Long utenteId) {
+		this.utenteId = utenteId;
+	}
 	public String getNome() {
 		return nome;
 	}
