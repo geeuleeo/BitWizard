@@ -2,6 +2,7 @@ package com.wizard.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,11 +19,11 @@ public class UtenteAgenzia {
     @Column(name = "utente_id", nullable = false)
     private Long utenteId;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "agenzia_id", nullable = false)
     private Agenzia agenzia;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ruolo_id", nullable = false)
     private Ruolo ruolo;
 

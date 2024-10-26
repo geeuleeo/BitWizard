@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -16,13 +17,13 @@ public class Recensione {
     @EmbeddedId
     private ChiaveRecensione id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("viaggioId")
     @JoinColumn(name = "id_viaggio")
     @JsonBackReference
     private Viaggio viaggio;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("utenteId")
     @JoinColumn(name = "id_utente")
     @JsonBackReference

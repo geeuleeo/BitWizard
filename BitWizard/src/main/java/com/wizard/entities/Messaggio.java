@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -18,19 +19,19 @@ public class Messaggio {
 	@EmbeddedId
     private ChiaveMessaggio chiavemessaggio;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
     @MapsId("viaggioId")
     @JoinColumn(name = "viaggio_id")
     @JsonBackReference
     private Viaggio viaggio;
     
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
     @MapsId("utenteId")
 	@JoinColumn(name = "utente_id", insertable = false, updatable = false)
     @JsonBackReference
     private Utente utente;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "immagine_id", nullable = true)
     @JsonBackReference
     private Immagine immagine;

@@ -79,7 +79,7 @@ public class Viaggio {
     @Column(name = "eta_max")
     private int etaMax;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stato_id")
     private Stato stato;
     
@@ -90,18 +90,18 @@ public class Viaggio {
     @Column(name = "creato_il")
     private Date creatoIl;
 
-    @OneToMany(mappedBy = "viaggio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "viaggio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<PartecipantiViaggio> partecipanti;
 
     @OneToMany(mappedBy = "viaggio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ViaggioImmagini> immaginiViaggio;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "immagine_id")
     private Immagine immagineCopertina;
 	
-    @OneToMany(mappedBy = "viaggio", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
+    @OneToMany(mappedBy = "viaggio", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<ViaggioTag> viaggioTags = new HashSet<>();
 	

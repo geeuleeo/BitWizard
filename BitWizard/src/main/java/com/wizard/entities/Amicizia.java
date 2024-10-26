@@ -17,12 +17,12 @@ public class Amicizia {
     private ChiaveAmicizia chiave;
 
     @MapsId("utenteInviante")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utente_inviante")
     private Utente utenteInviante;
 
     @MapsId("utenteRicevente")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utente_ricevente")
     private Utente utenteRicevente;
 

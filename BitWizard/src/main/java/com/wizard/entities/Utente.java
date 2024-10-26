@@ -48,16 +48,16 @@ public class Utente {
     private Immagine immagine;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<UtenteTag> utenteTags = new HashSet<>();
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ruolo_id", nullable = false)
 	private Ruolo ruolo;
 	
 	private int punteggio;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "livello_id")
 	private Livello livello;
 	
