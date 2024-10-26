@@ -68,19 +68,50 @@
         } else {
             console.log("Nessun tag trovato per il viaggio con ID:", viaggio.viaggioId);
         }
+		
+		 const listaPartecipanti = document.getElementById('listaPartecipanti');
+            listaPartecipanti.innerHTML = '';
 
-        // Mostra i partecipanti del viaggio
-        const listaPartecipanti = document.getElementById('listaPartecipanti');
-        listaPartecipanti.innerHTML = '';  // Pulisci eventuali contenuti precedenti
-        if (viaggio.partecipanti && viaggio.partecipanti.length > 0) {
-            viaggio.partecipanti.forEach(partecipante => {
-                const partecipanteItem = document.createElement('li');
-                partecipanteItem.className = 'list-group-item';
-                partecipanteItem.textContent = `${partecipante.nome} ${partecipante.cognome}`;
-                listaPartecipanti.appendChild(partecipanteItem);
-            });
-        } else {
-            console.log("Nessun partecipante disponibile per il viaggio.");
+           if (viaggio.partecipanti && viaggio.partecipanti.length > 0) {
+    		viaggio.partecipanti.forEach(partecipante => {
+                    // Crea un elemento <div> per il partecipante
+                    const partecipanteDiv = document.createElement('div');
+                    partecipanteDiv.className = 'd-flex align-items-center mb-3';
+
+                    // Crea l'immagine del partecipante come pulsante
+                    const immaginePartecipante = document.createElement('img');
+                    immaginePartecipante.className = 'rounded-circle me-3';
+                    immaginePartecipante.style.width = '80px';
+                    immaginePartecipante.style.height = '80px';
+                    immaginePartecipante.alt = 'Immagine profilo utente';
+
+                    // Imposta la sorgente dell'immagine in base alla presenza di utenteId
+                    immaginePartecipante.src = partecipante.utenteId 
+                        ? `/api/immagini/utente/profilo/${partecipante.utenteId}`
+                        : `/immagini/default-profilo.png`;
+
+                    // Aggiungi un evento al click per andare al profilo
+                    immaginePartecipante.style.cursor = 'pointer';
+                    immaginePartecipante.onclick = () => vaiAlProfilo(partecipante.utenteId);
+
+                    // Crea un elemento <span> per il nome del partecipante
+                    const nomePartecipante = document.createElement('span');
+                    nomePartecipante.textContent = `${partecipante.nome} ${partecipante.cognome}`;
+
+                    // Aggiungi l'immagine e il nome al div del partecipante
+                    partecipanteDiv.appendChild(immaginePartecipante);
+                    partecipanteDiv.appendChild(nomePartecipante);
+
+                    // Aggiungi il div del partecipante alla lista dei partecipanti
+                    listaPartecipanti.appendChild(partecipanteDiv);
+                });
+            } else {
+                console.log("Nessun partecipante disponibile per il viaggio.");
+            }
+            
+		 // Funzione per reindirizzare al profilo dell'amico
+        function vaiAlProfilo(utenteId) {
+            window.location.href = `/profiloUtente/${utenteId}`;
         }
 
         // Mostra l'immagine di copertina
@@ -107,41 +138,67 @@
         aggiornaDettagliViaggio(viaggio);
     }
     
-    async function aggiornaPartecipanti(viaggioId) {
-        try {
-            // Effettua la richiesta per ottenere la lista aggiornata dei partecipanti
-            const response = await fetch(`/viaggio/${viaggioId}/partecipanti`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                const partecipanti = await response.json();
-
-                // Pulisci la lista dei partecipanti nel DOM
-                const listaPartecipanti = document.getElementById('listaPartecipanti');
-                listaPartecipanti.innerHTML = '';  // Rimuove i partecipanti precedenti
-
-                if (partecipanti && partecipanti.length > 0) {
-                    // Aggiungi i nuovi partecipanti
-                    partecipanti.forEach(partecipante => {
-                        const partecipanteItem = document.createElement('li');
-                        partecipanteItem.className = 'list-group-item';
-                        partecipanteItem.textContent = `${partecipante.nome} ${partecipante.cognome}`;
-                        listaPartecipanti.appendChild(partecipanteItem);
-                    });
-                } else {
-                    console.log("Nessun partecipante disponibile per il viaggio.");
-                }
-            } else {
-                console.error("Errore nel caricamento dei partecipanti.");
+async function aggiornaPartecipanti(viaggioId) {
+    try {
+        // Effettua la richiesta per ottenere la lista aggiornata dei partecipanti
+        const response = await fetch(`/viaggio/${viaggioId}/partecipanti`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
             }
-        } catch (error) {
-            console.error("Errore durante la richiesta:", error);
+        });
+
+        if (response.ok) {
+            const partecipanti = await response.json();
+
+            // Pulisci la lista dei partecipanti nel DOM
+            const listaPartecipanti = document.getElementById('listaPartecipanti');
+            listaPartecipanti.innerHTML = '';  // Rimuove i partecipanti precedenti
+
+            if (partecipanti && partecipanti.length > 0) {
+                // Aggiungi i nuovi partecipanti con foto e nome
+                partecipanti.forEach(partecipante => {
+                    // Crea un elemento <div> per il partecipante
+                    const partecipanteDiv = document.createElement('div');
+                    partecipanteDiv.className = 'd-flex align-items-center mb-3';
+
+                    // Crea l'immagine del partecipante come pulsante
+                    const immaginePartecipante = document.createElement('img');
+                    immaginePartecipante.className = 'rounded-circle me-3';
+                    immaginePartecipante.style.width = '80px';
+                    immaginePartecipante.style.height = '80px';
+                    immaginePartecipante.alt = 'Immagine profilo utente';
+
+                    // Imposta la sorgente dell'immagine in base alla presenza di utenteId
+                    immaginePartecipante.src = partecipante.utenteId 
+                        ? `/api/immagini/utente/profilo/${partecipante.utenteId}`
+                        : `/immagini/default-profilo.png`;
+
+                    // Aggiungi un evento al click per andare al profilo
+                    immaginePartecipante.style.cursor = 'pointer';
+                    immaginePartecipante.onclick = () => vaiAlProfilo(partecipante.utenteId);
+
+                    // Crea un elemento <span> per il nome del partecipante
+                    const nomePartecipante = document.createElement('span');
+                    nomePartecipante.textContent = `${partecipante.nome} ${partecipante.cognome}`;
+
+                    // Aggiungi l'immagine e il nome al div del partecipante
+                    partecipanteDiv.appendChild(immaginePartecipante);
+                    partecipanteDiv.appendChild(nomePartecipante);
+
+                    // Aggiungi il div del partecipante alla lista dei partecipanti
+                    listaPartecipanti.appendChild(partecipanteDiv);
+                });
+            } else {
+                console.log("Nessun partecipante disponibile per il viaggio.");
+            }
+        } else {
+            console.error("Errore nel caricamento dei partecipanti.");
         }
+    } catch (error) {
+        console.error("Errore durante la richiesta:", error);
     }
+}
 
     function setFormAction(viaggioId) {
         const form = document.getElementById('iscrivitiForm');
@@ -326,7 +383,11 @@
                 document.getElementById('messaggioCompleto').style.display = 'none'; // Nascondi il messaggio
             }
 
-            // Se il viaggio non è completo, controlla se l'utente è già iscritto
+            // Controlla se il viaggio è terminato
+            const viaggioTerminatoResponse = await fetch(`/viaggio/terminato/${viaggioId}`);
+            const isViaggioTerminato = await viaggioTerminatoResponse.json();
+
+            // Controlla se l'utente è già iscritto al viaggio
             const response = await fetch(`/viaggio/${viaggioId}/partecipanti`, {
                 method: 'GET',
                 headers: {
@@ -348,14 +409,26 @@
                     document.getElementById('iscrivitiBtn').style.display = 'none';
                     document.getElementById('annullaIscrizioneBtn').style.display = 'block';
                     document.getElementById('ChatDelViaggio').style.display = 'block';
-                    document.getElementById('recensioneForm').style.display = 'block';
+                    document.getElementById('messaggioForm').style.display = 'block';
+
+                    // Mostra o nascondi il form di recensione in base allo stato del viaggio
+                    if (isViaggioTerminato) {
+                        document.getElementById('recensioneForm').style.display = 'block';
+                        document.getElementById('mostraRecensioni').style.display = 'block';
+                    } else {
+                        document.getElementById('recensioneForm').style.display = 'none';
+                        document.getElementById('mostraRecensioni').style.display = 'none';
+                    }
                 } else {
                     console.log('Utente non iscritto');
                     document.getElementById('iscrivitiBtn').style.display = 'block';
                     document.getElementById('annullaIscrizioneBtn').style.display = 'none';
                     document.getElementById('ChatDelViaggio').style.display = 'none';
-                    document.getElementById('recensioneForm').style.display = 'none';
+                    document.getElementById('recensioneForm').style.display = 'none'; // Nascondi sempre il form di recensione se l'utente non è iscritto
                 }
+
+                // Mostra il pulsante per vedere le recensioni a tutti
+                document.getElementById('mostraRecensioni').style.display = 'block';
             } else {
                 console.error('Errore nel caricamento dei partecipanti.');
             }

@@ -1,31 +1,26 @@
 package com.wizard.controllers;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.wizard.entities.Agenzia;
-import com.wizard.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wizard.DTO.TagDTO;
-import com.wizard.entities.Recensione;
+import com.wizard.entities.Agenzia;
 import com.wizard.entities.Utente;
 import com.wizard.entities.Viaggio;
-import com.wizard.services.RecensioneService;
+import com.wizard.repos.AgenziaDAO;
+import com.wizard.repos.PartecipantiViaggioDTO;
+import com.wizard.repos.UtenteDAO;
+import com.wizard.repos.ViaggioDAO;
+import com.wizard.repos.ViaggioDTO;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -37,9 +32,6 @@ public class PaginaViaggioController {
 	
 	@Autowired
 	private UtenteDAO utenteDAO;
-	
-	@Autowired
-	private RecensioneService recensioneService;
 
     @Autowired
     private AgenziaDAO agenziaDAO;
@@ -185,6 +177,23 @@ public class PaginaViaggioController {
         
         // Restituisci lo stato di disponibilità
         return ResponseEntity.ok(completo);
+    }
+    
+    @GetMapping("/viaggio/terminato/{viaggioId}")
+    public ResponseEntity<Boolean> getViaggioTerminato(@PathVariable("viaggioId") Long viaggioId) {
+        
+        // Recupera le informazioni del viaggio
+        Viaggio viaggio = viaggioDAO.findById(viaggioId)
+            .orElseThrow(() -> new IllegalArgumentException("Viaggio non trovato"));
+        
+        Date dataFine = viaggio.getDataRitorno();
+        Date dataCorrente = new Date(); // Ottieni la data corrente
+        
+        // Verifica se il viaggio è terminato confrontando le date
+        boolean terminato = dataFine.before(dataCorrente);
+        
+        // Restituisci lo stato del viaggio
+        return ResponseEntity.ok(terminato);
     }
 	
 }
