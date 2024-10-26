@@ -43,6 +43,34 @@
             padding: 10px;
             margin-bottom: 10px;
         }
+
+/* Stile per il contenitore delle notifiche */
+#notificheContainer {
+    width: 100%; /* Larghezza completa del container */
+    max-height: 400px; /* Altezza massima per il contenitore */
+    overflow-y: auto; /* Abilita lo scroll verticale */
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* Stile per ogni notifica */
+#notificaCard {
+    width: 100%; /* Larghezza completa per allinearsi al contenitore */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    margin-bottom: 10px;
+    display: flex; /* Assicura che il testo sia orizzontale */
+    align-items: center; /* Allinea il testo verticalmente */
+    justify-content: space-between; /* Spazio tra elementi interni */
+    text-align: left;
+}
+
+        
+        
     </style>
 </head>
 <body>
@@ -62,7 +90,8 @@
             </div>
         </div>
         
-        <div id="notificheContainer" class="column"></div>
+        <div id="notificheContainer" class="column">
+        	</div>
         
         <div class="actions">
             <button id="modificaBtn" class="btn btn-warning">Modifica Profilo</button>
@@ -198,6 +227,7 @@
             .catch(error => console.error('Errore nella cancellazione:', error));
         }
         
+        <!--
         function createNotificaCard(notifica) {
             // Format the date
             const dataInvio = new Date(notifica.data).toLocaleString('it-IT', {
@@ -224,7 +254,35 @@
 
             return cardHtml;
         }
+        -->
         
+        function createNotificaCard(notifica) {
+            const dataInvio = new Date(notifica.data).toLocaleString('it-IT', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+
+            // HTML della card con icona e pulsanti migliorati
+            return `
+                <div id="notificaCard" class="col-md-4" id="notifica-${notifica.notificaId}">
+                    <div class="card mb-4 shadow-sm border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-person-plus-fill text-primary"></i> Notifica
+                            </h5>
+                            <p class="card-text">
+                                ${notifica.testo} <br>
+                                <small class="text-muted">Data: ${dataInvio}</small>
+                            </p>
+                            <button data-id="${notifica.notificaId}" class="btn btn-primary btn-block cancella-notifica">Segna come letto</button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            `;
+        }
+
         function mostraListaAmici() {
             fetch(`/api/amicizia/trovaAmici`, {
                 method: 'GET',

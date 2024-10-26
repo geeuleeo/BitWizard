@@ -2,6 +2,7 @@ package com.wizard.entities;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,9 @@ public class Notifica {
 	
 	private Long utenteId;
 	
+	@Column(name = "testo", length = 500) // imposta 500 o la lunghezza necessaria
 	private String testo;
+
 	private Date data;
 	
 	public Long getUtenteId() {

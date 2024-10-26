@@ -247,9 +247,9 @@ public class NotificaServiceImpl implements NotificaService {
         notifica.setUtenteId(utenteRicevente.getUtenteId());
         
         notifica.setTesto("Ciao " + utenteRicevente.getNome() + ", hai ricevuto una richiesta d'amicizia da " 
-        	    + utenteRichiedente.getNome() + ". "
-        	    + "<button onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", true, this)\">Accetta</button>"
-        	    + "<button onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", false, this)\">Rifiuta</button>");
+                + utenteRichiedente.getNome() + ". "
+                + "<button class=\"gestisci-amicizia-btn btn btn-sm btn-success me-2\" onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", true, this)\">Accetta</button>"
+                + "<button class=\"gestisci-amicizia-btn btn btn-sm btn-danger\" onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", false, this)\">Rifiuta</button>");
         
         notifica.setData(new Date());
         
