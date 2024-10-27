@@ -135,5 +135,33 @@ public class AmiciziaController {
             }
             return ResponseEntity.ok(viaggiAmici);
     }
+    
+    @GetMapping("/controllo/{utenteIdTarget}")
+    public ResponseEntity<Boolean> controlloAmicizia(HttpSession session, @PathVariable Long utenteIdTarget) {
+        // Recupera l'utente loggato dalla sessione
+        Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+
+        // Controlla se l'utente loggato è presente nella sessione
+        if (utenteLoggato == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // Ottieni la lista di amicizie dell'utente loggato
+        List<Amicizia> amicizie = amiciziaService.getAmicizie(utenteLoggato.getUtenteId());
+
+        // Verifica se c'è già un'amicizia con l'utente target
+        boolean esisteAmicizia = amicizie.stream()
+            .anyMatch(amicizia -> 
+                (amicizia.getUtenteInviante().getUtenteId().equals(utenteIdTarget) || 
+                 amicizia.getUtenteRicevente().getUtenteId().equals(utenteIdTarget)) &&
+                (amicizia.getStato() == StatoAmicizia.ACCETTATO || 
+                 amicizia.getStato() == StatoAmicizia.IN_ATTESA)
+            );
+        
+        System.out.println("invio del controllo amicizia: " + esisteAmicizia);
+        
+        // Restituisci true se l'amicizia esiste, false altrimenti
+        return ResponseEntity.ok(esisteAmicizia);
+    }
 
 }

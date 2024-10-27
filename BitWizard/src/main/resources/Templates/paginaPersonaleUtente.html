@@ -128,7 +128,7 @@
 
         // Funzione per caricare i viaggi dell'utente
         async function caricaViaggiFinitiUtente() {
-            const response = await fetch('/api/viaggi/utente/finito'); // Endpoint che restituisce i viaggi dell'utente
+            const response = await fetch(`/api/viaggi/utente/finito/${0}`); // Endpoint che restituisce i viaggi dell'utente
             const viaggi = await response.json();
             const container = document.getElementById('viaggiFinitiContainer');
 
@@ -139,7 +139,7 @@
         
      // Funzione per caricare i viaggi dell'utente
         async function caricaViaggiCreatiUtente() {
-            const response = await fetch('/api/viaggi/creatore');
+            const response = await fetch(`/api/viaggi/creatore/${0}`);
             const viaggi = await response.json();
             const container = document.getElementById('viaggiCreatiContainer');
 
@@ -149,7 +149,7 @@
         }
      
         async function caricaViaggiIscrittiUtente() {
-            const response = await fetch('/api/viaggi/utente/iscritto');
+            const response = await fetch(`/api/viaggi/utente/iscritto/${0}`);
             const viaggi = await response.json();
             const container = document.getElementById('viaggiIscrittoContainer');
 

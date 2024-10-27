@@ -356,31 +356,59 @@ public class ViaggioController {
         return ResponseEntity.ok(viaggi);
     }
     
-    @GetMapping("/utente/finito")
-    public ResponseEntity<List<ViaggioDTO>> getViaggiUtenteFiniti(HttpSession session) {
-        Utente utente = (Utente) session.getAttribute("utenteLoggato");
+    @GetMapping("/utente/finito/{utenteId}")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiUtenteFiniti(HttpSession session, @PathVariable Long utenteId) {
+        Utente utente;
 
-        if (utente == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        // Controlla se l'utenteId è zero (0) o un valore speciale per indicare l'utente loggato
+        if (utenteId == 0) {
+            // Prendi l'utente dalla sessione
+            utente = (Utente) session.getAttribute("utenteLoggato");
+
+            if (utente == null) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            // Cerca l'utente specificato
+            Optional<Utente> utenteOptional = utenteDAO.findById(utenteId);
+
+            if (!utenteOptional.isPresent()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            utente = utenteOptional.get();
         }
 
         // Ottieni la data corrente
         Date dataCorrente = new Date();
 
-        // Recupera i viaggi dell'utente e filtra quelli finiti (data di ritorno passata)
+        // Recupera i viaggi dell'utente e filtra quelli terminati (data di ritorno passata)
         List<ViaggioDTO> viaggiFiniti = viaggioService.findViaggiByUtenteId(utente.getUtenteId()).stream()
-            .filter(viaggio -> viaggio.getDataRitorno().before(dataCorrente)) // Filtra i viaggi la cui data di ritorno è passata
+            .filter(viaggio -> viaggio.getDataRitorno().before(dataCorrente)) // Filtra i viaggi terminati
             .collect(Collectors.toList());
 
         return ResponseEntity.ok(viaggiFiniti);
     }
     
-    @GetMapping("/utente/iscritto")
-    public ResponseEntity<List<ViaggioDTO>> getViaggiUtenteIscritto(HttpSession session) {
-        Utente utente = (Utente) session.getAttribute("utenteLoggato");
+    @GetMapping("/utente/iscritto/{utenteId}")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiUtenteIscritto(HttpSession session, @PathVariable Long utenteId) {
+    	Utente utente;
+    	
+        // Controlla se l'utenteId è zero (0) o un valore speciale per indicare l'utente loggato
+        if (utenteId == 0) {
+            // Prendi l'utente dalla sessione
+            utente = (Utente) session.getAttribute("utenteLoggato");
 
-        if (utente == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            if (utente == null) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            // Cerca l'utente specificato
+            Optional<Utente> utenteOptional = utenteDAO.findById(utenteId);
+
+            if (!utenteOptional.isPresent()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            utente = utenteOptional.get();
         }
         
         List<Viaggio> viaggi = viaggioService.trovaViaggiPerUtente(utente.getUtenteId());
@@ -393,13 +421,27 @@ public class ViaggioController {
         return ResponseEntity.ok(viaggiDTO);
     }
 
-    @GetMapping("/creatore")
-    public ResponseEntity<List<ViaggioDTO>> getViaggiByCreatoreId(HttpSession session){
+    @GetMapping("/creatore/{utenteId}")
+    public ResponseEntity<List<ViaggioDTO>> getViaggiByCreatoreId(HttpSession session, @PathVariable Long utenteId){
     	
-    	Utente utente = (Utente) session.getAttribute("utenteLoggato");
+    	Utente utente;
+    	
+        // Controlla se l'utenteId è zero (0) o un valore speciale per indicare l'utente loggato
+        if (utenteId == 0) {
+            // Prendi l'utente dalla sessione
+            utente = (Utente) session.getAttribute("utenteLoggato");
 
-        if (utente == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            if (utente == null) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            // Cerca l'utente specificato
+            Optional<Utente> utenteOptional = utenteDAO.findById(utenteId);
+
+            if (!utenteOptional.isPresent()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            utente = utenteOptional.get();
         }
         
         Long creatoreId = utente.getUtenteId();

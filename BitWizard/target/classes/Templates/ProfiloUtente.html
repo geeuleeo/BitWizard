@@ -100,7 +100,8 @@
 
         // Funzione per caricare i viaggi dell'utente
         async function caricaViaggiFinitiUtente() {
-            const response = await fetch('/api/viaggi/utente/finito'); // Endpoint che restituisce i viaggi dell'utente
+        	const utenteIdTarget = document.getElementById('aggiungiAmicoBtn').getAttribute('data-utente-id');
+            const response = await fetch(`/api/viaggi/utente/finito/${utenteIdTarget}`); // Endpoint che restituisce i viaggi dell'utente
             const viaggi = await response.json();
             const container = document.getElementById('viaggiFinitiContainer');
 
@@ -110,8 +111,9 @@
         }
         
      // Funzione per caricare i viaggi dell'utente
-        async function caricaViaggiCreatiUtente() {
-            const response = await fetch('/api/viaggi/creatore');
+        async function caricaViaggiCreatiUtente(utenteId) {
+        	const utenteIdTarget = document.getElementById('aggiungiAmicoBtn').getAttribute('data-utente-id');
+            const response = await fetch(`/api/viaggi/creatore/${utenteIdTarget}`);
             const viaggi = await response.json();
             const container = document.getElementById('viaggiCreatiContainer');
 
@@ -121,7 +123,8 @@
         }
      
         async function caricaViaggiIscrittiUtente() {
-            const response = await fetch('/api/viaggi/utente/iscritto');
+        	const utenteIdTarget = document.getElementById('aggiungiAmicoBtn').getAttribute('data-utente-id');
+            const response = await fetch(`/api/viaggi/utente/iscritto/${utenteIdTarget}`);
             const viaggi = await response.json();
             const container = document.getElementById('viaggiIscrittoContainer');
 
@@ -186,6 +189,26 @@
                 console.error('Errore durante il caricamento degli amici:', error);
             });
         }
+        
+        async function verificaAmicizia() {
+        	const utenteIdTarget = document.getElementById('aggiungiAmicoBtn').getAttribute('data-utente-id');
+        	
+        	console.log('utenteTargetId: ' + utenteIdTarget);
+        	
+            const response = await fetch(`/api/amicizia/controllo/${utenteIdTarget}`);
+            if (response.ok) {
+                const esisteAmicizia = await response.json();
+                if (esisteAmicizia) {
+                    // Nascondi il pulsante se esiste già un'amicizia
+                    document.getElementById('aggiungiAmicoBtn').style.display = 'none';
+                } else {
+                    // Mostra il pulsante se non esiste un'amicizia
+                    document.getElementById('aggiungiAmicoBtn').style.display = 'block';
+                }
+            } else {
+                console.error("Errore nel controllo dell'amicizia.");
+            }
+        }
 
         // Funzione per reindirizzare al profilo dell'amico
         function vaiAlProfilo(utenteId) {
@@ -221,6 +244,7 @@
         caricaViaggiFinitiUtente();
         caricaViaggiCreatiUtente();
         caricaViaggiIscrittiUtente();
+        verificaAmicizia();
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
