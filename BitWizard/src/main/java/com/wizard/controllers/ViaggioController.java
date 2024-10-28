@@ -187,6 +187,40 @@ public class ViaggioController {
         return viaggio;
     }
     
+    @PostMapping("/{viaggioId}/immagine")
+    public ResponseEntity<?> salvaImmagineViaggio(@PathVariable Long viaggioId,
+                                                  @RequestParam("immagineViaggio") MultipartFile immagineViaggio) {
+        Viaggio viaggio = viaggioDAO.findById(viaggioId)
+            .orElseThrow(() -> new RuntimeException("Viaggio non trovato"));
+        
+        if (immagineViaggio != null && !immagineViaggio.isEmpty()) {
+            Immagine immagineEntity = new Immagine();
+            
+            try {
+                immagineEntity.setImg(immagineViaggio.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore durante la lettura del file");
+            }
+            
+            immagineDAO.save(immagineEntity);
+
+            // Crea l'entità ViaggioImmagini per l'associazione
+            ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
+            viaggioImmagine.setViaggio(viaggio);
+            viaggioImmagine.setImmagine(immagineEntity);
+            viaggioImmaginiDAO.save(viaggioImmagine);
+            
+            // Crea una mappa o un DTO per restituire solo le informazioni necessarie
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", immagineEntity.getIdImg());
+            
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nessun file inviato");
+        }
+    }
+    
     @PutMapping("/modifica/{viaggioId}")
     public ResponseEntity<ViaggioDTO> modificaViaggio(
             @PathVariable Long viaggioId,

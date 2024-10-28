@@ -138,6 +138,61 @@
         aggiornaDettagliViaggio(viaggio);
     }
     
+document.getElementById('aggiungiImgBtn').addEventListener('click', function () {
+    // Simula il clic sull'input file nascosto
+    document.getElementById('inputImmagineViaggio').click();
+});
+
+// Gestisce la selezione dell'immagine
+document.getElementById('inputImmagineViaggio').addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+        // Chiama la funzione per caricare l'immagine
+        caricaImmagineViaggio(viaggioId, file);
+    }
+});
+
+function caricaImmagineViaggio(viaggioId, file) {
+	
+	console.log('Viaggio Id per il salvataggio dell immagine: ', viaggioId);
+    
+    const formData = new FormData();
+    formData.append('immagineViaggio', file);
+
+    fetch(`/api/viaggi/${viaggioId}/immagine`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json(); // Supponendo che il server restituisca i dettagli dell'immagine
+        } else {
+            throw new Error('Errore nel caricamento dell\'immagine');
+        }
+    })
+    .then(data => {
+        // Aggiorna l'interfaccia utente con la nuova immagine
+        mostraImmagineCaricata(data);
+    })
+    .catch(error => {
+        console.error('Errore:', error);
+        alert('Si è verificato un errore durante il caricamento dell\'immagine.');
+    });
+}
+
+function mostraImmagineCaricata(data) {
+	
+    const immaginiDiv = document.getElementById('immaginiViaggio');
+    
+    // Crea un elemento img e lo aggiunge al div
+    const imgElement = document.createElement('img');
+    imgElement.src = `/api/immagini/immagine/${data.id}`; // Usa l'ID dell'immagine
+    imgElement.alt = 'Immagine del viaggio';
+    imgElement.classList.add('col-md-4'); // Aggiungi le classi CSS necessarie
+    
+    immaginiDiv.appendChild(imgElement);
+}
+    
 async function aggiornaPartecipanti(viaggioId) {
     try {
         // Effettua la richiesta per ottenere la lista aggiornata dei partecipanti

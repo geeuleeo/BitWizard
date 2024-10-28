@@ -217,6 +217,7 @@
                 if (response.ok) {
                     // Rimuovi la card della notifica dal DOM
                     const notificaElement = document.getElementById(`notifica-${notificaId}`);
+                    caricaNotificheUtente();
                     if (notificaElement) {
                         notificaElement.remove();
                     }
@@ -320,9 +321,12 @@
         
         function gestisciRichiestaAmicizia(utenteInvianteId, accetta, buttonElement) {
         	
-        	const notificaId = buttonElement.closest('div[id^="notifica-"]').id.split('-')[1]; // Estrai il numero dopo "notifica-"
-        	
-        	console.log(notificaId);
+        	const notificaId = buttonElement.getAttribute("data-id");
+
+        	if (!notificaId) {
+                console.error("Impossibile trovare notificaId");
+                return;
+            }
 
             const action = accetta ? 'accetta' : 'rifiuta';
 

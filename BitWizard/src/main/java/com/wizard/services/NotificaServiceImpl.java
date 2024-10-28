@@ -246,13 +246,18 @@ public class NotificaServiceImpl implements NotificaService {
         // La notifica va inviata al ricevente, cioè Mauro (utenteRicevente)
         notifica.setUtenteId(utenteRicevente.getUtenteId());
         
-        notifica.setTesto("Ciao " + utenteRicevente.getNome() + ", hai ricevuto una richiesta d'amicizia da " 
+        notificaDAO.saveAndFlush(notifica);
+        
+        Long notificaId = notifica.getId();
+        
+        System.out.println("NotificaId dell'amicizia creata: " + notificaId);
+        
+        String testo = "Ciao " + utenteRicevente.getNome() + ", hai ricevuto una richiesta d'amicizia da "
                 + utenteRichiedente.getNome() + ". "
-                + "<button class=\"gestisci-amicizia-btn btn btn-sm btn-success me-2\" onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", true, this)\">Accetta</button>"
-                + "<button class=\"gestisci-amicizia-btn btn btn-sm btn-danger\" onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", false, this)\">Rifiuta</button>");
+                + "<button data-id=\"" + notificaId + "\" class=\"gestisci-amicizia-btn btn btn-sm btn-success me-2\" onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", true, this)\">Accetta</button>"
+                + "<button data-id=\"" + notificaId + "\" class=\"gestisci-amicizia-btn btn btn-sm btn-danger\" onclick=\"gestisciRichiestaAmicizia(" + utenteRichiedente.getUtenteId() + ", false, this)\">Rifiuta</button>";
         
-        notifica.setData(new Date());
-        
+        notifica.setTesto(testo);        
         notifica.setData(new Date());
 
         notificaDAO.save(notifica);

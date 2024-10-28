@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dettagli del Viaggio</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <style>
-.chat-container {
-    height: 500px; /* Altezza fissa per la chat */
+/* Stile generale della chat */
+#ChatDelViaggio {
+    height: 600px; /* Altezza fissa per la chat */
     overflow-y: auto; /* Barra di scorrimento verticale */
     padding: 15px;
     border: 1px solid #dee2e6;
@@ -15,21 +17,81 @@
     background-color: #ffffff;
     scrollbar-width: thin; /* Riduce la larghezza della scrollbar su Firefox */
     scrollbar-color: #c4c4c4 #ffffff; /* Colore della scrollbar su Firefox */
+    margin-bottom: 1rem;
 }
 
-/* Scrollbar styling per Webkit (Chrome, Safari) */
-.chat-container::-webkit-scrollbar {
-    width: 8px; /* Larghezza della scrollbar */
-    border-radius: 50px; /* Angoli arrotondati per lo slider */
+.chat-title {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
-.chat-container::-webkit-scrollbar-thumb {
-    background-color: #a9a9a9; /* Colore della scrollbar */
-    border-radius: 50px; /* Angoli arrotondati per lo slider */
+.chat-container {
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #ffffff;
+    margin-bottom: 1rem;
 }
 
-.chat-container::-webkit-scrollbar-track {
-    background: #ffffff; /* Colore dello sfondo della scrollbar */
+/* Stile del form di invio */
+.message-form {
+    display: flex;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 50px;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+/* Input per il messaggio */
+.message-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 0.8rem 1rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #fff;
+    margin-right: 0.5rem;
+}
+
+/* Icona per allegati */
+.attach-icon {
+    color: #c0c0c0;
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+/* Pulsante di invio */
+.send-button {
+    background-color: #c0c0c0;
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+/* Hover ed effetti */
+.send-button:hover, .attach-icon:hover {
+    background-color: #3b2e5a;
+    color: #fff;
 }
 
 
@@ -116,7 +178,9 @@
         <!-- Sezione per le immagini del viaggio -->
         <h3>Immagini del Viaggio</h3>
         <div id="immaginiViaggio" class="row immagini-viaggio"></div>
-
+        <input type="file" id="inputImmagineViaggio" accept="image/*" style="display: none;">
+		<button id="aggiungiImgBtn" type="button" class="btn btn-primary">Aggiungi immagine al Viaggio</button>
+		
         <!-- Sezione per i tag del viaggio -->
         <h3>Tag del Viaggio</h3>
         <div id="tagsViaggio"></div>
@@ -138,29 +202,31 @@
     			<button id="annullaBtn" class="btn btn-danger">Cancella Viaggio</button>
 		</div>
 		</form>
-		
-		<div id="ChatDelViaggio" style="display: none;">
-			<h2>Chat del viaggio</h2>
-			<!--
-        	<div id="messaggioContainer" class="row">
-          	  <!-- Le card dei messaggi verranno inserite qui dinamicamente -->
-          	 <div id="messaggioContainer" class="chat-container">
-    			<!-- I messaggi saranno inseriti qui tramite JavaScript -->
-			</div>
-       	 	</div>
-       	 	
-        
-    			<form id="messaggioForm" enctype="multipart/form-data" style="display: block;">
-    			<h2>Invia un nuovo messaggio</h2>
-        		<label for="testo">Testo del messaggio:</label><br>
-        		<input type="text" id="testo" name="testo" required><br><br>
-        
-        		<label for="immagine">Immagine del messaggio (opzionale):</label><br>
-        		<input type="file" id="immagine" name="immagineMessaggio"><br><br>
+   			
+   		<div id="ChatDelViaggio" style="display: none;">
+    <h2 class="chat-title">Chat del viaggio</h2>
 
-        		<button type="submit">Invia Messaggio</button>
-   			</form>
-   		</div>
+    <!-- Container per i messaggi -->
+    <div id="messaggioContainer" class="chat-container">
+        <!-- I messaggi verranno aggiunti qui dinamicamente -->
+    </div>
+
+    <!-- Form per inviare il messaggio -->
+    <form id="messaggioForm" enctype="multipart/form-data" class="message-form">
+        <div class="input-container">
+            <input type="text" id="testo" name="testo" class="message-input" placeholder="Scrivi un messaggio..." required>
+            <input type="file" id="immagine" name="immagineMessaggio" class="file-input" hidden>
+            <label for="immagine" class="attach-icon">
+                <i class="fas fa-paperclip"></i>
+            </label>
+            <button type="submit" class="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+</div>
 
     <p id="result"></p>
 	
