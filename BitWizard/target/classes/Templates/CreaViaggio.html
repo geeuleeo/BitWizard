@@ -81,71 +81,6 @@
         
         let selectedImages = [];
 
-     // Funzione per l'anteprima delle immagini selezionate
-     function handleImages() {
-         const copertinaInput = document.getElementById('immagini');
-         const copertinaPreview = document.getElementById('copertinaPreview');
-         copertinaPreview.innerHTML = "";
-
-         selectedImages = []; // Reset the array
-
-         if (copertinaInput.files && copertinaInput.files.length > 0) {
-             Array.from(copertinaInput.files).forEach((file) => {
-                 // Create image preview
-                 const reader = new FileReader();
-                 reader.onload = function (e) {
-                     const img = document.createElement('img');
-                     img.src = e.target.result;
-                     img.className = 'img-preview';
-                     copertinaPreview.appendChild(img);
-                 };
-                 reader.readAsDataURL(file);
-
-                 // Add file to selectedImages array
-                 selectedImages.push(file);
-             });
-         } else {
-             console.log("Nessun file selezionato.");
-         }
-     }
-
-        
-        <!--
-
-        function handleMultipleImages() {
-            console.log('handleMultipleImages called');
-
-            const imageInput = document.getElementById('immagini');
-            selectedImages = Array.from(imageInput.files);
-            console.log('Selected Images:', selectedImages);
-
-            const previewContainer = document.getElementById('previewContainer');
-            previewContainer.innerHTML = ""; // Clear previous previews
-
-            if (selectedImages.length > 0) {
-                selectedImages.forEach((file, index) => {
-                    const reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'img-preview';
-                        previewContainer.appendChild(img);
-                        console.log(`Immagine ${index + 1} caricata: ${file.name}`);
-                    };
-
-                    reader.onerror = function() {
-                        console.error(`Errore nel caricamento dell'immagine ${file.name}`);
-                    };
-
-                    reader.readAsDataURL(file);
-                });
-            } else {
-                console.log("Nessun file selezionato.");
-            }
-        }
-        -->
-
      // Funzione per inviare i dati tramite fetch
         function inviaDati(formData) {
             fetch('/api/viaggi/crea', {
@@ -207,19 +142,6 @@
             if (immagineCopertina) {
                 formData.append('immagineCopertina', immagineCopertina);
             }
-            
-            console.log("Immagini selezionate per l'invio:", selectedImages);
-
-            console.log('selectedImages in inviaForm:', selectedImages);
-
-            if (selectedImages.length > 0) {
-                selectedImages.forEach((file) => {
-                    console.log(`Aggiungendo l'immagine: ${file.name}`);
-                    formData.append('immagini', file);
-                });
-            } else {
-                console.log("Nessuna immagine da inviare.");
-            }
 
             // Log FormData entries
             for (let [key, value] of formData.entries()) {
@@ -274,6 +196,13 @@
             margin-right: 10px;
             margin-bottom: 10px;
         }
+        .immagini-viaggio img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -324,15 +253,6 @@
         <label for="immagineCopertina">Immagine Copertina del Viaggio:</label>
         <input type="file" id="immagineCopertina" name="immagineCopertina" accept="image/*"><br><br>
         <div id="copertinaPreview"></div>
-        
-        <label for="immagini">Immagini del Viaggio:</label>
-        <input type="file" id="immagini" name="immagini" accept="image/*" onchange="handleImages()"><br><br>
-        <div id="copertinaPreview"></div>
-
-        <!-- Sezione per il caricamento di più immagini
-		<label for="immagini">Altre Immagini del Viaggio:</label>
-		<input type="file" id="immagini" name="immagini" accept="image/*" multiple onchange="handleMultipleImages()"><br><br>
-		-->
 		
         <!-- Anteprima delle immagini selezionate -->
         <div id="previewContainer"></div>

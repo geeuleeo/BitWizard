@@ -405,6 +405,7 @@ async function aggiornaPartecipanti(viaggioId) {
                     // Mostra i pulsanti del creatore
                     document.getElementById('pulsantiCreatore').style.display = 'block';
                     document.getElementById('ChatDelViaggio').style.display = 'block';
+                    document.getElementById('aggiungiImgBtn').style.display = 'block';
                 } else {
                 	
                     // Mostra il pulsante di iscrizione se l'utente non è il creatore

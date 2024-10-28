@@ -76,7 +76,6 @@ public class ViaggioController {
     public ResponseEntity<?> creaViaggio(
             @RequestPart("viaggioDTO") @Valid ViaggioCreazioneDTO viaggioDTO,
             @RequestPart(value = "immagineCopertina", required = false) MultipartFile immagineCopertina,
-            @RequestPart(value = "immagini", required = false) List<MultipartFile> immagini,
             HttpSession session) {
 
         try {
@@ -105,53 +104,14 @@ public class ViaggioController {
             if (immagineCopertina != null && !immagineCopertina.isEmpty()) {
                 handleProfileImage(nuovoViaggio, immagineCopertina);
             }
-            // Salva il viaggio con i tag associati
-            //Controllo se nella session c'è un'azienda o un utente
-
+            
             if(agenzia==null){
                 Viaggio viaggioSalvato = viaggioService.salvaViaggio(nuovoViaggio, tagDTOs);
-                // Gestione delle altre immagini, se presenti
-                if (immagini != null && !immagini.isEmpty()) {
-                    for (MultipartFile immagine : immagini) {
-                        if (!immagine.isEmpty()) {
-                            // Crea l'entità Immagine e la salva
-                            Immagine immagineEntity = new Immagine();
-                            immagineEntity.setImg(immagine.getBytes());
-                            immagineDAO.save(immagineEntity);
-
-                            // Crea l'entità ViaggioImmagini per l'associazione
-                            ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
-                            viaggioImmagine.setViaggio(viaggioSalvato);
-                            viaggioImmagine.setImmagine(immagineEntity);
-
-                            // Salva l'associazione nel repository
-                            viaggioImmaginiDAO.save(viaggioImmagine);
-                        }
-                    }
-                }
+               
                 return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
 
             }else {
                 Viaggio viaggioSalvato= viaggioService.salvaViaggioAgenzia(nuovoViaggio, tagDTOs);
-                // Gestione delle altre immagini, se presenti
-                if (immagini != null && !immagini.isEmpty()) {
-                    for (MultipartFile immagine : immagini) {
-                        if (!immagine.isEmpty()) {
-                            // Crea l'entità Immagine e la salva
-                            Immagine immagineEntity = new Immagine();
-                            immagineEntity.setImg(immagine.getBytes());
-                            immagineDAO.save(immagineEntity);
-
-                            // Crea l'entità ViaggioImmagini per l'associazione
-                            ViaggioImmagini viaggioImmagine = new ViaggioImmagini();
-                            viaggioImmagine.setViaggio(viaggioSalvato);
-                            viaggioImmagine.setImmagine(immagineEntity);
-
-                            // Salva l'associazione nel repository
-                            viaggioImmaginiDAO.save(viaggioImmagine);
-                        }
-                    }
-                }
 
                 return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
             }
