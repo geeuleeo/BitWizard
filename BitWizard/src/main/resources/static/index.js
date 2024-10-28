@@ -176,7 +176,13 @@ function caricaImmagineViaggio(viaggioId, file) {
     })
     .catch(error => {
         console.error('Errore:', error);
-        alert('Si è verificato un errore durante il caricamento dell\'immagine.');
+        Swal.fire({
+            		icon: 'error',
+            		title: 'Operazione fallita.',
+            		text: 'Si è verificato un errore durante il caricamento dell\'immagine.',
+            		confirmButtonText: 'OK'
+        		});
+        
     });
 }
 
@@ -273,13 +279,28 @@ async function aggiornaPartecipanti(viaggioId) {
 
             if (response.ok) {
             	aggiornaPartecipanti(viaggioId);
-                alert('Iscrizione avvenuta con successo!');     
+                Swal.fire({
+                	icon: 'success',
+                	title: 'Iscrizione avvenuta con successo!',
+                	text: 'Ti sei iscritto correttamente al viaggio.',
+                	confirmButtonText: 'OK'
+            	});    
             } else {
-                alert('Errore durante l\'iscrizione');
+				Swal.fire({
+            	icon: 'error',
+            	title: 'Errore di rete',
+            	text: 'Si è verificato un errore. Riprova più tardi.',
+            	confirmButtonText: 'OK'
+        	});
             }
         } catch (error) {
             console.error('Errore durante la richiesta:', error);
-            alert('Si è verificato un errore');
+            Swal.fire({
+            	icon: 'error',
+            	title: 'Errore di rete',
+            	text: 'Si è verificato un errore di connessione. Riprova più tardi.',
+            	confirmButtonText: 'OK'
+        	});
         }
     }
 
@@ -295,13 +316,28 @@ async function aggiornaPartecipanti(viaggioId) {
 
             if (response.ok) {
                 aggiornaPartecipanti(viaggioId);
-                alert('Annullamento Iscrizione avvenuto con successo!');     
+                Swal.fire({
+                	icon: 'success',
+                	title: 'Annullamento avvenuto con successo!',
+                	text: 'Annullamento Iscrizione avvenuto con successo!',
+                	confirmButtonText: 'OK'
+            	});
             } else {
-                alert('Errore durante l\'annullamento dell\'iscrizione');
+                Swal.fire({
+            	icon: 'error',
+            	title: 'Errore di rete',
+            	text: 'Errore durante l\'annullamento dell\'iscrizione',
+            	confirmButtonText: 'OK'
+        	});
             }
         } catch (error) {
             console.error('Errore durante la richiesta:', error);
-            alert('Si è verificato un errore');
+            Swal.fire({
+            	icon: 'error',
+            	title: 'Errore di rete',
+            	text: 'Si è verificato un errore di connessione. Riprova più tardi.',
+            	confirmButtonText: 'OK'
+        	});
         }
     }
 
@@ -336,14 +372,28 @@ async function aggiornaPartecipanti(viaggioId) {
             });
 
             if (response.ok) {
-            	aggiornaPartecipanti(viaggioId);
-                alert('Annullamento avvenuta con successo!');     
+                Swal.fire({
+            		icon: 'succes',
+            		title: 'Operazione avvenuta!',
+            		text: 'Annullamento Viaggio avvenuta con successo!',
+            		confirmButtonText: 'OK'
+        		});   
             } else {
-                alert('Errore durante l\'annullamento');
+                Swal.fire({
+            		icon: 'error',
+            		title: 'Errore di rete',
+            		text: 'Errore durante l\'annullamento',
+            		confirmButtonText: 'OK'
+        		});
             }
         } catch (error) {
             console.error('Errore durante la richiesta:', error);
-            alert('Si è verificato un errore');
+            Swal.fire({
+            		icon: 'error',
+            		title: 'Errore di rete',
+            		text: 'Si è verificato un errore.',
+            		confirmButtonText: 'OK'
+        		});
         }
     }
     
@@ -637,7 +687,12 @@ caricaMessaggi(viaggioId);
  	    .then(response => response.json())
  	    .then(data => {
  	        console.log(data); // Visualizza la risposta del server
- 	        alert('Recensione inviata con successo!');
+ 	        Swal.fire({
+            		icon: 'success',
+            		title: 'Recensione creata',
+            		text: 'Recensione inviata con successo!',
+            		confirmButtonText: 'OK'
+        		});
  	        caricaRecensioni(viaggioId);
  	    })
  	    .catch(error => console.error('Errore:', error));

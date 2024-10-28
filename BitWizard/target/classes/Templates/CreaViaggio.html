@@ -95,6 +95,12 @@
                         feedbackMessage.textContent = 'Viaggio creato con successo!';
                         feedbackMessage.style.color = 'green';
                         feedbackMessage.style.display = 'block';
+                        Swal.fire({
+                        	icon: 'success',
+                        	title: 'Viaggio creato!',
+                        	text: 'Il tuo viaggio è stato creato correttamente.',
+                        	confirmButtonText: 'OK'
+                    	}); 
                         return data;
                     });
                 } else {
