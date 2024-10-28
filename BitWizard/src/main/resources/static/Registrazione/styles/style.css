@@ -19,7 +19,6 @@ body {
 
 .navbar-custom {
     background-color: #000035;
-    padding: 10px 0;
     width: 100%; /* Imposta la larghezza al 100% */
     position: absolute; /* Posizionamento assoluto per tenere la navbar in alto */
     top: 0; /* Posiziona la navbar in alto */
@@ -90,64 +89,74 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #0056b3;
+input, button {
+	font-family: 'ADLaM Display', sans-serif;
+	border-radius: 10px;
 }
 
+
+#pulsanteCrea, #pulsanteLogin {
+	cursor: pointer;
+	width: 100%;
+	height: auto;
+}
+
+#pulsanteCrea:hover, #pulsanteLogin:hover {
+	background-color: #000035;
+	color: #ff6f61;
+}
+
+
+
+/* Contenitore generale per i tag */
 #availableTags, #selectedTags {
     width: 100%;
-    margin: 0;
-    padding: 8px;
-    background-color: #f1f1f1;
-    border-radius: 5px;
+    max-width: 400px; /* Imposta una larghezza massima per il box dei tag */
+    border: 1px solid black;
+    min-height: 100px;
+    padding: 10px;
+    margin: 10px auto; /* Margine automatico per centrare */
+    display: flex;
+    flex-wrap: wrap; /* Permette ai tag di andare a capo automaticamente */
+    justify-content: center; /* Centra i tag all'interno del box */
+    border-radius: 10px;
 }
 
-/* Stile per i tag come bottoni */
+/* Stile per i tag */
+/* Stile per mantenere la stessa larghezza dei tag */
 .tag {
     display: inline-block;
-    padding: 8px 12px;
+    padding: 8px 15px;
     margin: 5px;
-    background-color: #007bff;
-    color: white;
-    border-radius: 20px;
-    cursor: pointer;
-    position: relative;
+    width: 100px; /* Imposta una larghezza fissa */
+    text-align: center;
+    background-color: #ff6f61;
+    color: #fff;
     font-size: 14px;
+    font-weight: bold;
+    border-radius: 20px;
+    transition: transform 0.2s, background-color 0.2s;
+    cursor: pointer;
 }
+
+/* Stile per i contenitori dei tag */
+#availableTags .tag, #selectedTags .tag {
+    width: 100px; /* La stessa larghezza per entrambi i contenitori */
+}
+
 
 .tag:hover {
-    background-color: #0056b3;
+    background-color: #ff5a3b;
 }
 
-.tag .close-btn {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    padding: 0 5px;
-    font-size: 12px;
-    cursor: pointer;
-}
 
-.tag .close-btn:hover {
-    background-color: #ff1a1a;
-}
 
-/* Stile per il contenitore dei tag */
-#availableTags, #selectedTags {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 10px;
-    background-color: #f1f1f1;
-    border-radius: 5px;
+.img-preview {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 10px;
     margin-bottom: 10px;
-}
-
-#availableTags .tag, #selectedTags .tag {
-    margin: 5px;
 }
 
 

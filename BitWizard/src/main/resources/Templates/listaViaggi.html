@@ -4,96 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/Lista-viaggi/styles/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <title>Lista Viaggi</title>
- <style>
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .profile-header img {
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-        }
-        .profile-info {
-            flex-grow: 1;
-            margin-left: 20px;
-        }
-        .profile-info h2 {
-            margin: 0;
-        }
-        .actions {
-            margin-top: 20px;
-        }
-        .actions button {
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        .viaggi-list {
-            margin-top: 30px;
-        }
-        .viaggio {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-    </style>
+
 </head>
 <body>
 
-	<h2>Lista dei viaggi</h2>
-        <div id="cardContainer" class="row">
-            <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
-        </div>
+	<!-- Navbar -->
+	<nav class="navbar navbar-custom">
+		<div class="navbar-container">
+			<a href="/" class="navbar-logo"> <img
+				src="../assets/img/viaggiodasolo.svg" alt="Logo" class="logo">
+			</a>
+			<h1 class="navbar-title">Viaggia con noi - Le nostre migliori
+				offerte</h1>
+		</div>
+	</nav>
 
-	<script>
-    // Funzione per caricare i viaggi dell'utente
-    async function caricaViaggi() {
-        const response = await fetch('api/viaggi/lista'); // Endpoint che restituisce i viaggi dell'utente
-        const viaggi = await response.json();
-        const container = document.getElementById('cardContainer');
+	<!-- Contenuto della pagina -->
+	<div class="container mt-4">
+		<div id="cardContainer" class="row">
+			<!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+		</div>
+	</div>
 
-        viaggi.forEach(viaggio => {
-            container.innerHTML += createViaggioCard(viaggio);
-        });
-    }
+	<!-- Sezione delle offerte -->
+	<section class="offerte">
+		<div class="card-container">
+			<div class="cards-wrapper">
+				<div class="cards" id="offerteCardsContainer">
+					<!-- Le card generate dinamicamente verranno inserite qui -->
+				</div>
+			</div>
+		</div>
+	</section>
 	
-	function createViaggioCard(viaggio) {
-        // Formatta le date in maniera più leggibile (es. dd/mm/yyyy)
-        const dataPartenza = new Date(viaggio.dataPartenza).toLocaleDateString();
-        const dataRitorno = new Date(viaggio.dataRitorno).toLocaleDateString();
-
-        // Crea la card HTML per il viaggio
-        return `
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
-                    <div class="card-body">
-                        <h5 class="card-title">${viaggio.nome}</h5>
-                        <p class="card-text">
-                            Luogo di Partenza: ${viaggio.luogoPartenza} <br>
-                            Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
-                            Data di Partenza: ${dataPartenza} <br>
-                            Data di Ritorno: ${dataRitorno} <br>
-                            Prezzo: €${viaggio.prezzo.toFixed(2)}
-                        </p>
-                        <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="btn btn-primary">Dettagli del viaggio</a>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-	caricaViaggi();
-</script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Script -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="/Lista-viaggi/scripts/main.js"></script>
 </body>
 </html>
