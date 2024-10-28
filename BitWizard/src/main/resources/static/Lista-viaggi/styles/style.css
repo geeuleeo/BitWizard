@@ -1,0 +1,102 @@
+/* Stile personalizzato per la navbar */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+	font-family: 'ADLaM Display', sans-serif;
+	background-color: beige;
+}
+
+.navbar-custom {
+    background-color: #000035;
+    padding: 10px 0;
+}
+
+.navbar-custom .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar-custom .navbar-logo .logo {
+    width: 100px;
+    height: auto;
+}
+
+.navbar-title {
+    color: #ff6f61;
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+/* Stile per le card dei viaggi */
+.card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cards-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.card {
+    width: 300px;  /* Larghezza delle card */
+    height: 450px; /* Altezza delle card */
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    margin: 0 10px; /* Spaziatura tra le card */
+}
+
+.card img {
+    width: 100%; /* L'immagine riempirà tutta la larghezza della card */
+    height: 150px; /* Altezza fissa per l'immagine */
+    border-radius: 10px;
+}
+
+/* Stile per il bottone "Dettagli del viaggio" */
+.card .btn-primary {
+    background-color: #000035; /* Colore di sfondo del bottone */
+    border-color: #000035;
+    color: #ff6f61
+}
+
+.card .btn-primary:hover {
+    background-color: #ff6f61; /* Colore di sfondo su hover */
+    border-color: #ff6f61;
+    color: #000035;
+}
+
+p {
+	text-align: justify;
+}
+
+
+.nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-btn img {
+    width: 30px; /* Dimensione delle frecce */
+    height: auto;
+}

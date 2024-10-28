@@ -1,0 +1,23 @@
+/*
+* Pagina di stile per la pagina di home
+*/
+
+body {
+	background-color: #f4f4f4;
+}
+
+.container {
+	margin-top: 30px;
+}
+
+h1 {
+	color: #333;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+.btn-primary {
+	margin-top: 10px;
+}
