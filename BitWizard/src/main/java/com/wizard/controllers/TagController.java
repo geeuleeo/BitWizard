@@ -1,14 +1,13 @@
 package com.wizard.controllers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wizard.entities.Tag;
 import com.wizard.entities.Utente;
@@ -34,11 +33,11 @@ public class TagController {
 	}
 
 	@GetMapping("/get")
-	public ResponseEntity<?> getTagByUtenteId(HttpSession session) {
+	public ResponseEntity<?> getTagByUtenteId(@RequestParam Long utenteId) {
 
 		try
 		{
-			Utente utente = (Utente) session.getAttribute("utenteLoggato");
+			Utente utente = utenteService.findById(utenteId);
 			if (utente == null) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}

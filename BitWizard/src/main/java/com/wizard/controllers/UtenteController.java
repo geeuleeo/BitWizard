@@ -71,7 +71,9 @@ public class UtenteController {
     
     @Autowired
     private NotificaService notificaService;
-    
+    @Autowired
+    private HttpSession httpSession;
+
     @PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
     public ResponseEntity<?> signUp(

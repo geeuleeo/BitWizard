@@ -4,28 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="Creazione viaggi agenzie fixato">
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/BitWizardApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/BitWizardApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/AmiciziaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/AmiciziaController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/PaginaViaggioController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/ViaggioController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Amicizia$StatoAmicizia.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Amicizia$StatoAmicizia.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Amicizia.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Amicizia.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ChiavePartecipantiViaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ChiavePartecipantiViaggio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Messaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Messaggio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Notifica.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Notifica.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/PartecipantiViaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/PartecipantiViaggio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Recensione.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Recensione.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Tag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Tag.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Utente.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Utente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteAgenzia.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteAgenzia.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/UtenteTag.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/Viaggio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ViaggioImmagini.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ViaggioImmagini.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ViaggioTag.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/entities/ViaggioTag.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/NotificaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/NotificaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/NotificaServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/NotificaServiceImpl.class" afterDir="false" />
+    <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="Creazione branch frontend prendendo le ultime modifiche del branch &quot;backend-definitivo&quot;">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/TagController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/TagController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/UtenteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/UtenteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/Templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/TagController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/TagController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -226,7 +212,23 @@
       <option name="project" value="LOCAL" />
       <updated>1729788745404</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Creazione branch frontend prendendo le ultime modifiche del branch &quot;backend-definitivo&quot;">
+      <option name="closed" value="true" />
+      <created>1730130448775</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1730130448775</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Creazione branch frontend prendendo le ultime modifiche del branch &quot;backend-definitivo&quot;">
+      <option name="closed" value="true" />
+      <created>1730130512970</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1730130512970</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -257,7 +259,8 @@
     <MESSAGE value="q" />
     <MESSAGE value="Iscrizione viaggi agenzie" />
     <MESSAGE value="Creazione viaggi agenzie fixato" />
-    <option name="LAST_COMMIT_MESSAGE" value="Creazione viaggi agenzie fixato" />
+    <MESSAGE value="Creazione branch frontend prendendo le ultime modifiche del branch &quot;backend-definitivo&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Creazione branch frontend prendendo le ultime modifiche del branch &quot;backend-definitivo&quot;" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
