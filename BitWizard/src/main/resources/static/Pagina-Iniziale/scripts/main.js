@@ -106,6 +106,9 @@ function createOffertaCard(offerta) {
     `;
 }
 
+
+
 // Carica i viaggi e le offerte quando la pagina è pronta
 caricaViaggi();
 caricaOfferte();
+

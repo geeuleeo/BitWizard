@@ -17,6 +17,43 @@ body {
     padding: 20px; /* Aggiunto padding per evitare che gli elementi tocchino i bordi */
 }
 
+.navbar-custom {
+    background-color: #000035;
+    padding: 10px 0;
+    width: 100%; /* Imposta la larghezza al 100% */
+    position: absolute; /* Posizionamento assoluto per tenere la navbar in alto */
+    top: 0; /* Posiziona la navbar in alto */
+    z-index: 1000; /* Assicura che la navbar sia sopra altri contenuti */
+}
+
+.navbar-custom .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra orizzontalmente tutto il contenuto */
+    margin: 0 auto; /* Rimuovi margin laterale per centrare contenuto */
+    max-width: 1200px; /* Mantieni un massimo per larghezze grandi */
+    padding: 0 20px; /* Aggiungi padding laterale per il contenuto */
+}
+
+.navbar-custom .navbar-logo {
+    margin-right: 20px; /* Spazio tra logo e titolo */
+    width: 100px;
+    height: auto;
+}
+
+.navbar-custom .navbar-title {
+    color: #ff6f61;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+input, button {
+	font-family: 'ADLaM Display', sans-serif;
+	border-radius: 10px;
+}
+
+
+
 .form-container {
     background-color: rgba(255, 255, 255, 0.9); /* Colore bianco trasparente */
     padding: 20px; 
@@ -24,6 +61,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bottom shadow */
     width: 90%; /* Utilizza una percentuale per adattarsi a schermi piccoli */
     max-width: 400px; /* Massima larghezza per schermi più grandi */
+    margin-top: 130px;
 }
 
 h2 {

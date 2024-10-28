@@ -349,6 +349,28 @@ h2 {
     color: gold; /* Colora le stelle in oro */
 }
 
+#titolo-social {
+    text-align: center;
+    margin: auto;
+}
+
+/* Stile per l'immagine sotto le card */
+.social-image-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.social-image {
+    width: 100%;
+    max-width: 850px;/* max-height: 850px; */
+    height: auto;
+    border-radius: 30px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+
 
 /* Footer Styles */
 footer {

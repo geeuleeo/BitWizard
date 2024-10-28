@@ -10,9 +10,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <div class="form-container">
-        <h2>Registrazione Nuovo Utente</h2>
 
+	<!-- Navbar -->
+    <nav class="navbar navbar-custom">
+        <div class="navbar-container">
+            <a href="/" class="navbar-logo">
+                <img src="../assets/img/viaggiodasolo.svg" alt="Logo" class="logo">
+            </a>
+            <h1 class="navbar-title">Registrazione Nuovo Utente</h1>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        
         <form id="signup" action="#" method="POST" enctype="multipart/form-data">
             
             <label for="nome">Nome:</label>
@@ -51,7 +61,7 @@
             <div id="errori"></div>
             <div id="successo"></div>
 
-            <button type="button" onclick="inviaForm()">Crea Utente</button>
+            <button id="pulsanteCrea" type="button" onclick="inviaForm()">Crea Utente</button>
             
             <button id="pulsanteLogin" class="btn btn-outline-secondary" onclick="window.location.href='/login'">Vai al Login</button>
         </form>

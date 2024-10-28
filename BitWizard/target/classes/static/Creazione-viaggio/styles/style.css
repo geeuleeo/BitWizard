@@ -17,6 +17,7 @@ body {
     align-items: center; /* Centra verticalmente */
     padding: 20px; /* Aggiunto padding per evitare che gli elementi tocchino i bordi */
     margin-top: 60px; /* Spazio sopra il form per la navbar */  
+    overflow: hidden;
 }
 
 .navbar-custom {
