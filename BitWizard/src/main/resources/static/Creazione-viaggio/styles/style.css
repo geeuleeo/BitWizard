@@ -130,6 +130,31 @@ input, button {
     margin-bottom: 10px;
 }
 
+/* Media query per schermi di circa 15 pollici */
+@media (max-width: 1440px) and (min-width: 1366px) {
+    #creazione-viaggio-form {
+        width: 80%; /* Riduce la larghezza per adattarsi meglio allo schermo */
+        margin: auto; /* Centra il form */
+        padding: 20px; /* Aggiunge spazio interno per migliore leggibilità */
+        font-size: 1rem; /* Adatta la dimensione del testo */
+    }
+
+    #creazione-viaggio-form input,
+    #creazione-viaggio-form select,
+    #creazione-viaggio-form textarea {
+        width: 100%; /* Imposta i campi di input per prendere tutto lo spazio disponibile */
+        padding: 12px; /* Aggiunge spazio interno ai campi di input */
+        font-size: 0.9rem; /* Riduce leggermente la dimensione del testo per adattarsi meglio */
+    }
+
+    #creazione-viaggio-form button {
+        width: 100%; /* Fa sì che il bottone occupi tutta la larghezza disponibile */
+        padding: 15px; /* Rende il bottone più accessibile */
+        font-size: 1rem; /* Imposta una dimensione del testo comoda per cliccare */
+    }
+}
+
+
 /* Layout tablet */
 @media (max-width: 768px) {
 	
