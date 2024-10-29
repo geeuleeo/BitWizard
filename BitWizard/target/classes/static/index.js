@@ -460,6 +460,7 @@ async function aggiornaPartecipanti(viaggioId) {
                 	
                     // Mostra il pulsante di iscrizione se l'utente non è il creatore
                     document.getElementById('iscrivitiBtn').style.display = 'block';
+                    document.getElementById('ChatDelViaggio').style.display = 'block';
                     // Nascondi i pulsanti del creatore
                     document.getElementById('pulsantiCreatore').style.display = 'none';
                     console.log('controllo iscrizione con viaggioId:', viaggioId);
@@ -543,39 +544,67 @@ async function aggiornaPartecipanti(viaggioId) {
         }
     }
     
+let utenteLoggatoId = null; // Variabile globale per l'ID dell'utente loggato
+
+// Recupera l'utente loggato e salva l'ID nella variabile globale
+async function recuperaUtenteLoggato() {
+    try {
+        const response = await fetch(`/api/utente/session`);
+        if (response.ok) {
+            const utenteLoggato = await response.json();
+            utenteLoggatoId = utenteLoggato; // Salva l'ID nella variabile globale
+            console.log('utente loggato id per i messaggi: ' + utenteLoggatoId);
+        } else {
+            console.error("Errore: risposta non ok", response.status);
+        }
+    } catch (error) {
+        console.error("Errore nel recupero dell'utente loggato:", error);
+    }
+}
+
+// Inizializza la chat
+async function initChat() {
+    await recuperaUtenteLoggato(); // Attendi di ottenere l'ID dell'utente loggato
+
+    // Usa l'ID dell'utente loggato per creare i messaggi
+    if (utenteLoggatoId !== null) {
+        console.log("Utente loggato ID:", utenteLoggatoId);
+        // Avvia il caricamento della chat o altre funzioni che dipendono dall'ID
+        caricaMessaggi(viaggioId, utenteLoggatoId); // O qualunque funzione sia responsabile di caricare i messaggi
+    } else {
+        console.error("Impossibile ottenere l'ID dell'utente loggato.");
+    }
+}
+    
 const utentiCache = {};
 
-async function caricaMessaggi(viaggioId) {
+async function caricaMessaggi(viaggioId, utenteLoggatoId) {
     try {
         const response = await fetch(`/carica/messaggi/${viaggioId}`);
         if (!response.ok) throw new Error(`Errore nel caricamento dei messaggi: ${await response.text()}`);
 
         const nuoviMessaggi = await response.json();
-        visualizzaMessaggi(nuoviMessaggi);
+        visualizzaMessaggi(nuoviMessaggi, utenteLoggatoId);
 
     } catch (error) {
         console.error("Errore nel caricamento dei messaggi:", error);
     }
 }
 
-async function visualizzaMessaggi(messaggi) {
+async function visualizzaMessaggi(messaggi, utenteLoggatoId) {
     const container = document.querySelector('.chat-container');
     container.innerHTML = ''; // Svuota il contenitore
 
-    const messaggiHTML = await Promise.all(messaggi.map(createMessaggioCard));
+    const messaggiHTML = await Promise.all(messaggi.map(messaggio => createMessaggioCard(messaggio, utenteLoggatoId)));
     container.innerHTML = messaggiHTML.reverse().join(''); // Inverti l'ordine per avere il più recente in fondo
-
     // Imposta lo scroll alla fine
     container.scrollTop = container.scrollHeight;
-}
-
-// Funzione per scorrere automaticamente alla fine ogni volta che viene aggiunto un nuovo messaggio
-function scrollToBottom(container) {
-    container.scrollTop = container.scrollHeight;
+    
 }
 
 // Funzione per creare la card di un messaggio
-async function createMessaggioCard(messaggio) {
+async function createMessaggioCard(messaggio, utenteLoggatoId) {
+	
     const dataInvio = new Date(messaggio.data).toLocaleString('it-IT', {
         day: '2-digit',
         month: '2-digit',
@@ -584,27 +613,30 @@ async function createMessaggioCard(messaggio) {
         minute: '2-digit',
     });
 
-    let utenteNome = 'Anonimo';
-    let utenteCognome = '';
-
+    // Verifica se l'utente è già in cache
     if (messaggio.utenteId && !utentiCache[messaggio.utenteId]) {
+		
+		console.log('utente loggato id per i messaggi' + utenteLoggatoId);
+		
         try {
             const response = await fetch(`/api/utente/nome/${messaggio.utenteId}`);
-            const utente = await response.json();
-            utentiCache[messaggio.utenteId] = {
-                nome: utente.nome || 'Anonimo',
-                cognome: utente.cognome || '',
-            };
+            if (response.ok) {
+                const utente = await response.json();
+                utentiCache[messaggio.utenteId] = {
+                    nome: utente.nome || 'Anonimo',
+                    cognome: utente.cognome || '',
+                };
+            }
         } catch (error) {
             console.error("Errore nel recupero dei dati dell'utente", error);
         }
     }
 
-    if (utentiCache[messaggio.utenteId]) {
-        utenteNome = utentiCache[messaggio.utenteId].nome;
-        utenteCognome = utentiCache[messaggio.utenteId].cognome;
-    }
+    // Determina il nome e cognome da visualizzare
+    let utenteNome = (messaggio.utenteId === utenteLoggatoId) ? 'Tu' : (utentiCache[messaggio.utenteId]?.nome || 'Anonimo');
+    let utenteCognome = (messaggio.utenteId === utenteLoggatoId) ? '' : (utentiCache[messaggio.utenteId]?.cognome || '');
 
+    // Gestione dell'immagine del messaggio e del profilo
     const immagineHTML = messaggio.immagineId
         ? `<img src="/api/immagini/immagine/${messaggio.immagineId}" class="img-fluid rounded mb-3" alt="Immagine messaggio">`
         : '';
@@ -613,15 +645,20 @@ async function createMessaggioCard(messaggio) {
         ? `<img src="/api/immagini/utente/profilo/${messaggio.utenteId}" class="rounded-circle me-3" alt="Immagine profilo utente" style="width: 50px; height: 50px;">`
         : `<img src="/immagini/default-profilo.png" class="rounded-circle me-3" alt="Immagine profilo di default" style="width: 50px; height: 50px;">`;
 
+    // Configura lo stile del messaggio in base all'utente
+    const messageAlignment = messaggio.utenteId === utenteLoggatoId ? 'justify-content-end text-end' : 'align-items-start';
+    const messageBackground = messaggio.utenteId === utenteLoggatoId ? 'background-color: #d1f7c4;' : 'background-color: #f8f9fa;';
+
     return `
-        <div class="d-flex mb-4 align-items-start">
-            ${immagineProfilo}
-            <div class="p-3 rounded shadow-sm" style="background-color: #f8f9fa; max-width: 75%;">
+        <div class="d-flex mb-4 ${messageAlignment}">
+            ${messaggio.utenteId === utenteLoggatoId ? '' : immagineProfilo}
+            <div class="p-3 rounded shadow-sm" style="${messageBackground} max-width: 75%;">
                 <h6 class="mb-1">${utenteNome} ${utenteCognome}</h6>
                 <small class="text-muted">${dataInvio}</small>
                 <p class="mb-1">${messaggio.testo}</p>
                 ${immagineHTML}
             </div>
+            ${messaggio.utenteId === utenteLoggatoId ? immagineProfilo : ''}
         </div>
     `;
 }
@@ -650,11 +687,12 @@ caricaMessaggi(viaggioId);
  	            method: 'POST',
  	            body: formData
  	        });
-
+ 	        
  	        const result = await response.json();
  	        if (response.ok) {
  	            document.getElementById('result').innerText = 'Messaggio inviato con successo!';
- 	            caricaMessaggi(viaggioId);
+ 	            console.log('id utente loggato creazione messaggio', utenteLoggatoId);
+ 	            caricaMessaggi(viaggioId, utenteLoggatoId);
  	        } else {
  	            document.getElementById('result').innerText = 'Errore: ' + result.error;
  	        }
@@ -711,7 +749,7 @@ caricaMessaggi(viaggioId);
  	        } else {
  	        // Usa for...of per iterare sugli oggetti asincroni
  	           for (let messaggio of messaggi) {
- 	               const messaggioCard = createMessaggioCard(messaggio);  // Attendi che la card venga creata
+ 	               const messaggioCard = createMessaggioCard(messaggio, utenteLoggatoId);  // Attendi che la card venga creata
  	               container.innerHTML += messaggioCard;  // Aggiungi la card al container
  	           }
  	        }
@@ -781,3 +819,6 @@ caricaMessaggi(viaggioId);
  	        </div>
  	    `;
  	}
+ 	
+ 	
+ 	initChat();

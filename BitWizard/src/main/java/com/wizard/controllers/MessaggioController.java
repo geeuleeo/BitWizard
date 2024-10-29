@@ -8,9 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wizard.DTO.CreazioneMessaggioDTO;
 import com.wizard.DTO.MessaggioDTO;
-import com.wizard.DTO.UtenteMessaggioDTO;
 import com.wizard.entities.Immagine;
 import com.wizard.entities.Messaggio;
 import com.wizard.entities.Utente;
@@ -125,7 +122,7 @@ public class MessaggioController {
 	        errorResponse.put("error", "Viaggio non trovato con ID: " + viaggioId);
 	        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	    }
-	}
+	   }
 	
 	private Messaggio createMessaggioFromDTO(CreazioneMessaggioDTO messaggioDTO) {
 	    Messaggio messaggio = new Messaggio();

@@ -19,4 +19,5 @@ public interface MessaggioDAO extends JpaRepository<Messaggio, ChiaveMessaggio> 
 	@Query("SELECT MAX(m.chiavemessaggio.messaggioId) FROM Messaggio m WHERE m.chiavemessaggio.viaggioId = :viaggioId AND m.chiavemessaggio.utenteId = :utenteId")
 	Long findUltimoMessaggioId(@Param("viaggioId") Long viaggioId, @Param("utenteId") Long utenteId);
 
+
 }
