@@ -22,9 +22,6 @@ public class AgenziaController {
     @Autowired
     private AgenziaDAO agenziaDAO;
 
-
-
-
     @PostMapping("/signup")
     public ResponseEntity<?>  signUp (@Valid@RequestBody AgenziaRegistrazioneDTO agenziaRegistrazioneDTO){
 

@@ -1,0 +1,227 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('/assets/img/background-registrazione.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'ADLaM Display', sans-serif;
+    height: 100vh; /* Mantieni l'altezza al 100% della viewport */
+    display: flex;
+    flex-direction: column; /* Aggiunto per permettere la separazione verticale */
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    padding: 20px; /* Aggiunto padding per evitare che gli elementi tocchino i bordi */
+    margin-top: 60px; /* Spazio sopra il form per la navbar */  
+    overflow: hidden;
+}
+
+.navbar-custom {
+    background-color: #000035;
+    padding: 10px 0;
+    width: 100%; /* Imposta la larghezza al 100% */
+    position: absolute; /* Posizionamento assoluto per tenere la navbar in alto */
+    top: 0; /* Posiziona la navbar in alto */
+    z-index: 1000; /* Assicura che la navbar sia sopra altri contenuti */
+}
+
+.navbar-custom .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra orizzontalmente tutto il contenuto */
+    margin: 0 auto; /* Rimuovi margin laterale per centrare contenuto */
+    max-width: 1200px; /* Mantieni un massimo per larghezze grandi */
+    padding: 0 20px; /* Aggiungi padding laterale per il contenuto */
+}
+
+.navbar-custom .navbar-logo {
+    margin-right: 20px; /* Spazio tra logo e titolo */
+    width: 100px;
+    height: auto;
+}
+
+.navbar-custom .navbar-title {
+    color: #ff6f61;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+.form-container {
+    background-color: rgba(255, 255, 255, 0.9); /* Colore bianco trasparente */
+    padding: 20px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bottom shadow */
+    width: 90%; /* Utilizza una percentuale per adattarsi a schermi piccoli */
+    max-width: 400px; /* Massima larghezza per schermi più grandi */
+    margin-top: 15px;
+}
+
+input, button {
+	font-family: 'ADLaM Display', sans-serif;
+	border-radius: 10px;
+}
+
+
+#crea-viaggio, #pulsantePaginaPersonale, #submitButton {
+	cursor: pointer;
+	width: 100%;
+	height: auto;
+}
+
+#crea-viaggio:hover, #pulsantePaginaPersonale:hover, #submitButton:hover {
+	background-color: #000035;
+	color: #ff6f61;
+}
+
+
+/* Contenitore generale per i tag */
+#availableTags, #selectedTags {
+    width: 100%;
+    max-width: 400px; /* Imposta una larghezza massima per il box dei tag */
+    border: 1px solid black;
+    min-height: 100px;
+    padding: 10px;
+    margin: 10px auto; /* Margine automatico per centrare */
+    display: flex;
+    flex-wrap: wrap; /* Permette ai tag di andare a capo automaticamente */
+    justify-content: center; /* Centra i tag all'interno del box */
+    border-radius: 10px;
+}
+
+/* Stile per i tag */
+/* Stile per mantenere la stessa larghezza dei tag */
+.tag {
+    display: inline-block;
+    padding: 8px 15px;
+    margin: 5px;
+    width: 100px; /* Imposta una larghezza fissa */
+    text-align: center;
+    background-color: #ff6f61;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 20px;
+    transition: transform 0.2s, background-color 0.2s;
+    cursor: pointer;
+}
+
+/* Stile per i contenitori dei tag */
+#availableTags .tag, #selectedTags .tag {
+    width: 100px; /* La stessa larghezza per entrambi i contenitori */
+}
+
+
+.tag:hover {
+    background-color: #ff5a3b;
+}
+
+
+
+.img-preview {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/* Media query per schermi di circa 15 pollici */
+@media (max-width: 1440px) and (min-width: 1366px) {
+    #creazione-viaggio-form {
+        width: 80%; /* Riduce la larghezza per adattarsi meglio allo schermo */
+        margin: auto; /* Centra il form */
+        padding: 20px; /* Aggiunge spazio interno per migliore leggibilità */
+        font-size: 1rem; /* Adatta la dimensione del testo */
+    }
+
+    #creazione-viaggio-form input,
+    #creazione-viaggio-form select,
+    #creazione-viaggio-form textarea {
+        width: 100%; /* Imposta i campi di input per prendere tutto lo spazio disponibile */
+        padding: 12px; /* Aggiunge spazio interno ai campi di input */
+        font-size: 0.9rem; /* Riduce leggermente la dimensione del testo per adattarsi meglio */
+    }
+
+    #creazione-viaggio-form button {
+        width: 100%; /* Fa sì che il bottone occupi tutta la larghezza disponibile */
+        padding: 15px; /* Rende il bottone più accessibile */
+        font-size: 1rem; /* Imposta una dimensione del testo comoda per cliccare */
+    }
+}
+
+
+/* Layout tablet */
+@media (max-width: 768px) {
+	
+    .form-container {
+        width: 100%;
+        max-width: 600px; /* Espandi per sfruttare meglio lo spazio */
+        padding: 15px;
+    }
+
+    .navbar-custom .navbar-title {
+        font-size: 20px; /* Ridimensiona titolo navbar per dispositivi più piccoli */
+    }
+
+    .navbar-custom .navbar-logo {
+        width: 80px; /* Ridimensiona il logo */
+    }
+
+    .tag {
+        width: auto; /* Permetti che i tag siano adattabili */
+        padding: 6px 12px; /* Ridimensiona padding dei tag per farli rientrare */
+        font-size: 13px;
+    }
+
+    #availableTags, #selectedTags {
+        padding: 8px;
+        min-height: 80px;
+    }
+
+    #crea-viaggio, #pulsantePaginaPersonale {
+        height: 50px; /* Ridimensiona i pulsanti */
+        font-size: 16px;
+    }
+
+    /* Adatta anteprime immagini */
+    .img-preview {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* Layout smartphone */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 10px;
+    }
+
+    .navbar-custom .navbar-title {
+        font-size: 18px;
+    }
+
+    .navbar-custom .navbar-logo {
+        width: 60px;
+    }
+
+    .tag {
+        width: auto;
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    #crea-viaggio, #pulsantePaginaPersonale {
+        height: 45px;
+        font-size: 14px;
+    }
+
+    .img-preview {
+        width: 70px;
+        height: 70px;
+    }
+}
