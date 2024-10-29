@@ -112,6 +112,11 @@ public class HomeController {
         return "CreaViaggio";
     }
     
+    @GetMapping("/DiventaUnPartner")
+    public String showDiventaUnPartner() {
+        return "DiventaUnPartner";
+    }
+    
     @GetMapping("/ModificaViaggio")
     public String showModificaViaggioPage() {
         return "ModificaViaggio";
@@ -160,6 +165,7 @@ public class HomeController {
 	
 	@GetMapping ("/ricerca")
     public String showRicercaUtente() { return "Filters";}
+	
 
     @GetMapping("loginAgenzia")
     public String showLoginAgenziaPage(){

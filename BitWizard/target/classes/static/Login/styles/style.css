@@ -30,6 +30,8 @@ body {
 h2 {
     margin-bottom: 1.5rem;
     color: #333;
+    text-align: center;  /* Centra il titolo */
+    font-size: 1.8rem;
 }
 
 label {
@@ -74,7 +76,7 @@ button + button:hover {
     background-color: #ff4f4f;
 }
 
-p {
+.error-message {
     color: red;
     margin-bottom: 1rem;
     font-size: 0.9rem;

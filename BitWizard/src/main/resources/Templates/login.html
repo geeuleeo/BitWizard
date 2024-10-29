@@ -4,26 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="/Login/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <h2>Login</h2>
+    <div class="form-container">
+        <h2>Login</h2>
 
-    <!-- Messaggio di errore -->
-    <div th:if="${loginError}">
-        <p th:text="${loginError}" style="color: red;"></p>
+        <!-- Messaggio di errore -->
+        <div th:if="${loginError}">
+            <p th:text="${loginError}" class="error-message"></p>
+        </div>
+
+        <!-- Form di login -->
+        <form action="/login" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+            
+            <button id="pulsanteRegistrazione" class="btn btn-outline-secondary" onclick="window.location.href='registrazione'">Registrati</button>
+        </form>
     </div>
-
-    <!-- Form di login -->
-    <form action="/login" method="post">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
-        <button type="submit">Login</button>
-        
-        <button id="pulsanteRegistrazione" class="btn btn-outline-secondary" onclick="location.href='/registrazione'">Registrati</button>
-    </form>
+    
+    <script src="/Login/scripts/main.js"></script>
 </body>
 </html>
