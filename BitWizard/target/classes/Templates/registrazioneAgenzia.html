@@ -14,6 +14,7 @@
         <div class="mb-3">
             <label for="partitaIVA" class="form-label">Partita IVA</label>
             <input type="text" class="form-control" id="partitaIVA" name="partitaIVA" required>
+            <div id="partitaIVAError" class="text-danger" style="display:none;">La Partita IVA deve iniziare con "IT" seguito da 11 cifre.</div>
         </div>
         <div class="mb-3">
             <label for="nome" class="form-label">Nome</label>
@@ -34,6 +35,19 @@
 <script>
     document.getElementById('signupForm').addEventListener('submit', function(event) {
         event.preventDefault();
+
+        const partitaIVA = document.getElementById('partitaIVA').value;
+        const partitaIVAError = document.getElementById('partitaIVAError');
+
+        // Regular expression to validate Partita IVA
+        const partitaIVARegex = /^IT\d{11}$/;
+
+        if (!partitaIVARegex.test(partitaIVA)) {
+            partitaIVAError.style.display = 'block';
+            return; // Stop form submission if validation fails
+        } else {
+            partitaIVAError.style.display = 'none'; // Hide error message if valid
+        }
 
         const formData = new FormData(this);
 

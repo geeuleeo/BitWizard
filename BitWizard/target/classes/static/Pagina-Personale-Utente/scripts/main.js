@@ -51,6 +51,7 @@ function createViaggioCard(viaggio) {
         <div class="col-md-4 viaggio-card" 
              data-partenza="${viaggio.dataPartenza}" 
              data-ritorno="${viaggio.dataRitorno}">
+             <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="viaggio" </a>
             <div class="viaggio">
                 <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
                 <div class="card-body">

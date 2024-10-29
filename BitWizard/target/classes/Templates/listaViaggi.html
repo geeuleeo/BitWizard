@@ -27,6 +27,24 @@
 
 	<!-- Contenuto della pagina -->
 	<div class="container mt-4">
+		<form id="searchForm" class="mb-4">
+			<div class="form-row">
+				<div class="col">
+					<input type="text" class="form-control" id="luogoPartenza" placeholder="Luogo di Partenza">
+				</div>
+				<div class="col">
+					<input type="text" class="form-control" id="luogoArrivo" placeholder="Luogo di Arrivo">
+				</div>
+				<div class="col">
+					<input type="date" class="form-control" id="dataPartenza" placeholder="Data di Partenza">
+				</div>
+				<div class="col">
+					<input type="date" class="form-control" id="dataRitorno" placeholder="Data di Ritorno">
+				</div>
+
+			</div>
+			<button type="submit" class="btn btn-primary mt-3">Cerca</button>
+		</form>
 		<div id="cardContainer" class="row">
 			<!-- Le card dei viaggi verranno inserite qui dinamicamente -->
 		</div>

@@ -6,12 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="c5a118e0-2116-4f21-baf4-91041972526f" name="Changes" comment="Creazione branch frontend prendendo le ultime modifiche del branch &quot;backend-definitivo&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/TagController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/TagController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/UtenteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/java/com/wizard/controllers/UtenteController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/Templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/TagController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/TagController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/UtenteController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/listaViaggi.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/listaViaggi.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/registrazioneAgenzia.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/Templates/registrazioneAgenzia.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/static/Creazione-viaggio/styles/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/static/Creazione-viaggio/styles/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/static/Lista-viaggi/scripts/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/static/Lista-viaggi/scripts/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/src/main/resources/static/Pagina-Personale-Utente/scripts/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/src/main/resources/static/Pagina-Personale-Utente/scripts/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/listaViaggi.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/Templates/listaViaggi.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/Templates/registrazioneAgenzia.html" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/Templates/registrazioneAgenzia.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/AgenziaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/AgenziaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/HomeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/MessaggioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/controllers/MessaggioController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/MessaggioDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/repos/MessaggioDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/com/wizard/services/MessaggioServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/static/Creazione-viaggio/styles/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/static/Creazione-viaggio/styles/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/static/Lista-viaggi/scripts/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/static/Lista-viaggi/scripts/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BitWizard/target/classes/static/Pagina-Personale-Utente/scripts/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/BitWizard/target/classes/static/Pagina-Personale-Utente/scripts/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,31 +69,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.BitWizardApplication.executor": "Run",
-    "git-widget-placeholder": "frontend",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/ICTS23-25.494/Desktop/BitWizard",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "Groovy compiler",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.BitWizardApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;frontend&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ICTS23-25.494/Desktop/BitWizard&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Groovy compiler&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="BitWizardApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
