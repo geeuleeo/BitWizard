@@ -116,13 +116,13 @@ function displayTags(tags) {
 			Swal.fire({
                 	icon: 'success',
                 	title: 'Registrazione avvenuta con successo!',
-                	text: 'Registrazione avvenuta con successo! Verrai reindirizzato alla pagina di login in 5 secondi.',
+                	text: 'Registrazione avvenuta con successo! Verrai reindirizzato alla tua pagina personale in 5 secondi.',
                 	confirmButtonText: 'OK'
             	});
 
             //const bottoneLogin = document.getElementById("pulsanteLogin");
             setTimeout(() => {
-                window.location.assign("login");
+                window.location.assign("paginaPersonaleUtente");
                 //bottoneLogin.click();
             }, 5000);
 
