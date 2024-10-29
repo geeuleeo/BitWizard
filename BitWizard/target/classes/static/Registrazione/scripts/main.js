@@ -113,16 +113,18 @@ function displayTags(tags) {
         })
         .then(data => {
             console.log("Utente creato con successo:", data);
-            const successo = document.getElementById("successo");
-
-            successo.innerText=("Registrazione avvenuta con successo! Verrai reindirizzato alla pagina di login in 3 secondi .");
-
+			Swal.fire({
+                	icon: 'success',
+                	title: 'Registrazione avvenuta con successo!',
+                	text: 'Registrazione avvenuta con successo! Verrai reindirizzato alla tua pagina personale in 5 secondi.',
+                	confirmButtonText: 'OK'
+            	});
 
             //const bottoneLogin = document.getElementById("pulsanteLogin");
             setTimeout(() => {
-                window.location.assign("login");
+                window.location.assign("paginaPersonaleUtente");
                 //bottoneLogin.click();
-            }, 3000);
+            }, 5000);
 
         })
         .catch(error => {

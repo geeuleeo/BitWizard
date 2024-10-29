@@ -3,6 +3,7 @@ package com.wizard.controllers;
 import com.wizard.customs.CustomDettagliAgenzia;
 import com.wizard.entities.Agenzia;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,7 +43,7 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
+    public ResponseEntity<?>  login(@RequestParam String email,
                         @RequestParam String password,
                         HttpSession session,
                         RedirectAttributes redirectAttributes) {
@@ -71,13 +72,14 @@ public class HomeController {
 
             // Reindirizza all'URL precedente o alla home se l'URL non è disponibile
             // return "redirect:" + (urlPrecedente != null ? urlPrecedente : "/home");
-            
-            return "redirect:/";
+
+            return ResponseEntity.ok().build();
 
         } catch (AuthenticationException e) {
             // Autenticazione fallita
             redirectAttributes.addFlashAttribute("loginError", "Credenziali non valide. Per favore riprova.");
-            return "redirect:/login";
+            // return "redirect:/login";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenziali non valide. Per favore riprova.");
         }
     }
     
@@ -104,7 +106,7 @@ public class HomeController {
            // model.addAttribute("idUtente", utente.getUtenteId());
             model.addAttribute("messaggioBenvenuto", "Benvenuto, " + utente.getNome() + "!");
         }
-        return "paginaIniziale";
+        return "home";
     }
     
     @GetMapping("/CreaViaggio")
