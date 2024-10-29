@@ -22,101 +22,42 @@
             <li><a href="DiventaUnPartner">Diventa un partner</a></li>
             <li class="login-container">
                 <a href="login" class="login">
-                    <img src="../assets/icon/icon-login.svg" class="icona-logo" > Login/Registrati
+                    <img src="../assets/icon/icon-login.svg" class="icona-logo"> Login/Registrati
                 </a>
             </li>
-            
         </ul>
     </nav>
 
     <!-- Image content with search box -->
     <div class="image-content">
         <img src="../assets/img/giappone-ok.jpg" alt="Giappone">
-
-        <!-- Search Box -->
         <div class="search-box">
             <input type="text" placeholder="Dove vorresti andare?" class="search-input">
             <div class="separator"></div>
-            
-            <!-- Campo input con l'icona del calendario -->
             <div class="date-input">
-                <input type="date" class="search-date" id="date-input"> <!-- Input di tipo date -->
+                <input type="date" class="search-date" id="date-input">
             </div>
-            
             <button type="submit" class="search-btn">
-                <img href="" src="../assets/icon/search icon.png" alt="Cerca">
+                <img src="../assets/icon/search icon.png" alt="Cerca">
             </button>
         </div>
     </div>
 
-    <!-- Contenuto della pagina -->
-	<div class="container mt-4">
-		<div id="cardContainer" class="row">
-			<!-- Le card dei viaggi verranno inserite qui dinamicamente -->
-		</div>
-	</div>
-    
-    
-
-    <!-- Recensioni Section -->
-    <section class="recensioni">
-        <h2>Le nostre mete più recensite!!!</h2>
-        <div class="card-container">
-            <button class="nav-btn left-btn"><img src="../assets/icon/freccia-sinistra.svg" alt="Indietro"></button>
-            
-            <div class="cards-wrapper">
-                <div class="cards">
-                    <div class="card">
-                        <img src="../assets/img/giappone-ok.jpg" alt="Giappone">
-                        <p>GIAPPONE <br>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span> 4</span></p>
-                    </div>
-                    <div class="card">
-                        <img src="../assets/img/finlandia.jpg" alt="Finlandia">
-                        <p>FINLANDIA <br>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span> 5</span></p>
-                    </div>
-                    <div class="card">
-                        <img src="../assets/img/new-york.jpg" alt="New York">
-                        <p>NEW YORK <br>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star-half checked"></span>
-                            <span> 4.5</span></p>
-                    </div>
-                    <div class="card">
-                        <img src="../assets/img/italia.png" alt="Italia">
-                        <p>ITALIA <br>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="rating">4</span></p>
-                    </div>
-                </div>
-            </div>
-    
-            <button class="nav-btn right-btn"><img src="../assets/icon/freccia-destra.svg" alt="Avanti"></button>
+    <!-- Contenuto della pagina per le card dei viaggi -->
+    <div class="container mt-4">
+        <div id="cardContainer" class="row">
+            <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
         </div>
-    </section>
+        <!-- Controlli di paginazione -->
+        <div id="paginationControls" class="pagination-controls mt-3"></div>
+    </div>
+
     <h2 id="titolo-social">Seguici sui nostri profili social!</h2>
     
-	    <!-- Immagine Social sotto le Card -->
-	<div class="social-image-container">
-	    <img src="/assets/img/social.png" alt="Immagine Social" class="social-image">
-	</div>
-	    
-    
+    <!-- Immagine Social sotto le Card -->
+    <div class="social-image-container">
+        <img src="/assets/img/social.png" alt="Immagine Social" class="social-image">
+    </div>
 
     <!-- Footer -->
     <footer class="custom-container">
@@ -128,8 +69,10 @@
             <p>Indirizzo: Via Jacopo Durandi, 10</p>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Viaggio da solo S.p.A.</p>
+            <p>&copy; 2024 Viaggio da Solo S.p.A.</p>
         </div>
     </footer>
+    
+    <script src="/Pagina-Iniziale/scripts/main.js"></script>
 </body>
 </html>

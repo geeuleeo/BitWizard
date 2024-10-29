@@ -4,473 +4,493 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <!-- <link rel="stylesheet" href="/Home/styles/style.css">-->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f4f4;
-        }
-        .container {
-            margin-top: 30px;
-        }
-        h1 {
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .btn-primary {
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+<style>
+/*
+	*Stile per la Pagina iniziale
+*/
 
-    <div id="utenteId" th:text="${idUtente} "></div>
-    <div id="tagUtente" th:text="${tagsUtente}"></div>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'ADLaM Display', sans-serif;
+    background-color: #FDF5E6;
+    color: #333;
+}
+
+/* Navbar Styles */
+nav {
+    background-color: #000035;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: #ff6f61;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/* Logo */
+.logo img {
+    width: 150px;
+    height: auto;
+    margin-top: 30px;
+}
+
+ul li a img {
+    width: 30px;
+    display: inline-block;    
+}
+
+/* Modifiche per allineare l'icona al testo del login */
+nav ul li a.login {
+    display: flex; /* Imposta flexbox per l'allineamento orizzontale */
+    align-items: center; /* Allinea verticalmente l'icona e il testo */
+    gap: 8px; /* Spaziatura tra l'icona e il testo */
+    margin-right: 12px;
+}
+
+nav ul li a.login img.icona-logo {
+    width: 20px; /* Puoi regolare la dimensione dell'icona qui */
+    height: auto; /* Mantieni le proporzioni */
+}
+
+/* Menu a tendina */
+/* Posizionamento e nascondimento del menu a tendina */
+.login-container {
+    position: relative; /* Posiziona l'elemento rispetto a .dropdown-menu */
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%; /* Posiziona il menu sotto l'elemento genitore */
+    left: -80px; /* Sposta il menu verso sinistra, aumenta o riduci il valore a seconda del risultato */
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    z-index: 1000;
+}
+
+.dropdown-menu h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.dropdown-menu form {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-menu label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.dropdown-menu input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.dropdown-menu .buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.login-btn {
+    background-color: #ff6f61;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.register-btn {
+    background-color: #000035;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Visualizzazione del menu a tendina al passaggio del mouse */
+.login-container:hover .dropdown-menu {
+    display: block;
+    transition: all 0.3s ease-in-out;
+}
 
 
-<div class="container">
+.login-btn {
+    background-color: #ff6f61;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-    <h1 class="text-center display-4">Benvenuto, <span th:text="${nomeUtente}">Utente</span>!</h1>
+.login-btn:hover {
+    background-color: #000035;
+    color: #ff6f61;
+}
 
-    <p class="text-center">
-        <button id="pulsanteLogin" class="btn btn-outline-secondary" onclick="location.href='/login'">Vai al Login</button>
-        <button id="pulsanteAreaPersonale" class="btn btn-outline-primary" onclick="location.href='/paginaPersonale'">Vai Alla tua pagina personale</button>
-        <button id="pulsanteLogout" class="btn btn-outline-danger" onclick="effettuaLogout()">Logout</button>
-    </p>
+.register-btn {
+    background-color: #000035;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-  <h1 class="text-center display-4">Filtra i tuoi Viaggi</h1>
+.register-btn:hover {
+    background-color: #ff6f61;
+    color: #000035;
+}
 
-  <div class="card p-4">
-    <form id="filterByTag" class="form-group">
-      <h3>Filtra per Tag</h3>
-      <div class="row">
-        <div class="col-md-8">
-          <input type="number" class="form-control" id="tagId" placeholder="Inserisci ID del Tag" required>
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
+/* Mostra il menu a tendina al passaggio del mouse */
+nav ul li:hover .dropdown-menu {
+    display: block;
+    transition: all 0.3s ease-in-out;
+}
 
-    <form id="filterByAge" class="form-group">
-      <h3>Filtra per Età</h3>
-      <div class="row">
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="minAge" placeholder="Età Minima" required>
-        </div>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="maxAge" placeholder="Età Massima" required>
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
 
-    <form id="filterByDestination" class="form-group">
-      <h3>Filtra per Destinazione</h3>
-      <div class="row">
-        <div class="col-md-8">
-          <input type="text" class="form-control" id="destinazione" placeholder="Inserisci Destinazione" required>
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
+/* Image Content */
+.image-content {
+    position: relative;
+    text-align: center;
+}
 
-    <form id="filterByPartenza" class="form-group">
-      <h3>Filtra per Partenza</h3>
-      <div class="row">
-        <div class="col-md-8">
-          <input type="text" class="form-control" id="partenza" placeholder="Inserisci Partenza" required>
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
+.image-content img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+}
 
-    <form id="filterByPrezzo" class="form-group">
-      <h3>Filtra per Prezzo</h3>
-      <div class="row">
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="minPrezzo" placeholder="Prezzo Minimo" required>
-        </div>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="maxPrezzo" placeholder="Prezzo Massimo" required>
-        </div>
-        <div class="col-md-4">
-          <button type="submit" class="btn btn-primary w-100">Cerca</button>
-        </div>
-      </div>
-    </form>
+.search-box {
+    position: absolute;
+    bottom: -20px; /* Cambia qui per regolare la posizione verticale */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    background-color: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 4px 4px 6px 6px rgba(0, 0, 0, 0.1);
+}
 
-    <div id="cardContainer" class="row">
-	<!-- Le card dei viaggi verranno inserite qui dinamicamente -->
-	</div>
-	
-	<!-- Consigliati -->
-        <div class="mt-4" id="consigliati">
-            <!-- Sezione consigliati dinamica -->
-        </div>
+.search-input, .search-date {
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    border-radius: 25px;
+}
 
-        <!-- Azioni -->
-        <div class="text-center mt-4">
-            <p class="text-center mt-4"><a href="/lista" class="btn btn-outline-secondary">Vai alla Lista di Viaggi</a></p>
-            <button class="btn btn-outline-primary" id="pulsanteCreaViaggio" onclick="location.href='/CreaViaggio'">Crea il tuo Viaggio</button>
+/* Separator */
+.separator {
+    width: 2px;  /* Larghezza della linea */
+    background-color: #333;  /* Colore del placeholder */
+    margin: 0 10px;  /* Spaziatura tra i campi */
+    align-self: center;  /* Centra il separatore verticalmente */
+    height: 25px;  /* Altezza del separatore */
+}
+
+/* Placeholder color */
+::placeholder {
+    color: #333;  /* Colore del placeholder */
+}
+
+/* Stile per la date-input */
+.date-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-date {
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    border-radius: 25px;
+    padding-right: 35px;  /* Spazio per l'icona */
+}
+
+/* Icona del calendario */
+.calendar-icon {
+    position: absolute;
+    right: 10px;
+    color: #ccc;  /* Colore dell'icona uguale al placeholder */
+    cursor: pointer;
+}
+
+/* Effetto hover per l'icona */
+.calendar-icon:hover {
+    color: #ff6f61;  /* Cambia colore quando l'utente ci passa sopra */
+}
+
+.search-btn {
+    background-color: #ff6f61;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.search-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+#separatore {
+    height: 10px;
+}
+
+h2 {
+    text-align: center;
+    margin: 3%;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    margin: 20px 10px;
+}
+
+#card-img {
+	width: 100%;
+	height: 160px;
+	border-radius: 10px;
+}
+
+#consigliati .card {
+    margin-right: 15px; /* Aggiusta il valore secondo le tue esigenze */
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+
+#cardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Assicura che ci sia spazio tra le card */
+}
+
+
+
+.btn-custom {
+  width: 40px; /* Modifica la larghezza a tuo piacimento */
+  height: 40px; /* Modifica l'altezza a tuo piacimento */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  background-color: #6c757d; /* Colore di sfondo per il pulsante */
+  border-radius: 5px; /* Raggio per gli angoli arrotondati */
+}
+
+.btn-custom img {
+  width: 20px; /* Larghezza dell'icona */
+  height: 20px; /* Altezza dell'icona */
+}
+
+
+/* Stile per il bottone "Dettagli del viaggio" */
+.card .btn-primary {
+    background-color: #000035; /* Colore di sfondo del bottone */
+    border-color: #000035;
+    color: #ff6f61
+}
+
+.card .btn-primary:hover {
+    background-color: #ff6f61; /* Colore di sfondo su hover */
+    border-color: #ff6f61;
+    color: #000035;
+}
+
+
+
+#titolo-social {
+    text-align: center;
+    margin: auto;
+}
+
+/* Stile per l'immagine sotto le card */
+.social-image-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.social-image {
+    width: 100%;
+    max-width: 850px;/* max-height: 850px; */
+    height: auto;
+    border-radius: 30px;
+    box-shadow: 4px 4px 10px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+footer {
+    width: 100%; /* Assicura che il footer occupi tutta la larghezza */
+    display: flex; /* Imposta il footer come un contenitore flessibile */
+    flex-direction: column; /* Dispone gli elementi in colonna */
+    align-items: center; /* Centra gli elementi orizzontalmente */
+    text-align: center; /* Centra il testo */
+    background-color: #000035;
+    color: #ff6f61;
+    padding-top: 10px;
+}
+
+.footer-content {
+    margin-bottom: 10px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #fff;
+    width: 100%;
+    padding-top: 10px;
+    text-align: center;
+}
+
+
+
+
+/* Media Queries */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .image-content img {
+        height: 300px;
+    }
+
+    .search-box {
+        bottom: -20px;
+    }
+}
+</style>
+<body>
+    <!-- Nav-bar -->
+    <nav>
+        <div class="logo">
+            <a href="/"><img src="../assets/img/viaggiodasolo.svg" alt="Logo"></a>
+        </div>
+        <ul>
+            <li><a href="lista">Viaggia con noi</a></li>
+            <li><a href="CreaViaggio">Crea il tuo viaggio</a></li>
+            <li><a href="DiventaUnPartner">Diventa un partner</a></li>
+            <li class="login-container">
+                <a href="login" class="login">
+                    <img src="../assets/icon/icon-login.svg" class="icona-logo"> Login/Registrati
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Image content with search box -->
+    <div class="image-content">
+        <img src="../assets/img/giappone-ok.jpg" alt="Giappone">
+        <div class="search-box">
+            <input type="text" placeholder="Dove vorresti andare?" class="search-input">
+            <div class="separator"></div>
+            <div class="date-input">
+                <input type="date" class="search-date" id="date-input">
+            </div>
+            <button type="submit" class="search-btn">
+                <img src="../assets/icon/search icon.png" alt="Cerca">
+            </button>
         </div>
     </div>
-</div>
 
-<!-- Container per le card dinamiche -->
-<div id="cardContainer" class="row mt-4">
-    <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
-</div>
-
-<div id="paginationControls" class="text-center mt-4"></div>
-    <script>
-
-    async function fetchData(url) {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(errorText);
-    }
-
-    return await response.json();
-    }
-
-    function createViaggioCard(viaggio) {
-	    const dataPartenza = new Date(viaggio.dataPartenza).toLocaleDateString();
-	    const dataRitorno = new Date(viaggio.dataRitorno).toLocaleDateString();
-
-	    return `
-	      <div class="col-md-4">
-	        <div class="card mb-4">
-	          <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
-	          <div class="card-body">
-	            <h5 class="card-title">${viaggio.nome}</h5>
-	            <p class="card-text">
-	              Luogo di Partenza: ${viaggio.luogoPartenza} <br>
-	              Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
-	              Data di Partenza: ${dataPartenza} <br>
-	              Data di Ritorno: ${dataRitorno} <br>
-	              Prezzo: €${viaggio.prezzo.toFixed(2)}
-	            </p>
-	            <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="btn btn-primary">Dettagli del viaggio</a>
-	          </div>
-	        </div>
-	      </div>
-	    `;
-	  }
-
-	  function displayResults(results) {
-	    const resultsContainer = document.getElementById('results');
-	    resultsContainer.innerHTML = results.map(createViaggioCard).join('');
-	  }
-
-	  document.getElementById('filterByTag').addEventListener('submit', async (e) => {
-		    e.preventDefault();
-
-		    const tagId = document.getElementById('tagId').value;
-		    const container = document.getElementById('cardContainer');
-		    container.innerHTML = "";
-
-		    try {
-		        const result = await fetchData(`api/viaggi/filtra/tag?tagId=${tagId}`);
-		        result.forEach(viaggio => {
-		            container.innerHTML += createViaggioCard(viaggio);
-		        });
-		    } catch (error) {
-		        container.innerText = error.message;
-		    }
-		});
-
-
-  document.getElementById('filterByAge').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const minAge = document.getElementById('minAge').value;
-    const maxAge = document.getElementById('maxAge').value;
-    const container = document.getElementById('cardContainer');
-    
-    container.innerHTML = "";
-
-    try {
-      const result = await fetchData(`api/viaggi/filtra/eta?min=${minAge}&max=${maxAge}`);
-      result.forEach(viaggio => {
-          container.innerHTML += createViaggioCard(viaggio);
-      });
-  } catch (error) {
-      container.innerText = error.message;
-  }
-  });
-
-  document.getElementById('filterByDestination').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const destinazione = document.getElementById('destinazione').value;
-    const container = document.getElementById('cardContainer');
-    
-    container.innerHTML = "";
-
-    try {
-      const result = await fetchData(`api/viaggi/filtra/destinazione?destinazione=${destinazione}`);
-      result.forEach(viaggio => {
-          container.innerHTML += createViaggioCard(viaggio);
-      });
-  } catch (error) {
-      container.innerText = error.message;
-  }
-  });
-
-  document.getElementById('filterByPartenza').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const partenza = document.getElementById('partenza').value;
-    const container = document.getElementById('cardContainer');
-    
-    container.innerHTML = "";
-
-    try {
-      const result = await fetchData(`api/viaggi/filtra/partenza?partenza=${partenza}`);
-      result.forEach(viaggio => {
-          container.innerHTML += createViaggioCard(viaggio);
-      });
-  } catch (error) {
-      container.innerText = error.message;
-  }
-  });
-
-  document.getElementById('filterByPrezzo').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const minPrezzo = document.getElementById('minPrezzo').value;
-    const maxPrezzo = document.getElementById('maxPrezzo').value;
-    const container = document.getElementById('cardContainer');
-    
-    container.innerHTML = "";
-
-    try {
-      const result = await fetchData(`api/viaggi/filtra/prezzo?min=${minPrezzo}&max=${maxPrezzo}`);
-      result.forEach(viaggio => {
-          container.innerHTML += createViaggioCard(viaggio);
-      });
-  } catch (error) {
-      container.innerText = error.message;
-  }
-  });
-
-    async function getTags() {
-        try {
-
-            const userResponse = await fetch('/api/utente/session', {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!userResponse.ok) {
-                throw new Error('Errore nel recupero dell\'ID utente');
-            }
-
-
-            const utenteId =  await userResponse.json();
-
-            const response = await fetch(`/api/tags/get?utenteId=${utenteId}`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-
-            if (response.ok) {
-                const tags = await response.json();
-
-                if (tags.length > 0) {
-                    const tagIds = tags.map(tag => tag.tagId);
-                    const randomId = tagIds[Math.floor(Math.random() * tagIds.length)];
-
-                    const viaggiResponse = await fetch(`/api/viaggi/filtra/tag?tagId=${randomId}`, {
-                        method: 'GET',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (viaggiResponse.ok) {
-                        const viaggi = await viaggiResponse.json();
-                        const consigliatiDiv = document.getElementById('consigliati');
-                        consigliatiDiv.innerHTML = '';
-
-                        const risultatiDaMostrare = viaggi.slice(0, 3);
-
-                        risultatiDaMostrare.forEach(viaggio => {
-                            consigliatiDiv.innerHTML += createViaggioCard(viaggio);
-                        })
-
-                    } else {
-                        console.error('Errore durante il recupero dei viaggi:', viaggiResponse.status);
-                    }
-                } else {
-                    console.error('Nessun tag trovato');
-                }
-            } else {
-                console.error('Errore durante il recupero dei tag:', response.status);
-            }
-        } catch (error) {
-            console.error('Errore durante la fetch:', error);
-        }
-    }
-    
-    async function bottoneLogin() {
-        try {
-            // Effettua la richiesta al server per ottenere l'ID dell'utente loggato
-            const response = await fetch(`/api/utente/session`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                const utenteLoggato = await response.json(); // Ottieni l'ID dell'utente loggato dal server
-
-                console.log('ID utente loggato:', utenteLoggato);
-
-                if (utenteLoggato) {
-                    // Nascondi il pulsante di login
-                    document.getElementById('pulsanteLogin').style.display = 'none';
+    <!-- Contenuto della pagina per le card dei viaggi -->
+	<h2>Viaggi consigliati</h2>
+	<div class="container mt-4">
+	    <div id="consigliati" class="d-flex flex-row">
+	        <!-- Le card consigliate verranno inserite qui dinamicamente -->
+	    </div>
+	</div>
 	
-                    document.getElementById('pulsanteAreaPersonale').style.display = 'block';
-                    
-                    // Mostra il pulsante di logout
-                    document.getElementById('pulsanteLogout').style.display = 'block';
-                    
-                    document.getElementById('pulsanteCreaViaggio').style.display = 'block';
-                } else {
-                    // Mostra il pulsante di login
-                    document.getElementById('pulsanteLogin').style.display = 'block';
-	
-                    document.getElementById('pulsanteAreaPersonale').style.display = 'none';
-                    // Nascondi il pulsante di logout
-                    document.getElementById('pulsanteLogout').style.display = 'none';
-                    
-                    document.getElementById('pulsanteCreaViaggio').style.display = 'none';
-                }
-            } else {
-                console.error('Errore nel recupero della sessione utente');
-             // Mostra il pulsante di login
-                document.getElementById('pulsanteLogin').style.display = 'block';
-				
-                document.getElementById('pulsanteAreaPersonale').style.display = 'none';
-                // Nascondi il pulsante di logout
-                document.getElementById('pulsanteLogout').style.display = 'none';
-                
-                document.getElementById('pulsanteCreaViaggio').style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Errore durante la richiesta:', error);
-        }
-    }
-    
-    async function effettuaLogout() {
-        try {
-            const response = await fetch('/logout', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                const message = await response.text(); // Ottieni il messaggio di risposta dal server
-                alert(message); // Mostra il messaggio di logout effettuato con successo
-                window.location.href = '/';
-            } else {
-                alert('Errore durante il logout. Riprova.');
-            }
-        } catch (error) {
-            console.error('Errore durante la richiesta di logout:', error);
-        }
-    }
-
-
-    let currentPage = 0;
-    const tripsPerPage = 3;
-    let allTrips = [];
-
-    async function fetchRecommendedTrips() {
-        const url = 'api/amicizia/trovaViaggiConAmici';
-        const container = document.getElementById('cardContainer');
-        container.innerHTML = ""; // Clear previous results
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Error fetching trips');
-            }
-
-            allTrips = await response.json();
-            const uniqueTrips = Array.from(new Set(allTrips.map(trip => trip.nome)))
-                .map(name => allTrips.find(trip => trip.nome === name)); // Get unique trips
-
-            displayTrips(uniqueTrips);
-            createPaginationControls(uniqueTrips.length);
-        } catch (error) {
-            console.error('Error:', error);
-            container.innerText = error.message;
-        }
-    }
-
-    function displayTrips(trips) {
-        const container = document.getElementById('cardContainer');
-        const startIndex = currentPage * tripsPerPage;
-        const endIndex = startIndex + tripsPerPage;
-        const tripsToDisplay = trips.slice(startIndex, endIndex);
-
-        container.innerHTML = tripsToDisplay.map(createViaggioCard).join('');
-    }
-    function createPaginationControls(totalTrips) {
-        const paginationContainer = document.getElementById('paginationControls');
-        paginationContainer.innerHTML = '';
-
-        const totalPages = Math.ceil(totalTrips / tripsPerPage);
-
-        if (currentPage > 0) {
-            paginationContainer.innerHTML += `<button class="btn btn-secondary" onclick="changePage(-1)">Prev</button>`;
-        }
-
-        if (currentPage < totalPages - 1) {
-            paginationContainer.innerHTML += `<button class="btn btn-secondary" onclick="changePage(1)">Next</button>`;
-        }
-    }
-
-    function changePage(direction) {
-        currentPage += direction;
-        displayTrips(allTrips);
-        createPaginationControls(allTrips.length);
-    }
-
-
-
-    fetchRecommendedTrips();
-
-	bottoneLogin();
-
-    getTags();
+	<div class="container mt-4">
+	    <h2 id="Titolo-card-friends">Viaggi a cui partecipano i tuoi amici</h2>
+	    <div id="cardContainer" class="row">
+	        <!-- Le card dei viaggi verranno inserite qui dinamicamente -->
+	    </div>
+	    <!-- Controlli di paginazione -->
+	    <div id="paginationControls"></div>
+	</div>
 
     
-    </script>
+
+    <h2 id="titolo-social">Seguici sui nostri profili social!</h2>
+
+    
+    <!-- Immagine Social sotto le Card -->
+   
+    <div class="social-image-container">
+        <img src="/assets/img/social.png" alt="Immagine Social" class="social-image">
+    </div>
+
+    <!-- Footer -->
+    <footer class="custom-container">
+        <div class="footer-content">
+            <p>VIAGGIO DA SOLO S.p.A.</p>
+            <p>Email: info@viaggiodasolospa.it</p>
+            <p>Tel: 011 456789</p>
+            <p>P. Iva: 08425320721</p>
+            <p>Indirizzo: Via Jacopo Durandi, 10</p>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Viaggio da Solo S.p.A.</p>
+        </div>
+    </footer>
+    
+    <script src="/Pagina-Iniziale/scripts/main.js"></script>
+
 
 </body>
 </html>

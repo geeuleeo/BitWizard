@@ -1,114 +1,245 @@
-/**
- 	*Logica per la Pagina iniziale 
- */
+ async function fetchData(url) {
+    const response = await fetch(url);
 
-window.onload = function() {
-    window.location.href = "../Pagina Iniziale/home.html";
-};
+    if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText);
+    }
 
- // Seleziona gli elementi
-const cardsContainer = document.querySelector('.cards');
-const leftBtn = document.querySelector('.nav-btn left-btn');
-const rightBtn = document.querySelector('.nav-btn right-btn');
+    return await response.json();
+    }
 
-// Configura la larghezza della card e quante se ne vedono
-const cardWidth = document.querySelector('.card').offsetWidth + 20; // Card width + gap
-const visibleCards = 4;
-const totalCards = document.querySelectorAll('.card').length;
+    function createViaggioCard(viaggio) {
+	    const dataPartenza = new Date(viaggio.dataPartenza).toLocaleDateString();
+	    const dataRitorno = new Date(viaggio.dataRitorno).toLocaleDateString();
 
-let currentIndex = 0;
+	    return `
+	      <div class="col-md-4">
+	        <div class="card mb-4">
+	          <img id="card-img" src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
+	          <div class="card-body">
+	            <h5 class="card-title">${viaggio.nome}</h5>
+	            <p class="card-text">
+	              Luogo di Partenza: ${viaggio.luogoPartenza} <br>
+	              Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
+	              Data di Partenza: ${dataPartenza} <br>
+	              Data di Ritorno: ${dataRitorno} <br>
+	              Prezzo: €${viaggio.prezzo.toFixed(2)}
+	            </p>
+	            <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="btn btn-primary">Dettagli del viaggio</a>
+	          </div>
+	        </div>
+	      </div>
+	    `;
+	  }
 
-// Funzione per aggiornare la posizione del carosello
-function updateCarousel() {
-    const maxIndex = totalCards - visibleCards;
-    if (currentIndex < 0) currentIndex = 0;
-    if (currentIndex > maxIndex) currentIndex = maxIndex;
+	  function displayResults(results) {
+	    const resultsContainer = document.getElementById('results');
+	    resultsContainer.innerHTML = results.map(createViaggioCard).join('');
+	  }
+
+	  
+
+    async function getTags() {
+        try {
+
+            const userResponse = await fetch('/api/utente/session', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!userResponse.ok) {
+                throw new Error('Errore nel recupero dell\'ID utente');
+            }
+
+
+            const utenteId =  await userResponse.json();
+
+            const response = await fetch(`/api/tags/get?utenteId=${utenteId}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+
+            if (response.ok) {
+                const tags = await response.json();
+
+                if (tags.length > 0) {
+                    const tagIds = tags.map(tag => tag.tagId);
+                    const randomId = tagIds[Math.floor(Math.random() * tagIds.length)];
+
+                    const viaggiResponse = await fetch(`/api/viaggi/filtra/tag?tagId=${randomId}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (viaggiResponse.ok) {
+                        const viaggi = await viaggiResponse.json();
+                        const consigliatiDiv = document.getElementById('consigliati');
+                        consigliatiDiv.innerHTML = '';
+
+                        const risultatiDaMostrare = viaggi.slice(0, 3);
+
+                        risultatiDaMostrare.forEach(viaggio => {
+                            consigliatiDiv.innerHTML += createViaggioCard(viaggio);
+                        })
+
+                    } else {
+                        console.error('Errore durante il recupero dei viaggi:', viaggiResponse.status);
+                    }
+                } else {
+                    console.error('Nessun tag trovato');
+                }
+            } else {
+                console.error('Errore durante il recupero dei tag:', response.status);
+            }
+        } catch (error) {
+            console.error('Errore durante la fetch:', error);
+        }
+    }
     
-    // Scorre le card verso sinistra o destra
-    cardsContainer.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-}
+    async function bottoneLogin() {
+        try {
+            // Effettua la richiesta al server per ottenere l'ID dell'utente loggato
+            const response = await fetch(`/api/utente/session`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
-// Eventi per il pulsante destro
-rightBtn.addEventListener('click', () => {
-    if (currentIndex < totalCards - visibleCards) {
-        currentIndex++;
-        updateCarousel();
+            if (response.ok) {
+                const utenteLoggato = await response.json(); // Ottieni l'ID dell'utente loggato dal server
+
+                console.log('ID utente loggato:', utenteLoggato);
+
+                if (utenteLoggato) {
+                    // Nascondi il pulsante di login
+                    document.getElementById('pulsanteLogin').style.display = 'none';
+	
+                    document.getElementById('pulsanteAreaPersonale').style.display = 'block';
+                    
+                    // Mostra il pulsante di logout
+                    document.getElementById('pulsanteLogout').style.display = 'block';
+                    
+                    document.getElementById('pulsanteCreaViaggio').style.display = 'block';
+                } else {
+                    // Mostra il pulsante di login
+                    document.getElementById('pulsanteLogin').style.display = 'block';
+	
+                    document.getElementById('pulsanteAreaPersonale').style.display = 'none';
+                    // Nascondi il pulsante di logout
+                    document.getElementById('pulsanteLogout').style.display = 'none';
+                    
+                    document.getElementById('pulsanteCreaViaggio').style.display = 'none';
+                }
+            } else {
+                console.error('Errore nel recupero della sessione utente');
+             // Mostra il pulsante di login
+                document.getElementById('pulsanteLogin').style.display = 'block';
+				
+                document.getElementById('pulsanteAreaPersonale').style.display = 'none';
+                // Nascondi il pulsante di logout
+                document.getElementById('pulsanteLogout').style.display = 'none';
+                
+                document.getElementById('pulsanteCreaViaggio').style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta:', error);
+        }
     }
-});
+    
+    async function effettuaLogout() {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
-// Eventi per il pulsante sinistro
-leftBtn.addEventListener('click', () => {
-    if (currentIndex > 0) {
-        currentIndex--;
-        updateCarousel();
+            if (response.ok) {
+                const message = await response.text(); // Ottieni il messaggio di risposta dal server
+                alert(message); // Mostra il messaggio di logout effettuato con successo
+                window.location.href = '/';
+            } else {
+                alert('Errore durante il logout. Riprova.');
+            }
+        } catch (error) {
+            console.error('Errore durante la richiesta di logout:', error);
+        }
     }
-});
-
-async function caricaViaggi() {
-    const response = await fetch('api/viaggi/lista'); // Endpoint che restituisce i viaggi dell'utente
-    const viaggi = await response.json();
-    const container = document.getElementById('cardContainer');
-
-    // Svuota il contenitore prima di aggiungere le nuove card
-    container.innerHTML = '';
-
-    viaggi.forEach(viaggio => {
-        container.innerHTML += createViaggioCard(viaggio);
-    });
-}
-
-async function caricaOfferte() {
-    const response = await fetch('api/viaggi/offerte'); // Endpoint che restituisce le offerte
-    const offerte = await response.json();
-    const container = document.getElementById('offerteCardsContainer');
-
-    // Svuota il contenitore prima di aggiungere le nuove card
-    container.innerHTML = '';
-
-    offerte.forEach(offerta => {
-        container.innerHTML += createOffertaCard(offerta);
-    });
-}
-
-function createViaggioCard(viaggio) {
-    // Formatta le date in maniera più leggibile (es. dd/mm/yyyy)
-    const dataPartenza = new Date(viaggio.dataPartenza).toLocaleDateString();
-    const dataRitorno = new Date(viaggio.dataRitorno).toLocaleDateString();
-
-    // Crea la card HTML per il viaggio
-    return `
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
-                <div class="card-body">
-                    <h5 class="card-title">${viaggio.nome}</h5>
-                    <p class="card-text">
-                        Luogo di Partenza: ${viaggio.luogoPartenza} <br>
-                        Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
-                        Data di Partenza: ${dataPartenza} <br>
-                        Data di Ritorno: ${dataRitorno} <br>
-                        Prezzo: €${viaggio.prezzo.toFixed(2)}
-                    </p>
-                    <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="btn btn-primary">Dettagli del viaggio</a>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function createOffertaCard(offerta) {
-    // Crea la card HTML per l'offerta
-    return `
-        <div class="card">
-            <img src="${offerta.img}" alt="${offerta.nome}">
-            <p>${offerta.nome} <br>A partire da € ${offerta.prezzo}</p>
-        </div>
-    `;
-}
 
 
+    let currentPage = 0;
+    const tripsPerPage = 3;
+    let allTrips = [];
 
-// Carica i viaggi e le offerte quando la pagina è pronta
-caricaViaggi();
-caricaOfferte();
+    async function fetchRecommendedTrips() {
+        const url = 'api/amicizia/trovaViaggiConAmici';
+        const container = document.getElementById('cardContainer');
+        container.innerHTML = ""; // Clear previous results
 
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Error fetching trips');
+            }
+
+            allTrips = await response.json();
+            const uniqueTrips = Array.from(new Set(allTrips.map(trip => trip.nome)))
+                .map(name => allTrips.find(trip => trip.nome === name)); // Get unique trips
+
+            displayTrips(uniqueTrips);
+            createPaginationControls(uniqueTrips.length);
+        } catch (error) {
+            console.error('Error:', error);
+            container.innerText = error.message;
+        }
+    }
+
+    function displayTrips(trips) {
+        const container = document.getElementById('cardContainer');
+        const startIndex = currentPage * tripsPerPage;
+        const endIndex = startIndex + tripsPerPage;
+        const tripsToDisplay = trips.slice(startIndex, endIndex);
+
+        container.innerHTML = tripsToDisplay.map(createViaggioCard).join('');
+    }
+    function createPaginationControls(totalTrips) {
+        const paginationContainer = document.getElementById('paginationControls');
+        paginationContainer.innerHTML = '';
+
+        const totalPages = Math.ceil(totalTrips / tripsPerPage);
+
+        if (currentPage > 0) {
+		    paginationContainer.innerHTML += `<button class="btn btn-secondary" onclick="changePage(-1)"><img src="/assets/icon/freccia-sinistra.svg" alt="Previous"></button>`;
+		}
+		
+		if (currentPage < totalPages - 1) {
+		    paginationContainer.innerHTML += `<button class="btn btn-secondary" onclick="changePage(1)"><img src="/assets/icon/freccia-destra.svg" alt="Next"></button>`;
+		}
+    }
+
+    function changePage(direction) {
+        currentPage += direction;
+        displayTrips(allTrips);
+        createPaginationControls(allTrips.length);
+    }
+
+
+    fetchRecommendedTrips();
+
+	bottoneLogin();
+
+    getTags();
