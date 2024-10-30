@@ -124,6 +124,30 @@ public class AmiciziaController {
         return ResponseEntity.ok(amiciDTO);
     }
     
+    @GetMapping("trovaAmiciNonLoggato/{utenteIdTarget}")
+    public ResponseEntity<List<AmicoDTO>> trovaAmici(@PathVariable Long utenteIdTarget) {
+    	
+    	System.out.println("utenteTarget id: " + utenteIdTarget);
+
+        List<Amicizia> amici = amiciziaService.getAmicizie(utenteIdTarget);
+
+        if (amici == null || amici.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<AmicoDTO> amiciDTO = amici.stream()
+            .filter(amicizia -> amicizia.getStato() == StatoAmicizia.ACCETTATO)  // Filtra solo le amicizie accettate
+            .map(amicizia -> {
+                Utente amico = amicizia.getUtenteInviante().getUtenteId().equals(utenteIdTarget) 
+                    ? amicizia.getUtenteRicevente() 
+                    : amicizia.getUtenteInviante();
+                return amiciziaService.toDTO(amico);  // Converte l'utente in AmicoDTO
+            })
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(amiciDTO);
+    }
+    
     @GetMapping("trovaViaggiConAmici")
     public ResponseEntity<List<ViaggioDTO>> trovaViaggiConAmici(HttpSession session) {
 

@@ -103,18 +103,68 @@ public class ViaggioController {
             // Gestione dell'immagine di copertina, se presente
             if (immagineCopertina != null && !immagineCopertina.isEmpty()) {
                 handleProfileImage(nuovoViaggio, immagineCopertina);
+            }else{
+                Optional<Immagine> optionalImg = immagineDAO.findById(123);
+                if (optionalImg.isPresent()) {
+                    Immagine immagine = optionalImg.get();
+                    nuovoViaggio.setImmagineCopertina(immagine);
+                } else {
+                    // Gestisci il caso in cui l'immagine predefinita non è presente nel database
+                    throw new IllegalArgumentException("Immagine predefinita non trovata nel database.");
+                }
             }
             
             if(agenzia==null){
                 Viaggio viaggioSalvato = viaggioService.salvaViaggio(nuovoViaggio, tagDTOs);
+                
+                try {
+                    Long utenteId = creatore.getUtenteId();
+                    if (utenteId == null) {
+                        System.out.println("Utente non autenticato. Nessun utenteId trovato nella sessione.");
+                        throw new IllegalStateException("Utente non autenticato");
+                    } else {
+                        System.out.println("Utente autenticato con ID: " + utenteId);
+                    }
+
+                    // Recupera l'utente
+                    System.out.println("Tentativo di recuperare l'utente con ID: " + utenteId);
+                    Utente partecipante = utenteDAO.findById(utenteId)
+                        .orElseThrow(() -> {
+                            System.out.println("Utente con ID " + utenteId + " non trovato.");
+                            return new IllegalArgumentException("Utente non trovato");
+                        });
+                    System.out.println("Utente trovato: " + partecipante.getNome() + " " + partecipante.getCognome());
+
+                    // Verifica se l'utente è già iscritto a questo viaggio
+                    System.out.println("Controllo se l'utente è già iscritto al viaggio...");
+                    Optional<PartecipantiViaggio> partecipazioneEsistente = partecipantiViaggioDAO.findById(new ChiavePartecipantiViaggio(viaggioSalvato.getViaggioId(), utenteId));
+
+                    if (partecipazioneEsistente.isPresent()) {
+                        System.out.println("L'utente è già iscritto a questo viaggio.");
+                        return ResponseEntity.status(HttpStatus.CONFLICT).body("Utente già iscritto al viaggio");
+                    }
+
+                    // Aggiungi il partecipante al viaggio
+                    System.out.println("Tentativo di iscrivere l'utente al viaggio...");
+                    PartecipantiViaggio utenteIscritto = viaggioService.addPartecipanteViaggio(partecipante, viaggioSalvato);
+                    System.out.println("Utente iscritto al viaggio con successo!");
+                    
+                    return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
+                    
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Errore: " + e.getMessage());
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+                } catch (Exception e) {
+                    System.out.println("Errore generico durante l'iscrizione al viaggio: " + e.getMessage() + e.getCause() + e.getStackTrace());
+                }
                
                 return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
 
             }else {
                 Viaggio viaggioSalvato= viaggioService.salvaViaggioAgenzia(nuovoViaggio, tagDTOs);
-
+                
                 return new ResponseEntity<>(viaggioSalvato, HttpStatus.CREATED);
-            }
+            }  
         } catch (IllegalArgumentException e) {
             // Restituisce una risposta di errore specifico
             Map<String, String> errorResponse = new HashMap<>();
@@ -127,6 +177,7 @@ public class ViaggioController {
             errorResponse.put("message", e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        
     }
 
 

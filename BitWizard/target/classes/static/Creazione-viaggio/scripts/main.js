@@ -158,6 +158,14 @@ function handleImages() {
 						feedbackMessage.textContent = 'Viaggio creato con successo!';
 						feedbackMessage.style.color = 'green';
 						feedbackMessage.style.display = 'block';
+						Swal.fire({
+                			icon: 'success',
+                			title: 'Viaggio creato con successo!',
+                			text: 'Verrai reindirizzato alla tua pagina personale',
+                			confirmButtonText: 'OK'
+            			}).then(() => {
+    						window.location.assign("paginaPersonale");
+						});
 						return data;
 					});
 				} else {
