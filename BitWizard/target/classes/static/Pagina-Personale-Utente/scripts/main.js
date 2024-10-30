@@ -52,24 +52,23 @@ function createViaggioCard(viaggio) {
     const dataRitorno = new Date(viaggio.dataRitorno).toLocaleDateString();
 
     return `
-        <div class="col-md-4 viaggio-card" 
-             data-partenza="${viaggio.dataPartenza}" 
-             data-ritorno="${viaggio.dataRitorno}">
-			<a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="viaggio" </a>
-            <div class="viaggio">
-                <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
-                <div class="card-body">    
-                    <h5 class="card-title">${viaggio.nome}</h5>
-                    <p class="card-text">
-                        Luogo di Partenza: ${viaggio.luogoPartenza} <br>
-                        Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
-                        Data di Partenza: <span>${dataPartenza}</span> <br>
-                        Data di Ritorno: <span>${dataRitorno}</span> <br>  
-                    </p>   
-                </div> 
-            </div>
-        </div>
-    `;
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
+                        <div class="card-body">
+                            <h5 class="card-title">${viaggio.nome}</h5>
+                            <p class="card-text">
+                                Luogo di Partenza: ${viaggio.luogoPartenza} <br>
+                                Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
+                                Data di Partenza: ${dataPartenza} <br>
+                                Data di Ritorno: ${dataRitorno} <br>
+                                Prezzo: €${viaggio.prezzo.toFixed(2)}
+                            </p>
+                            <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="btn btn-primary">Dettagli del viaggio</a>
+                        </div>
+                    </div>
+                </div>
+            `;
 }
 
 // Funzione per gestire il logout
@@ -249,10 +248,18 @@ function gestisciRichiestaAmicizia(utenteInvianteId, accetta, buttonElement) {
     })
     .then(response => {
         if (response.ok) {
-            alert(`Richiesta d'amicizia ${accetta ? 'accettata' : 'rifiutata'}`);
+            Swal.fire({
+                icon: 'success',
+                title: `Richiesta d'amicizia ${accetta ? 'accettata' : 'rifiutata'}`,
+                confirmButtonText: 'OK'
+            })
             caricaNotificheUtente();
         } else {
-            alert('Errore nella gestione della richiesta');
+            Swal.fire({
+                icon: 'error',
+                title: 'Errore nella gestione della richiesta',
+                confirmButtonText: 'OK'
+            })
         }
     })
     .catch(error => {

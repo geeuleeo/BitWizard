@@ -82,18 +82,6 @@ nav {
     #listaAmiciContainer button:hover {
         color: #007bff;
     }
-    
-.card .btn-primary {
-    background-color: #000035; /* Colore di sfondo del bottone */
-    border-color: #000035;
-    color: #ff6f61
-}
-
-.card .btn-primary:hover {
-    background-color: #ff6f61; /* Colore di sfondo su hover */
-    border-color: #ff6f61;
-    color: #000035;
-}
 
 .centered-title {
     justify-content: space-between;
@@ -136,12 +124,23 @@ nav {
     height: 100%; /* Fa sì che l'ancora occupi l'altezza totale del li */
 }
 
+.card .btn-primary {
+    background-color: #000035; /* Colore di sfondo del bottone */
+    border-color: #000035;
+    color: #ff6f61
+}
+
+.card .btn-primary:hover {
+    background-color: #ff6f61; /* Colore di sfondo su hover */
+    border-color: #ff6f61;
+    color: #000035;
+}
 
 
 .logo img {
     width: 150px; /* Larghezza del logo */
     height: auto; /* Altezza automatica per mantenere le proporzioni */
-    margin-top: 25px; /* Margine sopra il logo */
+    margin-top: 10px; /* Margine sopra il logo */
     margin-left: 0px; /* Distanza dal bordo di sinistra */
 }
 
@@ -266,7 +265,7 @@ nav ul li a img {
 .btn-group button {
     margin-right: 10px; /* Aggiunge uno spazio tra i bottoni */
 }
-#amiciBtn, #modificaBtn , #caricaNotificheBtn{
+#amiciBtn, #modificaBtn , #aggiungiAmicoBtn{
     border-radius: 10px; /* Arrotonda i bordi */
 }
 .galleria-container {
@@ -413,4 +412,3 @@ footer {
         order: 2; /* Viaggi sotto la galleria */
     }
 }
-

@@ -82,6 +82,18 @@ nav {
     #listaAmiciContainer button:hover {
         color: #007bff;
     }
+    
+.card .btn-primary {
+    background-color: #000035; /* Colore di sfondo del bottone */
+    border-color: #000035;
+    color: #ff6f61
+}
+
+.card .btn-primary:hover {
+    background-color: #ff6f61; /* Colore di sfondo su hover */
+    border-color: #ff6f61;
+    color: #000035;
+}
 
 .centered-title {
     justify-content: space-between;
@@ -254,7 +266,7 @@ nav ul li a img {
 .btn-group button {
     margin-right: 10px; /* Aggiunge uno spazio tra i bottoni */
 }
-#amiciBtn, #modificaBtn {
+#amiciBtn, #modificaBtn , #caricaNotificheBtn{
     border-radius: 10px; /* Arrotonda i bordi */
 }
 .galleria-container {

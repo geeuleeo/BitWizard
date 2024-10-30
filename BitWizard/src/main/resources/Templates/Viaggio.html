@@ -4,155 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dettagli del Viaggio</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Viaggio/styles/style.css"> <!-- Link al file CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <style>
-/* Stile generale della chat */
-#ChatDelViaggio {
-    height: 675px; /* Altezza fissa per la chat */
-    /* overflow-y: auto; /* Barra di scorrimento verticale */
-    padding: 15px;
-    border: 1px solid #dee2e6;
-    border-radius: 20px; /* Angoli arrotondati per un aspetto più morbido */
-    background-color: #ffffff;
-    scrollbar-width: thin; /* Riduce la larghezza della scrollbar su Firefox */
-    scrollbar-color: #c4c4c4 #ffffff; /* Colore della scrollbar su Firefox */
-    margin-bottom: 1rem;
-    margin-top: 1rem;
-}
-
-.chat-title {
-    color: #c4c4c4;
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.chat-container {
-    max-height: 500px;
-    overflow-y: auto;
-    padding: 1rem;
-    border-radius: 8px;
-    background-color: #ffffff;
-    margin-bottom: 1rem;
-}
-
-/* Stile del form di invio */
-.message-form {
-    display: flex;
-    justify-content: center;
-    background-color: #ffffff;
-    padding: 0.5rem;
-    border-radius: 50px;
-}
-
-.input-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    position: relative;
-}
-
-/* Input per il messaggio */
-.message-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 0.8rem 1rem;
-    border-radius: 50px;
-    font-size: 1rem;
-    color: #000000;
-    background-color: #fff;
-    margin-right: 0.5rem;
-}
-
-/* Icona per allegati */
-.attach-icon {
-    color: #c0c0c0;
-    font-size: 1.2rem;
-    margin-right: 0.5rem;
-    cursor: pointer;
-}
-
-/* Pulsante di invio */
-.send-button {
-    background-color: #c0c0c0;
-    color: #fff;
-    border: none;
-    outline: none;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-
-/* Hover ed effetti */
-.send-button:hover {
-    background-color: #3b2e5a;
-    color: #fff;
-}
-
-
-	.d-flex.align-items-start {
-    	align-items: flex-start;
-	}
-
-	.p-3.rounded {
-  	  max-width: 75%;
-	}
-
-	.shadow-sm {
- 	   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-	}
-    
-        .container {
-            margin-top: 20px;
-        }
-        .img-preview {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-        .immagine-copertina {
-            width: 300px;
-            height: 200px;
-            object-fit: cover;
-            margin-bottom: 20px;
-        }
-        .immagini-viaggio img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-        .tag {
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 5px;
-            background-color: lightblue;
-            border-radius: 5px;
-        }
-    .creatore-section {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    .creatore-section img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        margin-right: 15px;
-    }
-    </style>
 </head>
 <body>
+<nav id="navbar">
+    <div class="logo">
+        <img src="../assets/img/viaggiodasolo.svg" alt="Logo">
+    </div>
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/lista">Viaggi</a></li>
+        <li><a href="CreaViaggio">Crea il tuo viaggio</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
+</nav>
+
     <div class="container">
         <h1 id="nomeViaggio">Nome del Viaggio</h1>
         <div class="creatore-section">
@@ -183,6 +55,11 @@
         <input type="file" id="inputImmagineViaggio" accept="image/*" style="display: none;">
 		<button id="aggiungiImgBtn" type="button" class="btn btn-primary" style="display: none;">Aggiungi immagine al Viaggio</button>
 		
+		<div id="imageModal" class="modal" onclick="closeModal()">
+    		<span class="close">&times;</span>
+    		<img class="modal-content" id="modalImg">
+		</div>
+
         <!-- Sezione per i tag del viaggio -->
         <h3>Tag del Viaggio</h3>
         <div id="tagsViaggio"></div>
@@ -258,7 +135,20 @@
 
     </div>
 
-<script src="/index.js" defer></script>
+<script src="/Viaggio/scripts/main.js" defer></script>
+
+ <footer class="custom-container">
+        <div class="footer-content">
+            <p>VIAGGIO DA SOLO S.p.A.</p>
+            <p>Email: viaggiodasolospa@gmail.com</p>
+            <p>Tel: 011 456789</p>
+            <p>P. Iva: IT 01 456789101</p>
+            <p>Indirizzo: Via Jacopo Durandi, 10</p>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Viaggio da solo S.p.A.</p>
+        </div>
+    </footer>
 
 </body>
 </html>

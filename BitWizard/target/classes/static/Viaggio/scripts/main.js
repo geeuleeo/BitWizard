@@ -23,6 +23,19 @@
         document.getElementById('nomeCreatore').textContent = `${viaggio.nomeCreatore} ${viaggio.cognomeCreatore}`;
     }
     
+    function openModal(img) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImg");
+
+    modalImg.src = img.src;  // Imposta l'immagine selezionata nella modal
+    modal.style.display = "flex";  // Mostra la modal
+}
+
+function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+}
+
+    
     async function caricaDettagliViaggio(viaggioId) {
         console.log('Viaggio ID ricevuto: ', viaggioId);
         
@@ -48,8 +61,15 @@
                 const img = document.createElement('img');
                 img.src = `data:image/jpeg;base64,${immagine}`;
                 img.alt = 'Immagine del viaggio';
-                img.className = 'img-fluid col-md-4';  // Aggiungi classi di stile se necessario
+                /* img.className = 'img-fluid col-md-4'; */  // Aggiungi classi di stile se necessario
+                img.style.border = "5px solid #000035"; // Bordo di 5px, solido, colore rosso
+				img.style.borderRadius = "15%";
                 immaginiViaggioDiv.appendChild(img);
+
+    			// Assegna la funzione openModal come gestore dell'evento onclick
+    			img.onclick = function() {
+        			openModal(img);
+    			};
             });
         } else {
             console.log("Nessuna immagine disponibile per il viaggio.");
