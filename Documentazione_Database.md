@@ -165,26 +165,6 @@ Relazioni:
 
 ## Tabelle Ausiliarie
 
-### Ruolo
-La tabella `Ruolo` definisce i diversi ruoli che un utente può avere all'interno del sistema.
-
-- **ruolo_id**: Identificativo unico del ruolo.
-- **Descrizione**: Descrizione del ruolo (es. agenzia, privato).
-
-Relazioni:
-- Ogni utente può avere uno o più ruoli associati.
-
----
-
-### Livelli
-La tabella `Livelli` gestisce i livelli degli utenti, che possono aumentare in base alle attività svolte.
-
-- **Icona_id**: Identificativo unico del livello.
-- **Descrizione**: Descrizione del livello.
-- **Requisiti**: Requisiti per ottenere il livello.
-
-Relazioni:
-- Ogni utente può avere un livello assegnato in base alle sue attività.
 
 ---
 
