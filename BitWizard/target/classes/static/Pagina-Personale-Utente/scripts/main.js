@@ -102,6 +102,76 @@ function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
 
+// Function to render notifications
+        async function caricaNotificheUtente() {
+            const response = await fetch('/notifica/cerca'); // Endpoint che restituisce i dati dell'utente loggato
+            const notifiche = await response.json();
+            const container = document.getElementById('notificheContainer');
+            container.innerHTML = ''; // Clear existing content
+
+            // Crea una card HTML per ogni notifica
+            notifiche.forEach(notifica => {
+                const cardHtml = createNotificaCard(notifica);
+                container.insertAdjacentHTML('beforeend', cardHtml);
+                console.log(parseInt(notifica.notificaId));
+            });
+        }
+
+        // Add event listener to the container (Event delegation)
+        document.getElementById('notificheContainer').addEventListener('click', function(event) {
+            if (event.target && event.target.matches('button.cancella-notifica')) {
+                const notificaId = event.target.getAttribute('data-id'); // Usa l'attributo data-id per recuperare l'ID
+                cancellaNotifica(Number(notificaId));
+            }
+        });
+
+        // Funzione per cancellare la notifica
+        function cancellaNotifica(notificaId) {
+            fetch(`/notifica/cancella?notificaId=${notificaId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Rimuovi la card della notifica dal DOM
+                    const notificaElement = document.getElementById(`notifica-${notificaId}`);
+                    caricaNotificheUtente();
+                    if (notificaElement) {
+                        notificaElement.remove();
+                    }
+                } else {
+                    console.error('Errore nella cancellazione:', response.statusText);
+                }
+            })
+            .catch(error => console.error('Errore nella cancellazione:', error));
+        }
+
+function createNotificaCard(notifica) {
+            const dataInvio = new Date(notifica.data).toLocaleString('it-IT', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+
+            // HTML della card con icona e pulsanti migliorati
+            return `
+                <div id="notificaCard" class="col-md-4" id="notifica-${notifica.notificaId}">
+                    <div class="card mb-4 shadow-sm border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-person-plus-fill text-primary"></i> Notifica
+                            </h5>
+                            <p class="card-text">
+                                ${notifica.testo} <br>
+                                <small class="text-muted">Data: ${dataInvio}</small>
+                            </p>
+                            <button data-id="${notifica.notificaId}" class="btn btn-primary btn-block cancella-notifica">Segna come letto</button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            `;
+        }
+
 function mostraListaAmici() {
     const listaAmiciContainer = document.getElementById('listaAmiciContainer');
 
@@ -141,6 +211,18 @@ function mostraListaAmici() {
         .catch(error => {
             console.error('Errore durante il caricamento degli amici:', error);
         });
+    }
+}
+
+function mostraListaNotifiche() {
+    const listaAmiciContainer = document.getElementById('notificheContainer');
+
+    // Se il contenitore è visibile, nascondilo
+    if (listaAmiciContainer.style.display === "block") {
+        listaAmiciContainer.style.display = "none"; // Nascondi la lista
+    } else {
+		listaAmiciContainer.style.display = "block";
+        caricaNotificheUtente();
     }
 }
 
@@ -186,8 +268,7 @@ async function modificaUtente() {
 // Carica i dati al caricamento della pagina
 document.addEventListener("DOMContentLoaded", function () {
     caricaDatiUtente();
-    caricaTuttiIViaggi();
-    mostraListaAmici();
+    caricaViaggiUtente();
 
     const modificaBtn = document.getElementById('modificaBtn');
     if (modificaBtn) {
@@ -197,5 +278,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-
-caricaViaggiUtente();

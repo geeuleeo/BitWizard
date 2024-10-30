@@ -346,6 +346,9 @@ async function aggiornaPartecipanti(viaggioId) {
         event.preventDefault();
         if (viaggioId) {
             annullaIscrivitiAlViaggio(viaggioId);
+            document.getElementById('annullaIscrizioneBtn').style.display = 'none';
+            document.getElementById('iscrivitiBtn').style.display = 'block';
+            document.getElementById('ChatDelViaggio').style.display = 'none';
         } else {
             console.error('Errore: Viaggio ID non disponibile.');
         }
@@ -355,6 +358,9 @@ async function aggiornaPartecipanti(viaggioId) {
         event.preventDefault();  // Evita il submit del form nativo
         if (viaggioId) {
             iscrivitiAlViaggio(viaggioId);
+            document.getElementById('iscrivitiBtn').style.display = 'none';
+            document.getElementById('annullaIscrizioneBtn').style.display = 'block';
+            document.getElementById('ChatDelViaggio').style.display = 'block';
         } else {
             console.error('Errore: Viaggio ID non disponibile.');
         }

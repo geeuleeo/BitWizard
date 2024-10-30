@@ -10,8 +10,8 @@
         <style>
 /* Stile generale della chat */
 #ChatDelViaggio {
-    height: 600px; /* Altezza fissa per la chat */
-    overflow-y: auto; /* Barra di scorrimento verticale */
+    height: 675px; /* Altezza fissa per la chat */
+    /* overflow-y: auto; /* Barra di scorrimento verticale */
     padding: 15px;
     border: 1px solid #dee2e6;
     border-radius: 20px; /* Angoli arrotondati per un aspetto più morbido */
@@ -19,10 +19,11 @@
     scrollbar-width: thin; /* Riduce la larghezza della scrollbar su Firefox */
     scrollbar-color: #c4c4c4 #ffffff; /* Colore della scrollbar su Firefox */
     margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 .chat-title {
-    color: #ffffff;
+    color: #c4c4c4;
     text-align: center;
     margin-bottom: 1rem;
 }
@@ -60,7 +61,7 @@
     padding: 0.8rem 1rem;
     border-radius: 50px;
     font-size: 1rem;
-    color: #ffffff;
+    color: #000000;
     background-color: #fff;
     margin-right: 0.5rem;
 }
@@ -90,7 +91,7 @@
 }
 
 /* Hover ed effetti */
-.send-button:hover, .attach-icon:hover {
+.send-button:hover {
     background-color: #3b2e5a;
     color: #fff;
 }

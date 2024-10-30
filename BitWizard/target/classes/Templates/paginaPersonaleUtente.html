@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/Pagina-Personale-Utente/styles/style.css"> <!-- Link al file CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
    <nav id="navbar">
@@ -36,6 +37,7 @@
             </div>
                            
         <div class="btn-group">
+        	<button id="caricaNotificheBtn" class="btn btn-primary rounded-btn" onclick="mostraListaNotifiche()"><i class="fas fa-bell"></i> Notifiche</button>
     		<button id="aggiungiAmicoBtn" class="btn btn-primary rounded-btn" style="display: none;" onclick="inviaRichiestaAmicizia()">Invia richiesta amicizia</button>
     		<button id="amiciBtn" class="btn btn-primary rounded-btn" style="display: block;" onclick="mostraListaAmici()">Amici</button>
    			<button id="modificaBtn" class="btn btn-warning rounded-btn">Modifica Profilo</button>
@@ -45,6 +47,8 @@
 	
 		<!-- Contenitore per la lista amici, inizialmente nascosto -->
 		<div id="listaAmiciContainer" style="display: none"></div>
+		
+		<div id="notificheContainer" class="column" style="display: none"></div>
 		
         <div class="split-container">
             <div class="lower-section">
