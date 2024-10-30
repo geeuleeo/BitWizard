@@ -8,18 +8,9 @@ async function caricaDatiUtente() {
     document.getElementById('descrizione').textContent = data.descrizione;
 }
 
-// Funzione principale per caricare i viaggi
-async function caricaTuttiIViaggi() {
-    try {
-        await Promise.all([caricaViaggiUtente(), caricaViaggiCreatiUtente()]);
-    } catch (error) {
-        console.error('Errore nel caricamento dei viaggi:', error);
-    }
-}
-
 // Funzione per caricare i viaggi dell'utente
 async function caricaViaggiUtente() {
-    const response = await fetch('/api/viaggi/utente');
+    const response = await fetch(`/api/viaggi/utente/iscritto/${0}`);
     const viaggi = await response.json();
     const container = document.getElementById('cardContainer');
     container.innerHTML = '';  // Svuota il contenitore prima di aggiungere nuove card
@@ -34,7 +25,20 @@ async function caricaViaggiUtente() {
 async function caricaViaggiCreatiUtente() {
     const response = await fetch(`/api/viaggi/creatore/${0}`); // Sostituisci 0 con l'ID dell'utente loggato
     const viaggi = await response.json();
-    const container = document.getElementById('viaggiCreatiContainer');
+    const container = document.getElementById('cardContainer');
+    container.innerHTML = '';
+
+    viaggi.forEach(viaggio => {
+        container.innerHTML += createViaggioCard(viaggio);
+    });
+}
+
+// Funzione per caricare i viaggi creati dall'utente
+async function caricaViaggiFinitiUtente() {
+    const response = await fetch(`/api/viaggi/utente/finito/${0}`); // Sostituisci 0 con l'ID dell'utente loggato
+    const viaggi = await response.json();
+    const container = document.getElementById('cardContainer');
+    container.innerHTML = '';
 
     viaggi.forEach(viaggio => {
         container.innerHTML += createViaggioCard(viaggio);
@@ -51,46 +55,22 @@ function createViaggioCard(viaggio) {
         <div class="col-md-4 viaggio-card" 
              data-partenza="${viaggio.dataPartenza}" 
              data-ritorno="${viaggio.dataRitorno}">
-             <a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="viaggio" </a>
+			<a href="/paginaViaggio/viaggio?viaggioId=${viaggio.viaggioId}" class="viaggio" </a>
             <div class="viaggio">
                 <img src="/api/viaggi/${viaggio.viaggioId}/immagine" class="card-img-top" alt="Immagine del viaggio">
-                <div class="card-body">
+                <div class="card-body">    
                     <h5 class="card-title">${viaggio.nome}</h5>
                     <p class="card-text">
                         Luogo di Partenza: ${viaggio.luogoPartenza} <br>
                         Luogo di Arrivo: ${viaggio.luogoArrivo} <br>
                         Data di Partenza: <span>${dataPartenza}</span> <br>
-                        Data di Ritorno: <span>${dataRitorno}</span> <br>
-                    </p>
-                </div>
+                        Data di Ritorno: <span>${dataRitorno}</span> <br>  
+                    </p>   
+                </div> 
             </div>
         </div>
     `;
 }
-
-// Funzione per filtrare i viaggi
-function filtraViaggi(tipoViaggio) {
-    const viaggioElements = document.querySelectorAll('.viaggio-card');
-    const oggi = new Date();
-
-    viaggioElements.forEach(viaggio => {
-        const dataPartenza = new Date(viaggio.getAttribute('data-partenza'));
-        const dataRitorno = new Date(viaggio.getAttribute('data-ritorno'));
-        const creatoreId = viaggio.getAttribute('data-creatore'); // Assicurati che i viaggi abbiano questo attributo
-
-        if (tipoViaggio === 'prenotati') {
-            viaggio.style.display = (dataPartenza > oggi) ? 'block' : 'none';
-        } else if (tipoViaggio === 'completati') {
-            viaggio.style.display = (dataRitorno < oggi) ? 'block' : 'none';
-        } else if (tipoViaggio === 'creati') {
-            const utenteLoggatoId = 0; // Sostituisci con l'ID dell'utente loggato
-            viaggio.style.display = (creatoreId == utenteLoggatoId) ? 'block' : 'none';
-        } else {
-            viaggio.style.display = 'block';
-        }
-    });
-}
-
 
 // Funzione per gestire il logout
 async function logout() {
@@ -217,3 +197,5 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+caricaViaggiUtente();

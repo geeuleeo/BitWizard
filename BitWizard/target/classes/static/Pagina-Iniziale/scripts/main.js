@@ -97,7 +97,34 @@
                         console.error('Errore durante il recupero dei viaggi:', viaggiResponse.status);
                     }
                 } else {
-                    console.error('Nessun tag trovato');
+
+
+                    const randomDefaultId = tagIds[Math.floor(Math.random() * 7)];
+
+                    const viaggiResponse = await fetch(`/api/viaggi/filtra/tag?tagId=${randomDefaultId}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (viaggiResponse.ok) {
+                        const viaggi = await viaggiResponse.json();
+                        const consigliatiDiv = document.getElementById('consigliati');
+                        consigliatiDiv.innerHTML = '';
+
+                        const risultatiDaMostrare = viaggi.slice(0, 3);
+
+                        risultatiDaMostrare.forEach(viaggio => {
+                            consigliatiDiv.innerHTML += createViaggioCard(viaggio);
+                        })
+
+                    } else {
+                        console.error('Errore durante il recupero dei viaggi:', viaggiResponse.status);
+                    }
+
+
                 }
             } else {
                 console.error('Errore durante il recupero dei tag:', response.status);
