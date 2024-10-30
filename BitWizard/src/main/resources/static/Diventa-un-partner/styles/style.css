@@ -8,18 +8,26 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
 body {
     font-family: 'ADLaM Display', sans-serif;
     margin: 0;
     padding: 0;
     background-color: beige;
+    height: 100%;
 }
 
 .navbar-custom {
     background-color: #000035;
     padding: 10px 0;
     width: 100%; /* Imposta la larghezza al 100% */
-    position: absolute; /* Posizionamento assoluto per tenere la navbar in alto */
+    position: static; /* Posizionamento assoluto per tenere la navbar in alto */
     top: 0; /* Posiziona la navbar in alto */
     z-index: 1000; /* Assicura che la navbar sia sopra altri contenuti */
 }
@@ -46,17 +54,55 @@ body {
 }
 
 .container {
-    padding: 80px 20px; /* Aggiungi padding per evitare che il testo sia coperto dalla navbar */
+    flex: 1; /* Fa espandere il contenitore per occupare lo spazio disponibile */
+    padding: 80px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-h1 {
-    color: #333;
+p {
+    line-height: 1.6; /* Aumenta lo spazio tra le righe */
+    margin-bottom: 5px; /* Aggiungi uno spazio verticale tra i paragrafi */
 }
 
-h2 {
-    color: #666;
+h1, h2 {
+    line-height: 1.4; /* Spazio tra le righe dei titoli */
+    margin-bottom: 20px; /* Spazio sotto ciascun titolo */
+    color: #ff6f61;
 }
 
 ul {
-    margin: 10px 0;
+    margin-bottom: 20px; /* Spazio sotto l'elenco */
 }
+
+li {
+    margin-bottom: 10px; /* Spazio tra ogni elemento della lista */
+}
+
+/* Stili per il footer */
+footer {
+    width: 100%;
+    text-align: center;
+    background-color: #000035;
+    color: #ff6f61;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 0;
+}
+
+.footer-content {
+    margin-bottom: 10px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #fff;
+    width: 100%;
+    padding-top: 10px;
+    text-align: center;
+}
+

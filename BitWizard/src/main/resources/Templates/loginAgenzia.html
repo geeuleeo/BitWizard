@@ -2,21 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login Agenzia</title>
+    <link rel="stylesheet" href="/Login-Agenzia/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
-<form action="/loginAgenzia" method="post">
+	<div class="form-container">
+        <a href="/"><img src="../assets/img/viaggiodasolo.svg" alt="Logo" class="logo"></a>
+    <div class="d-flex align-items-center mb-4"> <!-- Aggiungi questa div per il flexbox -->
+        <h2 class="login-title">Login Agenzia</h2>
+    </div>
+
+	<form action="/loginAgenzia" method="post">
     <div class="mb-3">
         <label for="partitaIva" class="form-label">Partita IVA</label>
-        <input type="text" class="form-control" id="partitaIva" name="partitaIva" required>
+        <input type="text" class="form-control" id="partitaIva" name="partitaIva" placeholder="Inserisci il numero di P.Iva" required>
     </div>
     <div class="mb-3">
         <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" name="password" required>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Inserisci la tua password" required>
     </div>
     <button type="submit" class="btn btn-primary">Accedi</button>
+    <p id="Agenzia">Non hai un account?<a href="registrazioneAgenzia">Registrati</a></p>
+    
 </form>
+</div>
 
 </body>
 </html>

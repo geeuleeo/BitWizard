@@ -23,14 +23,43 @@ body {
     font-family: 'ADLaM Display', sans-serif;
 }
 
+a img {
+	width: 90px;
+	
+}
+
+.login-title h2 {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+
 .form-container {
-    background-color: rgba(255, 255, 255, 0.8);  /* Sfondo bianco semi-trasparente */
+    /* Centra tutto il contenuto del form */
+    text-align: center;
+    /* Altre proprietà esistenti */
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;  /* Limita la larghezza massima */
-    text-align: center;  /* Centra il testo */
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.login-title {
+    display: inline-flex; /* Dispone logo e testo su una singola riga */
+    align-items: center; /* Allinea verticalmente logo e testo */
+    font-size: 1.8rem;
+    color: #333;
+    gap: 10px; /* Spazio tra logo e testo */
+}
+
+.logo {
+    width: 90px; /* Dimensione del logo */
+    height: auto;
 }
 
 h2 {
@@ -44,7 +73,7 @@ label {
     display: block;
     text-align: left;
     margin-bottom: 0.5rem;
-    color: #333;
+    color: #000035;
     font-weight: bold;
 }
 
@@ -80,6 +109,20 @@ button + button {
 
 button + button:hover {
     background-color: #ff4f4f;
+}
+
+p#Agenzia {
+	margin-top: 14px;
+}
+
+a {
+	margin-left: 15px;
+	text-decoration: none;
+	color: #000035;
+}
+
+a:hover {
+	color: #ff6f61;
 }
 
 .error-message {

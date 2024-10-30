@@ -55,6 +55,7 @@ a img {
     font-size: 1.8rem;
     color: #333;
     gap: 10px; /* Spazio tra logo e testo */
+    font-family: 'ADLaM Display', sans-serif;
 }
 
 .logo {
@@ -71,13 +72,13 @@ h2 {
 
 label {
     display: block;
-    text-align: left;
     margin-bottom: 0.5rem;
     color: #000035;
     font-weight: bold;
+    font-family: 'ADLaM Display', sans-serif;
 }
 
-input[type="email"], input[type="password"] {
+input[type="partitaIva"], input[type="email"], input[type="password"] {
     width: 100%;
     padding: 0.75rem;
     margin-bottom: 1.5rem;
@@ -85,6 +86,8 @@ input[type="email"], input[type="password"] {
     border-radius: 4px;
     font-size: 1rem;
 }
+
+
 
 button {
     width: 100%;
@@ -98,21 +101,16 @@ button {
     font-family: 'ADLaM Display', sans-serif;   
 }
 
-button:hover {
-    background-color: #0056b3;
+
+button.btn.btn-primary {
+    background-color: #000035;
+    border-color: #000035;
+    font-family: 'ADLaM Display';
 }
 
-button + button {
-    margin-top: 1rem;
-    background-color: #ff6f61;
-}
-
-button + button:hover {
-    background-color: #ff4f4f;
-}
-
-p#Agenzia {
-	margin-top: 14px;
+button.btn.btn-primary:hover {
+	background-color: #ff6f61;
+	border-color: #ff6f61;
 }
 
 a {

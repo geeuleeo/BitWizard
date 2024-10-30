@@ -129,7 +129,7 @@ nav {
 .logo img {
     width: 150px; /* Larghezza del logo */
     height: auto; /* Altezza automatica per mantenere le proporzioni */
-    margin-top: 10px; /* Margine sopra il logo */
+    margin-top: 25px; /* Margine sopra il logo */
     margin-left: 0px; /* Distanza dal bordo di sinistra */
 }
 
