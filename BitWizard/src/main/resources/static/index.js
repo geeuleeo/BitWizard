@@ -50,6 +50,7 @@
                 img.alt = 'Immagine del viaggio';
                 img.className = 'img-fluid col-md-4';  // Aggiungi classi di stile se necessario
                 immaginiViaggioDiv.appendChild(img);
+                img.onclick = openModal(this);
             });
         } else {
             console.log("Nessuna immagine disponibile per il viaggio.");

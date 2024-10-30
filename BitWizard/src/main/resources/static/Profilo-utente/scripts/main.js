@@ -168,11 +168,19 @@ function mostraListaAmici() {
                 })
                 .then(response => {
                     if (response.ok) {
-                        alert('Richiesta di amicizia inviata con successo!');
+                        Swal.fire({
+                			icon: 'success',
+                			title: 'Richiesta di amicizia inviata con successo!',
+                			confirmButtonText: 'OK'
+            			})
                         // Aggiorna lo stato del bottone, ad esempio per nascondere il pulsante di invio
                         document.getElementById('aggiungiAmicoBtn').style.display = 'none';
                     } else {
-                        alert('Errore durante l\'invio della richiesta di amicizia.');
+                        Swal.fire({
+                			icon: 'error',
+                			title: 'Errore durante l\'invio della richiesta di amicizia.',
+                			confirmButtonText: 'OK'
+            			})
                     }
                 })
                 .catch(error => {

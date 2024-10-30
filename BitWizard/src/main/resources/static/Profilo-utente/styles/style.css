@@ -265,7 +265,7 @@ nav ul li a img {
 .btn-group button {
     margin-right: 10px; /* Aggiunge uno spazio tra i bottoni */
 }
-#amiciBtn, #modificaBtn {
+#amiciBtn, #modificaBtn , #aggiungiAmicoBtn{
     border-radius: 10px; /* Arrotonda i bordi */
 }
 .galleria-container {

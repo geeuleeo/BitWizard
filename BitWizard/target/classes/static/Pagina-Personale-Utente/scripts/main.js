@@ -248,10 +248,18 @@ function gestisciRichiestaAmicizia(utenteInvianteId, accetta, buttonElement) {
     })
     .then(response => {
         if (response.ok) {
-            alert(`Richiesta d'amicizia ${accetta ? 'accettata' : 'rifiutata'}`);
+            Swal.fire({
+                icon: 'success',
+                title: `Richiesta d'amicizia ${accetta ? 'accettata' : 'rifiutata'}`,
+                confirmButtonText: 'OK'
+            })
             caricaNotificheUtente();
         } else {
-            alert('Errore nella gestione della richiesta');
+            Swal.fire({
+                icon: 'error',
+                title: 'Errore nella gestione della richiesta',
+                confirmButtonText: 'OK'
+            })
         }
     })
     .catch(error => {
