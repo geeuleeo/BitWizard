@@ -38,8 +38,6 @@
 	    resultsContainer.innerHTML = results.map(createViaggioCard).join('');
 	  }
 
-	  
-
     async function getTags() {
         try {
 
@@ -98,8 +96,7 @@
                     }
                 } else {
 
-
-                    const randomDefaultId = tagIds[Math.floor(Math.random() * 7)];
+                    const randomDefaultId = [Math.floor(Math.random() * 7)];
 
                     const viaggiResponse = await fetch(`/api/viaggi/filtra/tag?tagId=${randomDefaultId}`, {
                         method: 'GET',
@@ -150,35 +147,42 @@
                 console.log('ID utente loggato:', utenteLoggato);
 
                 if (utenteLoggato) {
-                    // Nascondi il pulsante di login
-                    document.getElementById('pulsanteLogin').style.display = 'none';
-	
-                    document.getElementById('pulsanteAreaPersonale').style.display = 'block';
-                    
-                    // Mostra il pulsante di logout
-                    document.getElementById('pulsanteLogout').style.display = 'block';
-                    
-                    document.getElementById('pulsanteCreaViaggio').style.display = 'block';
+
+                    document.getElementById('viaggiConsigliatiContainer').style.display = 'block';
+
+					fetchRecommendedTrips();
+					
                 } else {
-                    // Mostra il pulsante di login
-                    document.getElementById('pulsanteLogin').style.display = 'block';
-	
-                    document.getElementById('pulsanteAreaPersonale').style.display = 'none';
-                    // Nascondi il pulsante di logout
-                    document.getElementById('pulsanteLogout').style.display = 'none';
-                    
-                    document.getElementById('pulsanteCreaViaggio').style.display = 'none';
+
                 }
             } else {
-                console.error('Errore nel recupero della sessione utente');
-             // Mostra il pulsante di login
-                document.getElementById('pulsanteLogin').style.display = 'block';
 				
-                document.getElementById('pulsanteAreaPersonale').style.display = 'none';
-                // Nascondi il pulsante di logout
-                document.getElementById('pulsanteLogout').style.display = 'none';
-                
-                document.getElementById('pulsanteCreaViaggio').style.display = 'none';
+				const randomDefaultId = /*[Math.floor(Math.random() * 7)];*/ 3;
+
+                    const viaggiResponse = await fetch(`/api/viaggi/filtra/tag?tagId=${randomDefaultId}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (viaggiResponse.ok) {
+                        const viaggi = await viaggiResponse.json();
+                        const consigliatiDiv = document.getElementById('consigliati');
+                        consigliatiDiv.innerHTML = '';
+
+                        const risultatiDaMostrare = viaggi.slice(0, 3);
+
+                        risultatiDaMostrare.forEach(viaggio => {
+                            consigliatiDiv.innerHTML += createViaggioCard(viaggio);
+                        })
+
+                    } else {
+                        console.error('Errore durante il recupero dei viaggi:', viaggiResponse.status);
+                    }
+
+
             }
         } catch (error) {
             console.error('Errore durante la richiesta:', error);
@@ -272,10 +276,7 @@
         displayTrips(allTrips);
         createPaginationControls(allTrips.length);
     }
-
-
-    fetchRecommendedTrips();
-
+        
 	bottoneLogin();
-
-    getTags();
+	
+	getTags();
