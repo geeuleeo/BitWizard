@@ -212,28 +212,37 @@
     const tripsPerPage = 3;
     let allTrips = [];
 
-    async function fetchRecommendedTrips() {
-        const url = 'api/amicizia/trovaViaggiConAmici';
-        const container = document.getElementById('cardContainer');
-        container.innerHTML = ""; // Clear previous results
+ async function fetchRecommendedTrips() {
+     const url = 'api/amicizia/trovaViaggiConAmici';
+     const container = document.getElementById('cardContainer');
+     container.innerHTML = ""; // Clear previous results
 
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Error fetching trips');
-            }
+     try {
+         const response = await fetch(url);
+         if (!response.ok) {
+             throw new Error('Error fetching trips');
+         }
 
-            allTrips = await response.json();
-            const uniqueTrips = Array.from(new Set(allTrips.map(trip => trip.nome)))
-                .map(name => allTrips.find(trip => trip.nome === name)); // Get unique trips
+         allTrips = await response.json();
 
-            displayTrips(uniqueTrips);
-            createPaginationControls(uniqueTrips.length);
-        } catch (error) {
-            console.error('Error:', error);
-            container.innerText = error.message;
-        }
-    }
+         // Filtrare i viaggi con data di partenza futura
+         const currentDate = Date.now();
+         const futureTrips = allTrips.filter(trip => new Date(trip.dataPartenza).getTime() > currentDate);
+
+         // Ottenere viaggi unici
+         const uniqueTrips = Array.from(new Set(futureTrips.map(trip => trip.nome)))
+             .map(name => futureTrips.find(trip => trip.nome === name)); // Get unique trips
+
+        uniqueTrips.forEach(value => console.log(value.dataPartenza));
+        console.log(uniqueTrips.length);
+
+         displayTrips(uniqueTrips);
+         createPaginationControls(uniqueTrips.length);
+     } catch (error) {
+         console.error('Error:', error);
+         container.innerText = error.message;
+     }
+ }
 
     function displayTrips(trips) {
         const container = document.getElementById('cardContainer');
@@ -250,11 +259,11 @@
         const totalPages = Math.ceil(totalTrips / tripsPerPage);
 
         if (currentPage > 0) {
-		    paginationContainer.innerHTML += `<button class="btn btn-secondary" onclick="changePage(-1)"><img src="/assets/icon/freccia-sinistra.svg" alt="Previous"></button>`;
+		    paginationContainer.innerHTML += `<button class="btn btn-secondary" onclick="changePage(-1)"  id="bottoneAvanti">Indietro</button>`;
 		}
 		
 		if (currentPage < totalPages - 1) {
-		    paginationContainer.innerHTML += `<button class="btn btn-secondary" onclick="changePage(1)"><img src="/assets/icon/freccia-destra.svg" alt="Next"></button>`;
+		    paginationContainer.innerHTML += `<button class="btn btn-secondary" onclick="changePage(1)" id="bottoneIndietro">Avanti</button>`;
 		}
     }
 

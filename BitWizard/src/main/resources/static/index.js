@@ -124,6 +124,15 @@
             console.log("Nessuna immagine di copertina trovata.");
         }
 
+        if (viaggio.immagineCopertina) {
+            const base64String = `data:image/jpeg;base64,${viaggio.immagineCopertina}`;
+
+            // Imposta l'immagine di copertina come sfondo del body
+            document.body.style.backgroundImage = `url('${base64String}')`;
+        } else {
+            console.log("Nessuna immagine di copertina trovata.");
+        }
+
         // Mostra l'immagine del creatore
         const immagineCreatore = document.getElementById('immagineCreatore');
         if (viaggio.immagineProfiloCreatore) {
@@ -561,6 +570,7 @@ async function recuperaUtenteLoggato() {
             const utenteLoggato = await response.json();
             utenteLoggatoId = utenteLoggato; // Salva l'ID nella variabile globale
             console.log('utente loggato id per i messaggi: ' + utenteLoggatoId);
+
         } else {
             console.error("Errore: risposta non ok", response.status);
         }
@@ -826,6 +836,8 @@ caricaMessaggi(viaggioId);
  	        </div>
  	    `;
  	}
+
+
  	
  	
  	initChat();
