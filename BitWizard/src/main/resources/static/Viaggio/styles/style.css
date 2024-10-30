@@ -572,19 +572,25 @@ nav ul li a img {
 
 /* Footer Styles */
 footer {
-    background-color: #000035;
-    color: #ff6347;
-    padding: 20px;
-    text-align: center;
+	width: 100%; /* Assicura che il footer occupi tutta la larghezza */
+	display: flex; /* Imposta il footer come un contenitore flessibile */
+	flex-direction: column; /* Dispone gli elementi in colonna */
+	align-items: center; /* Centra gli elementi orizzontalmente */
+	text-align: center; /* Centra il testo */
+	background-color: #000035;
+	color: #ff6f61;
+	padding-top: 10px;
+}
+
+.footer-content {
+	margin-bottom: 10px;
 }
 
 .footer-bottom {
-    margin-top: 20px; /* Spazio sopra il testo nella sezione finale del footer */
-}
-
-.footer-bottom a {
-    color: #ff6347; /* Colore del link */
-    text-decoration: none; /* Rimuove la sottolineatura */
+    border-top: 1px solid #fff;
+    width: 100%;
+    padding-top: 10px;
+    text-align: center;
 }
 
 .footer-bottom a:hover {

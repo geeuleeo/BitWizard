@@ -6,6 +6,28 @@
     box-sizing: border-box;
 }
 
+footer {
+	width: 100%; /* Assicura che il footer occupi tutta la larghezza */
+	display: flex; /* Imposta il footer come un contenitore flessibile */
+	flex-direction: column; /* Dispone gli elementi in colonna */
+	align-items: center; /* Centra gli elementi orizzontalmente */
+	text-align: center; /* Centra il testo */
+	background-color: #000035;
+	color: #ff6f61;
+	padding-top: 10px;
+}
+
+.footer-content {
+	margin-bottom: 10px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #fff;
+    width: 100%;
+    padding-top: 10px;
+    text-align: center;
+}
+
 body {
 	font-family: 'ADLaM Display', sans-serif;
 	background-color: beige;
