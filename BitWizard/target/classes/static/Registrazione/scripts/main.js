@@ -122,9 +122,9 @@ function displayTags(tags) {
 
             //const bottoneLogin = document.getElementById("pulsanteLogin");
             setTimeout(() => {
-                window.location.assign("paginaPersonaleUtente");
+                window.location.assign("paginaPersonale");
                 //bottoneLogin.click();
-            }, 5000);
+            }, 4000);
 
         })
         .catch(error => {

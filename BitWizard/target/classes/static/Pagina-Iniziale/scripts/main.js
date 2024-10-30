@@ -157,7 +157,7 @@
                 }
             } else {
 				
-				const randomDefaultId = /*[Math.floor(Math.random() * 7)];*/ 3;
+				const randomDefaultId = 1;
 
                     const viaggiResponse = await fetch(`/api/viaggi/filtra/tag?tagId=${randomDefaultId}`, {
                         method: 'GET',

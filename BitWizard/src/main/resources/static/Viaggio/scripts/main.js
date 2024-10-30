@@ -97,6 +97,11 @@ function closeModal() {
                     // Crea un elemento <div> per il partecipante
                     const partecipanteDiv = document.createElement('div');
                     partecipanteDiv.className = 'd-flex align-items-center mb-3';
+                    
+                     const bottoneImmagine = document.createElement('button');
+        			 bottoneImmagine.className = 'p-0 border-0 bg-transparent'; // Rimuove lo stile predefinito del pulsante
+          			 bottoneImmagine.style.cursor = 'pointer';
+        			 bottoneImmagine.onclick = () => vaiAlProfilo(partecipante.utenteId);
 
                     // Crea l'immagine del partecipante come pulsante
                     const immaginePartecipante = document.createElement('img');
