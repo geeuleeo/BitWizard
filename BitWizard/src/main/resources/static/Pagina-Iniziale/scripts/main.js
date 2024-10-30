@@ -147,11 +147,7 @@
                 console.log('ID utente loggato:', utenteLoggato);
 
                 if (utenteLoggato) {
-
-                    document.getElementById('viaggiConsigliatiContainer').style.display = 'block';
-
 					fetchRecommendedTrips();
-					
                 } else {
 
                 }
@@ -225,23 +221,28 @@
          const response = await fetch(url);
          if (!response.ok) {
              throw new Error('Error fetching trips');
-         }
 
+         }
          allTrips = await response.json();
 
-         // Filtrare i viaggi con data di partenza futura
-         const currentDate = Date.now();
-         const futureTrips = allTrips.filter(trip => new Date(trip.dataPartenza).getTime() > currentDate);
+         if(allTrips.length>0){
+             document.getElementById("viaggiConsigliatiContainer").style.display='block';
+             // Filtrare i viaggi con data di partenza futura
+             const currentDate = Date.now();
+             const futureTrips = allTrips.filter(trip => new Date(trip.dataPartenza).getTime() > currentDate);
+             // Ottenere viaggi unici
+             const uniqueTrips = Array.from(new Set(futureTrips.map(trip => trip.nome)))
+                 .map(name => futureTrips.find(trip => trip.nome === name)); // Get unique trips
 
-         // Ottenere viaggi unici
-         const uniqueTrips = Array.from(new Set(futureTrips.map(trip => trip.nome)))
-             .map(name => futureTrips.find(trip => trip.nome === name)); // Get unique trips
+             uniqueTrips.forEach(value => console.log(value.dataPartenza));
+             console.log(uniqueTrips.length);
 
-        uniqueTrips.forEach(value => console.log(value.dataPartenza));
-        console.log(uniqueTrips.length);
+             displayTrips(uniqueTrips);
+             createPaginationControls(uniqueTrips.length);
+         }
 
-         displayTrips(uniqueTrips);
-         createPaginationControls(uniqueTrips.length);
+
+
      } catch (error) {
          console.error('Error:', error);
          container.innerText = error.message;
