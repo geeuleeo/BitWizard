@@ -487,6 +487,7 @@ async function aggiornaPartecipanti(viaggioId) {
                     document.getElementById('pulsantiCreatore').style.display = 'block';
                     document.getElementById('ChatDelViaggio').style.display = 'block';
                     document.getElementById('aggiungiImgBtn').style.display = 'block';
+                    verificaViaggioTerminato(viaggioId);
                 } else {
                 	
                     // Mostra il pulsante di iscrizione se l'utente non è il creatore
@@ -506,6 +507,26 @@ async function aggiornaPartecipanti(viaggioId) {
         }
     }
     
+    async function verificaViaggioTerminato(viaggioId){
+		const viaggioTerminatoResponse = await fetch(`/viaggio/terminato/${viaggioId}`);
+            const isViaggioTerminato = await viaggioTerminatoResponse.json();
+            
+            console.log('isViaggioTerminato', isViaggioTerminato);
+            
+            if (isViaggioTerminato) {
+                        document.getElementById('recensioneForm').style.display = 'block';
+                        document.getElementById('mostraRecensioni').style.display = 'block';
+                        document.getElementById('annullaIscrizioneBtn').style.display = 'none';
+                    	document.getElementById('ChatDelViaggio').style.display = 'none';
+                    	document.getElementById('messaggioForm').style.display = 'none';
+                    	document.getElementById('creatoreForm').style.display = 'none';
+                    } else {
+                        document.getElementById('recensioneForm').style.display = 'none';
+                        document.getElementById('mostraRecensioni').style.display = 'none';
+                        
+                    }
+	}
+    
     async function verificaIscrizioneUtente(viaggioId, utenteLoggato) {
         try {
             // Controlla se il viaggio è al completo
@@ -524,6 +545,8 @@ async function aggiornaPartecipanti(viaggioId) {
             // Controlla se il viaggio è terminato
             const viaggioTerminatoResponse = await fetch(`/viaggio/terminato/${viaggioId}`);
             const isViaggioTerminato = await viaggioTerminatoResponse.json();
+            
+            console.log('isViaggioTerminato', isViaggioTerminato);
 
             // Controlla se l'utente è già iscritto al viaggio
             const response = await fetch(`/viaggio/${viaggioId}/partecipanti`, {
